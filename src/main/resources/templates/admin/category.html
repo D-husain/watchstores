@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Watch Store - Admin Panel</title>
+	<!-- base:css -->
+	<link rel="stylesheet" href="vendors/typicons/typicons.css">
+	<link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+	<link rel="stylesheet" href="vendors/select2/select2.min.css">
+	<link rel="stylesheet" href="css/vertical-layout-light/style.css">
+	<link rel="shortcut icon" href="adminlogo/favicon.ico" />
+	<link type="text/css" rel="stylesheet" href="te/jquery-te-1.4.0.css">
+	<!-- jQuery Modal -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	<script type="text/javascript" src="te/jquery-te-1.4.0.min.js" charset="utf-8"></script>
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+	<!--sweet alert-->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
+	 <link rel="stylesheet" href="assets/css/toastmessage.css">
+	<style>
+		::-webkit-scrollbar {
+			width: 6px;
+			height: 6px;
+		}
+	
+		/* Track */
+		::-webkit-scrollbar-track {
+			background-color: #d4d4d4;
+			border-radius: 5px;
+		}
+	
+		/* Handle */
+		::-webkit-scrollbar-thumb {
+			background: #ba2026;
+			border-radius: 5px;
+		}
+	
+		body {
+			counter-reset: section;
+		}
+	
+		#id::before {
+			counter-increment: section;
+			content: "" counter(section) "";
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container-scroller"><br><br><br>
+		<!-- partial:partials/_navbar.html -->
+		<div th:insert="admin-include/header :: nav"></div>
+		<div class="container-fluid page-body-wrapper">
+			<div th:insert="admin-include/slide-bar :: nav"> </div>
+			<div class="main-panel">
+				<div class="content-wrapper">
+					<div class="row">
+						<div class="col-lg-12 grid-margin stretch-card">
+							<div class="card">
+								<div class="card-body">
+									<h4 class="card-title">Categories</h4>
+									<button data-toggle="modal" data-target="#addmodal" class="btn btn-primary btn-icon-text">
+										<i class="typcn typcn-upload btn-icon-prepend"></i>
+										Add Category
+									</button>
+									<div class="d-flex flex-column flex-lg-row justify-content-lg-end align-items-lg-center  mt-5 mb-2">
+										<div class="d-flex flex-column flex-sm-row justify-content-end align-items-sm-center ">
+											<select class="form-control form-control-sm" name="state" id="maxRows"
+												style="width: 150px;margin-right:20px">
+												<option value="5000">Show All</option>
+												<option value="10">10</option>
+												<option value="20">20</option>
+												<option value="50">50</option>
+												<option value="70">70</option>
+												<option value="100">100</option>
+											</select>
+											<input type="text" class="form-control form-control-sm"
+												style="width: 300px;" id="myInput" placeholder="search for category" />
+										</div>
+									</div>
+									<div class="px-3">
+										<div class="table-responsive">
+
+											<table class="table table-hover table-striped" id="myTable">
+												<thead>
+													<tr id="heading">
+														<th>Sr. No.</th>
+														<th>Category Name</th>
+														<th>Category Image</th>
+														<th>Actions</th>
+													</tr>
+												</thead>
+												<tbody>
+													
+													<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+														<div class="modal-dialog modal-dialog-centered" role="document">
+															<div class="modal-content">
+																<div class="modal-header">
+																	<h5 class="modal-title" id="exampleModalLongTitle">
+																		Delete Category</h5>
+																	<button type="button" class="close"
+																		data-dismiss="modal" aria-label="Close">
+																		<span aria-hidden="true">&times;</span>
+																	</button>
+																</div>
+																<div class="modal-body">
+																	You really want to delete 
+																	<span class='text-primary'>
+																	</span> category ?
+																</div>
+																<div class="modal-footer">
+																	<button type="button" class="btn btn-secondary"
+																		data-dismiss="modal">No</button>
+																	<button id="confirmDelete" type="button" class="btn btn-primary">Yes</button>
+																</div>
+															</div>
+														</div>
+													</div>
+													
+													<tr th:unless="${category.size() > 0}">
+														<th colspan="5">No Categories Found</th>
+													</tr>
+
+												</tbody>
+											</table>
+											
+											<div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+												<div class="modal-dialog modal-dialog-centered" role="document">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h5 class="modal-title" id="exampleModalLongTitle">Add Category</h5>
+															<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+														</div>
+														<form id="categoryForm" class="forms-sample" enctype="multipart/form-data">
+															<div class="modal-body">
+																<div class="row">
+																	<div class="col-12">
+																		<div class="form-group">
+																			<label for="exampleInputName1">Category Name</label>
+																			<input type="text" id="cname" name="cname" class="form-control"
+																				placeholder="Category Name" onblur="checkCname()">
+																			<span id="cnameerr" class="text-danger" style="font-size:14px"></span>
+																		</div>
+																	</div>
+																	<div class="col-12">
+																		<div class="form-group">
+																			<label>Category Image</label>
+																			<input type="file" name="cimg" id="cimg" class="file-upload-default" onchange="checkCimg()">
+																			<div class="input-group col-xs-12">
+																				<input type="text" id="cimg" class="form-control file-upload-info" disabled
+																					placeholder="Upload Category Image">
+																				<span class="input-group-append">
+																					<button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+																				</span>
+																			</div>
+																			<span id="cimgerr" class="text-danger" style="font-size:14px"></span>
+																		</div>
+																	</div>
+											
+																</div>
+															</div>
+															<div class="modal-footer">
+																<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+																<button type="submit" id="submitCategory" onclick="return validate()"
+																	class="btn btn-primary">Confirm</button>
+															</div>
+														</form>
+													</div>
+												</div>
+											</div>
+											
+											<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+												<div class="modal-dialog modal-dialog-centered" role="document">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h5 class="modal-title" id="exampleModalLongTitle">Edit Category</h5>
+															<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+														</div>
+														<form id="editForm" class="forms-sample" enctype="multipart/form-data">
+															<div class="modal-body">
+																<div class="row">
+																	<input type="hidden" id="categoryId" name="id" />
+																	<div class="col-12">
+																		<div class="form-group">
+																			<label for="exampleInputName1">Category Name</label>
+																			<input type="text" name="cname" id="categoryname" class="form-control"
+																				placeholder="Category Name" onblur="checkCnames()">
+																			<span id="cnameserr" class="text-danger" style="font-size:14px"></span>
+																		</div>
+																	</div>
+																	<div class="col-12">
+																		<div class="form-group">
+																			<label>Category Image</label>
+																			<input type="file" name="cimg" id="categoryimg" class="file-upload-default" onchange="checkCimgs()">
+																			<div class="input-group col-xs-12">
+																				<input type="text" id="categoryimg" class="form-control file-upload-info" disabled
+																					placeholder="Upload Category Image">
+																				<span class="input-group-append">
+																					<button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+																				</span>
+																			</div>
+																			<span id="cimgserr" class="text-danger" style="font-size:14px"></span>
+																		</div>
+																	</div>
+											
+																</div>
+															</div>
+															<div class="modal-footer">
+																<button type="reset" class="btn btn-secondary" data-dismiss="modal">No</button>
+																<button type="submit" id="updateCategory" onclick="return validates()"
+																	class="btn btn-primary">Update</button>
+															</div>
+														</form>
+													</div>
+												</div>
+											</div>
+											
+										</div>
+										<div class='pagination-container my-4' style="width:fit-content;margin-left:auto">
+											<nav>
+												<ul class="pagination">
+													<li class="btn btn-sm btn-light m-1" data-page="prev">
+														<span>
+															< <span class="sr-only">(current)
+														</span></span>
+													</li>
+													<li class="btn btn-sm btn-light m-1" data-page="next" id="prev">
+														<span> > <span class="sr-only">(current)</span></span>
+													</li>
+												</ul>
+											</nav>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div th:insert="admin-include/footer :: footer"> </div>
+				<!-- partial -->
+			</div>
+			<!-- main-panel ends -->
+		</div>
+		<!-- page-body-wrapper ends -->
+	</div>
+	
+	<script src="ajax/category.js"></script>
+	<div class="snackbar" id="insert">Category submitted successfully!</div>
+	<div class="snackbar" id="update">Category update successfully!</div>
+	<div class="snackbar" id="delete">Category delete successfully!</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	<script src="assets/js/pagination.js"></script>
+	<!-- container-scroller -->
+	<script src="vendors/js/vendor.bundle.base.js"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page-->
+	<script src="vendors/chart.js/Chart.min.js"></script>
+	<script src="vendors/select2/select2.min.js"></script>
+	<!-- End plugin js for this page-->
+	<!-- inject:js -->
+	<script src="js/off-canvas.js"></script>
+	<script src="js/hoverable-collapse.js"></script>
+	<script src="js/template.js"></script>
+	<script src="js/settings.js"></script>
+	<script src="js/todolist.js"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script src="js/file-upload.js"></script>
+	<script src="js/dashboard.js"></script>
+	<script src="js/select2.js"></script>
+	<!-- End custom js for this page-->
+
+	<script>
+		if (window.history.replaceState) {
+			window.history.replaceState(null, null, window.location.href);
+		}
+	</script>
+</body>
+
+</html>

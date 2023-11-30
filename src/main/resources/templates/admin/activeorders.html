@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Watch Store - Admin Panel</title>
+	<!-- base:css -->
+	<link rel="stylesheet" href="vendors/typicons/typicons.css">
+	<link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+	<link rel="stylesheet" href="vendors/select2/select2.min.css">
+	<link rel="stylesheet" href="css/vertical-layout-light/style.css">
+	<link rel="shortcut icon" href="adminlogo/favicon.ico" />
+	<link type="text/css" rel="stylesheet" href="te/jquery-te-1.4.0.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	<script type="text/javascript" src="te/jquery-te-1.4.0.min.js" charset="utf-8"></script>
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+	<style>
+		::-webkit-scrollbar {
+			width: 6px;
+			height: 6px;
+		}
+	
+		/* Track */
+		::-webkit-scrollbar-track {
+			background-color: #d4d4d4;
+			border-radius: 5px;
+		}
+	
+		/* Handle */
+		::-webkit-scrollbar-thumb {
+			background: #ba2026;
+			border-radius: 5px;
+		}
+	
+		body {
+			counter-reset: section;
+		}
+	
+		#id::before {
+			counter-increment: section;
+			content: "" counter(section) "";
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container-scroller"><br><br><br>
+		<!-- partial:partials/_navbar.html -->
+		<div th:insert="admin-include/header :: nav"></div>
+		<div class="container-fluid page-body-wrapper">
+			<div th:insert="admin-include/slide-bar :: nav"> </div>
+			<div class="main-panel">
+				<div class="content-wrapper">
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Active Orders</h4>
+                    <div class="d-flex justify-content-between align-items-center  mt-5 mb-2">
+                        <p class="text-sm text-primary">*Click on order id to see full details</p>
+                        <div class="d-flex justify-content-end align-items-center ">
+                            <select class="form-control form-control-sm" name="state" id="maxRows" style="width: 150px;margin-right:20px">
+                                <option value="5000">Show All</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="70">70</option>
+                                <option value="100">100</option>
+                            </select>
+                            <input type="text" class="form-control form-control-sm" style="width: 300px;" id="myInput" placeholder="search for order" />
+                        </div>
+                    </div>
+                    <div class="px-3">
+                        <div class="table-responsive mt-2">
+                            <table class="table table-hover table-striped" id="myTable">
+                                <thead>
+                                    <tr id="heading">
+                                        <th>Sr. No.</th>
+                                        <th>Order Id</th>
+                                        <th>Customer Name</th>
+                                        <th>Email</th>
+                                        <th>Order Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+									<tr th:each="o: ${active}">
+										<td id="id">
+										</td>
+										<td style="cursor: pointer;" data-toggle="modal" th:data-target="'#detailmodal'+${o.id}">[[${o.id}]]</td>
+										<td>
+											[[${o.user.fname}]] [[${o.user.lname}]]
+										</td>
+										<td>
+											[[${o.user.email}]]
+										</td>
+										<td>
+											[[${o.orderdate}]]
+										</td>
+										
+										<td>
+											<th:block th:if="${o.status == 1}">
+												<label class="badge badge-primary">Pending</label>
+											</th:block>
+											<th:block th:if="${o.status == 2}">
+												<label class="badge badge-info">Active</label>
+											</th:block>
+											<th:block th:if="${o.status == 3}">
+												<label class="badge badge-warning text-white">Shipping</label>
+											</th:block>
+											<th:block th:if="${o.status == 4}">
+												<label class="badge badge-success">Delivered</label>
+											</th:block>
+											<th:block th:if="${o.status == 5}">
+												<label class="badge badge-danger">Cancelled</label>
+											</th:block>
+										</td>
+											
+										<td>
+											<a th:href="@{/shipping-order/{orderId}(orderId=${o.id})}"
+												class="btn btn-sm btn-warning text-white btn-icon-text mr-2 text-decoration-none">Shipping
+												<i class="typcn typcn-dropbox btn-icon-append"></i>
+											</a>
+											<button data-toggle="modal" th:data-target="'#cancelmodal'+${o.id}"
+												class="btn btn-sm btn-danger btn-icon-text text-decoration-none">Cancel
+												<i class="typcn typcn-delete btn-icon-append"></i>
+											</button>
+										</td>
+								 </tr>
+									
+									<tr th:each="o: ${active}">	
+                                            <div class="modal fade" th:id="'cancelmodal'+${o.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLongTitle">Order Cancellation</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                      <form action="CancellationStatus"  method="post">
+                                                        <div class="modal-body">
+                                                            <h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Order Id</h6>
+                                                            <h4 style="margin-bottom: 20px;">[[${o.id}]]</h4>
+                                                            <span class="text-danger" th:id="'mainerr'+${o.id}" style="font-size:14px"></span>
+                                                                <input type="hidden" name="orderId" th:value="${o.id}">
+                                                                <div class="row">
+
+                                                                    <div class="col-12">
+                                                                        <div class="form-group">
+                                                                            <label for="exampleInputName1">Cancellation Reason ( please fill any one field )</fieldset></label>
+                                                                            <select name="cancelorder" th:id="'cancelselect'+${o.id}" th:onchange="'checkcancelselect'+${o.id}" class="form-control">
+                                                                                <option selected disabled value="">Select Category</option>
+                                                                                <option value="Product is not available">Product is not available</option>
+                                                                                <option value="Out of Stock">Out of Stock</option>
+                                                                            </select>
+                                                                            <span class="text-danger" th:id="'cancelselecterr'+${o.id}" style="font-size:14px"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <h6 style="margin:0 auto 20px;">OR</h6>
+                                                                   <div class="col-12">
+                                                                        <div class="form-group">
+                                                                            <textarea class="form-control" name="cancelorder" th:id="'cancelfield'+${o.id}" onblur="checkcancelfield" rows="7" placeholder="Cancellation reason" style="resize:auto"></textarea>
+                                                                            <span class="text-danger" th:id="'cancelfielderr'+${o.id}" style="font-size:14px"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                       </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                            <button type="submit" onclick="return validate" class="btn btn-primary">Confirm</button>
+                                                        </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                           </tr>
+                                            
+ 											<tr th:each="o: ${active}">
+                                            <script>
+                                                function validate() {
+                                                    let cancelselect= document.getElementById('cancelselect[[${o.id}]]').value;
+                                                    let cancelselecterr= document.getElementById('cancelselecterr[[${o.id}]]');
+                                                    let cancelfield = document.getElementById('cancelfield[[${o.id}]]').value;
+                                                    let cancelfielderr = document.getElementById('cancelfielderr[[${o.id}]]');
+                                                    let mainerr= document.getElementById('mainerr[[${o.id}]]');
+
+                                                    if (cancelselect == "" && cancelfield == "") {
+                                                        mainerr.innerHTML = "Please fillout/select any one field";
+                                                        return false
+                                                    } else {
+                                                        return true
+                                                    }
+                                                }
+                                            </script>
+                                          </tr>
+                                            					
+										<tr th:each="o: ${active}">
+                                            <div class="modal fade" th:id="'detailmodal'+${o.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLongTitle">Order Details</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body p-5">
+                                                            <div class="row g-4">
+                                                                <div class="col-md-3">
+                                                                    <h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Order Id</h6>
+                                                                    <h4 style="margin-bottom: 20px;">[[${o.id}]]</h4>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Order Date</h6>
+                                                                    <h4 style="margin-bottom: 20px;">[[${o.orderdate}]]</h4>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Customer Details</h6>
+                                                                    <h6 style="margin-bottom: 10px;font-size:14px" class="text-secondary">Name : <span class="text-body">[[${o.user.fname}]] [[${o.user.lname}]]</span></h6>
+                                                                    <h6 style="margin-bottom: 10px;font-size:14px" class="text-secondary">Email : <span class="text-body">[[${o.user.email}]]</span></h6>
+                                                                    <h6 style="margin-bottom: 10px;font-size:14px" class="text-secondary">Phone : <span class="text-body">[[${o.user.contact}]]</span></h6>
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Product Details</h6>
+                                                                    <div class="row">
+                                                                        <div class="col-md-1">
+                                                                            <h6 style="margin-bottom: 10px;font-size:16px" class="text-body">Sr. No.</h6>
+                                                                        </div>
+                                                                        <div class="col-md-5">
+                                                                            <h6 style="margin-bottom: 10px;font-size:16px" class="text-body">Product Name</h6>
+                                                                        </div>
+                                                                        <div class="col-md-2">
+                                                                            <h6 style="margin-bottom: 10px;font-size:16px" class="text-body">Price</h6>
+                                                                        </div>
+                                                                        <div class="col-md-2">
+                                                                            <h6 style="margin-bottom: 10px;font-size:16px" class="text-body">Quantity</h6>
+                                                                        </div>
+                                                                        <div class="col-md-2">
+                                                                            <h6 style="margin-bottom: 10px;font-size:16px" class="text-body">Total</h6>
+                                                                        </div>
+                                                                    </div>
+                                                                     <div th:with="orderDetailsList=${orderDetailsMap.get(o.id)}">
+                                                                        <div th:each="details : ${orderDetailsList}" class="row">
+                                                                            <div class="col-md-1">
+                                                                                <h6 style="margin-bottom: 10px;font-size:14px" class="text-secondary" id="id"></h6>
+                                                                            </div>
+                                                                            <div class="col-md-5">
+                                                                                <h6 style="margin-bottom: 10px;font-size:14px" class="text-secondary" >[[${details.productname}]]</h6>
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <h6 style="margin-bottom: 10px;font-size:14px" class="text-secondary" >&#8377; [[${details.price}]]</h6>
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <h6 style="margin-bottom: 10px;font-size:14px" class="text-secondary" >[[${details.qty}]]</h6>
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <h6 style="margin-bottom: 10px;font-size:14px" class="text-secondary" >&#8377; [[${details.total}]]</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                   </div>
+                                                                </div>
+                                                                <div class="col-md-3 mt-4">
+                                                                    <h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Order Payment</h6>
+                                                                    <h4 style="margin-bottom: 20px;">&#8377; [[${o.total}]]</h4>
+                                                                </div>
+                                                                <div class="col-md-3 mt-4">
+                                                                    <h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Order Status</h6>
+																	<th:block th:if="${o.status == 1}">
+																		<label class="badge badge-primary">Pending</label>
+																	</th:block>
+																	<th:block th:if="${o.status == 2}">
+																		<label class="badge badge-info">Active</label>
+																	</th:block>
+																	<th:block th:if="${o.status == 3}">
+																		<label class="badge badge-warning text-white">Shipping</label>
+																	</th:block>
+																	<th:block th:if="${o.status == 4}">
+																		<label class="badge badge-success">Delivered</label>
+																	</th:block>
+																	<th:block th:if="${o.status == 5}">
+																		<label class="badge badge-danger">Cancelled</label>
+																	</th:block>
+                                                                </div>
+                                                                	<th:block th:if="${o.status == 5}">
+                                                                    <div class="col-md-6 mt-4">
+                                                                        <h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Order Cancellation Reason</h6>
+                                                                        <h6 style="margin-bottom: 20px;">[[${o.cancelorder}]]</h6>
+                                                                    </div>
+                                                                	</th:block>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <a th:href="@{/shipping-order/{orderId}(orderId=${o.id})}" type="button" class="btn btn-warning text-white">Shipping</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </tr>
+
+									<tr th:unless="${active.size() > 0}">
+										<th colspan="7">No Orders Found</th>
+									</tr>
+									
+								</tbody>
+                            </table>
+                        </div>
+                        <div class='pagination-container my-4' style="width:fit-content;margin-left:auto">
+                            <nav>
+                                <ul class="pagination">
+                                    <li class="btn btn-sm btn-light m-1" data-page="prev">
+                                        <span>
+                                            < <span class="sr-only">(current)
+                                        </span></span>
+                                    </li>
+                                    <li class="btn btn-sm btn-light m-1" data-page="next" id="prev">
+                                        <span> > <span class="sr-only">(current)</span></span>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+				<div th:insert="admin-include/footer :: footer"> </div>
+				<!-- partial -->
+			</div>
+			<!-- main-panel ends -->
+		</div>
+		<!-- page-body-wrapper ends -->
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$("#myInput").on("keyup", function () {
+				var value = $(this).val().toLowerCase();
+				$("#myTable tr:not(#heading)").filter(function () {
+					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+				});
+			});
+		});
+
+		function getPagination(table) {
+			var lastPage = 1;
+
+			$('#maxRows')
+				.on('change', function (evt) {
+					//$('.paginationprev').html('');						// reset pagination
+
+					lastPage = 1;
+					$('.pagination')
+						.find('li')
+						.slice(1, -1)
+						.remove();
+					var trnum = 0; // reset tr counter
+					var maxRows = parseInt($(this).val()); // get Max Rows from select option
+
+					if (maxRows == 5000) {
+						$('.pagination').hide();
+					} else {
+						$('.pagination').show();
+					}
+
+					var totalRows = $(table + ' tbody tr').length; // numbers of rows
+					$(table + ' tr:gt(0)').each(function () {
+						// each TR in  table and not the header
+						trnum++; // Start Counter
+						if (trnum > maxRows) {
+							// if tr number gt maxRows
+
+							$(this).hide(); // fade it out
+						}
+						if (trnum <= maxRows) {
+							$(this).show();
+						} // else fade in Important in case if it ..
+					}); //  was fade out to fade it in
+					if (totalRows > maxRows) {
+						// if tr total rows gt max rows option
+						var pagenum = Math.ceil(totalRows / maxRows); // ceil total(rows/maxrows) to get ..
+						//	numbers of pages
+						for (var i = 1; i <= pagenum;) {
+							// for each page append pagination li
+							$('.pagination #prev')
+								.before(
+									'<li class="btn btn-sm btn-light m-1" data-page="' +
+									i +
+									'">\
+								  <span>' +
+									i++ +
+									'<span class="sr-only">(current)</span></span>\
+								</li>'
+								)
+								.show();
+						} // end for i
+					} // end if row count > max rows
+					$('.pagination [data-page="1"]').addClass('active'); // add active class to the first li
+					$('.pagination li').on('click', function (evt) {
+						// on click each page
+						evt.stopImmediatePropagation();
+						evt.preventDefault();
+						var pageNum = $(this).attr('data-page'); // get it's number
+
+						var maxRows = parseInt($('#maxRows').val()); // get Max Rows from select option
+
+						if (pageNum == 'prev') {
+							if (lastPage == 1) {
+								return;
+							}
+							pageNum = --lastPage;
+						}
+						if (pageNum == 'next') {
+							if (lastPage == $('.pagination li').length - 2) {
+								return;
+							}
+							pageNum = ++lastPage;
+						}
+
+						lastPage = pageNum;
+						var trIndex = 0; // reset tr counter
+						$('.pagination li').removeClass('active'); // remove active class from all li
+						$('.pagination [data-page="' + lastPage + '"]').addClass('active'); // add active class to the clicked
+						// $(this).addClass('active');					// add active class to the clicked
+						limitPagging();
+						$(table + ' tr:gt(0)').each(function () {
+							// each tr in table not the header
+							trIndex++; // tr index counter
+							// if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
+							if (
+								trIndex > maxRows * pageNum ||
+								trIndex <= maxRows * pageNum - maxRows
+							) {
+								$(this).hide();
+							} else {
+								$(this).show();
+							} //else fade in
+						}); // end of for each tr in table
+					}); // end of on click pagination list
+					limitPagging();
+				})
+				.val(10)
+				.change();
+
+			// end of on select change
+
+			// END OF PAGINATION
+		}
+
+		function limitPagging() {
+			// alert($('.pagination li').length)
+
+			if ($('.pagination li').length > 7) {
+				if ($('.pagination li.active').attr('data-page') <= 3) {
+					$('.pagination li:gt(5)').hide();
+					$('.pagination li:lt(5)').show();
+					$('.pagination [data-page="next"]').show();
+				}
+				if ($('.pagination li.active').attr('data-page') > 3) {
+					$('.pagination li:gt(0)').hide();
+					$('.pagination [data-page="next"]').show();
+					for (let i = (parseInt($('.pagination li.active').attr('data-page')) - 2); i <= (parseInt($('.pagination li.active').attr('data-page')) + 2); i++) {
+						$('.pagination [data-page="' + i + '"]').show();
+
+					}
+
+				}
+			}
+		}
+
+		getPagination('#myTable');
+	</script>
+	<!-- container-scroller -->
+	<script src="vendors/js/vendor.bundle.base.js"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page-->
+	<script src="vendors/chart.js/Chart.min.js"></script>
+	<script src="vendors/select2/select2.min.js"></script>
+	<!-- End plugin js for this page-->
+	<!-- inject:js -->
+	<script src="js/off-canvas.js"></script>
+	<script src="js/hoverable-collapse.js"></script>
+	<script src="js/template.js"></script>
+	<script src="js/settings.js"></script>
+	<script src="js/todolist.js"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script src="js/file-upload.js"></script>
+	<script src="js/dashboard.js"></script>
+	<script src="js/select2.js"></script>
+	<!-- End custom js for this page-->
+
+	<script>
+		if (window.history.replaceState) {
+			window.history.replaceState(null, null, window.location.href);
+		}
+	</script>
+</body>
+
+</html>

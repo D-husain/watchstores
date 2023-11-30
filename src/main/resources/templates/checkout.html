@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Checkout</title>
+
+    <!-- ::::::::::::::Favicon icon::::::::::::::-->
+   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/png">
+
+    <!-- ::::::::::::::All CSS Files here :::::::::::::: -->
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" href="assets/css/vendor/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/vendor/ionicons.css">
+    <link rel="stylesheet" href="assets/css/vendor/simple-line-icons.css">
+    <link rel="stylesheet" href="assets/css/vendor/jquery-ui.min.css">
+
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" href="assets/css/plugins/swiper-bundle.min.css">
+    <link rel="stylesheet" href="assets/css/plugins/animate.min.css">
+    <link rel="stylesheet" href="assets/css/plugins/nice-select.css">
+    <link rel="stylesheet" href="assets/css/plugins/venobox.min.css">
+    <link rel="stylesheet" href="assets/css/plugins/jquery.lineProgressbar.css">
+    <link rel="stylesheet" href="assets/css/plugins/aos.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Use the minified version files listed below for better performance and remove the files listed above -->
+    <!-- <link rel="stylesheet" href="assets/css/vendor/vendor.min.css">
+    <link rel="stylesheet" href="assets/css/plugins/plugins.min.css">
+    <link rel="stylesheet" href="assets/css/style.min.css"> -->
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
+    <style>
+		.toast-container {
+			animation: slideIn 0.5s ease-in-out forwards;
+		}
+		@keyframes slideIn {
+			0% {
+				right: -100%;
+			}
+	
+			100% {
+				right: 10px;
+			}
+		}
+	</style>
+</head>
+
+<body>
+    <!-- Start Header Area -->
+    <div th:insert="include/header :: header"> </div>
+    <!-- Start Header Area -->
+
+    <!-- Start Mobile Header -->
+    <div th:insert="include/mobile-header :: div"> </div>
+    <!-- End Mobile Header -->
+
+    <!--  Start Offcanvas Mobile Menu Section -->
+     <div th:insert="include/mobile-menu :: div"> </div>
+    <!-- ...:::: End Offcanvas Mobile Menu Section:::... -->
+
+    <!-- Start Offcanvas Mobile Menu Section -->
+    <div id="offcanvas-about" class="offcanvas offcanvas-rightside offcanvas-mobile-about-section">
+        <!-- Start Offcanvas Header -->
+        <div class="offcanvas-header text-right">
+            <button class="offcanvas-close"><i class="ion-android-close"></i></button>
+        </div> <!-- End Offcanvas Header -->
+        <!-- Start Offcanvas Mobile Menu Wrapper -->
+        <!-- Start Mobile contact Info -->
+        <div class="mobile-contact-info">
+            <div class="logo">
+                <a href="index.html"><img src="assets/images/logo/logo_white.png" alt=""></a>
+            </div>
+
+            <address class="address">
+                <span>Address: Your address goes here.</span>
+                <span>Call Us: 0123456789, 0123456789</span>
+                <span>Email: demo@example.com</span>
+            </address>
+
+            <ul class="social-link">
+                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+            </ul>
+
+            <ul class="user-link">
+                <li><a href="wishlist.html">Wishlist</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="checkout.html">Checkout</a></li>
+            </ul>
+        </div>
+        <!-- End Mobile contact Info -->
+    </div> <!-- ...:::: End Offcanvas Mobile Menu Section:::... -->
+
+     <!-- Start Offcanvas Addcart Section -->
+     <div th:insert="include/cart-header :: div"> </div>
+    <!-- End  Offcanvas Addcart Section -->
+
+    <!-- Start Offcanvas Mobile Menu Section -->
+     <div th:insert="include/wishlist-header :: div"> </div>
+    <!-- End Offcanvas Mobile Menu Section -->
+
+    <!-- Start Offcanvas Search Bar Section -->
+    <div th:insert="include/search :: div"> </div>
+    <!-- End Offcanvas Search Bar Section -->
+
+    <!-- Offcanvas Overlay -->
+    <div class="offcanvas-overlay"></div>
+
+    <!-- ...:::: Start Breadcrumb Section:::... -->
+    <div class="breadcrumb-section breadcrumb-bg-color--golden">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="breadcrumb-title">Checkout</h3>
+                        <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                            <nav aria-label="breadcrumb">
+                                <ul>
+                                    <li><a href="index.html">Home</a></li>
+                                    <li><a href="shop-grid-sidebar-left.html">Shop</a></li>
+                                    <li class="active" aria-current="page">Checkout</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- ...:::: End Breadcrumb Section:::... -->
+	<div th:if="${error}" class="toast-container position-absolute top-0 end-0 p-3">
+		<div style="background-color:#ff365d;" class="toast fade show" role="alert" aria-live="assertive"
+			aria-atomic="false" id="errorToast">
+			<div class="toast-body text-white">[[${error}]]</a></div>
+		</div>
+	</div>
+	<div th:if="${success}" class="toast-container position-absolute top-0 end-0 p-3">
+		<div style="background-color:#ff365d;" class="toast fade show" role="alert" aria-live="assertive"
+			aria-atomic="false" id="errorToast">
+			<div class="toast-body text-white">[[${success}]]</a></div>
+		</div>
+	</div>
+    <!-- ...:::: Start Checkout Section:::... -->
+    <div class="checkout-section">
+        <div class="container">
+            <div class="row">
+                <!-- User Quick Action Form -->
+                <div class="col-12">
+                    <div th:if="${session.user==null}" class="user-actions accordion" data-aos="fade-up" data-aos-delay="0">
+                        <h3><i class="fa fa-file-o" aria-hidden="true"></i> Returning customer?
+                            <a class="Returning" href="logins">Click here to login</a></h3>
+                    </div>
+                    
+                    <div th:if="${session.user!=null}" class="user-actions accordion" data-aos="fade-up" data-aos-delay="200">
+                        <h3>
+                            <i class="fa fa-file-o" aria-hidden="true"></i>
+                            Returning customer?
+                            <a class="Returning" href="#" data-bs-toggle="collapse" data-bs-target="#checkout_coupon"
+                                aria-expanded="true">Click here to enter your code</a>
+
+                        </h3>
+                        <div id="checkout_coupon" class="collapse checkout_coupon" data-parent="#checkout_coupon">
+                            <div class="checkout_info">
+                                <form action="applycoupon" method="post">
+                                    <input placeholder="Coupon code" name="code" type="text" required>
+                                    <input type="hidden" name="uid" th:value="${session.user.id}">
+                                    <button class="btn btn-md btn-black-default-hover" type="submit">Apply
+                                        coupon</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- User Quick Action Form -->
+            </div>
+            
+            <!-- Start User Details Checkout Form -->
+            <div class="checkout_form" data-aos="fade-up" data-aos-delay="400">
+				 <form th:action="@{/payment}" method="get">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                            <h3>Billing Details</h3><br>
+                            <div class="row">
+								 <!--<form th:action="@{/adduseraddress}" method="post">-->
+                                <div class="col-lg-6">
+                                    <div class="default-form-box">
+                                        <label>First Name <span>*</span></label>
+                                        <input type="text" name="fname" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="default-form-box">
+                                        <label>Last Name <span>*</span></label>
+                                        <input type="text" name="lname" required>
+                                    </div>
+                                </div>
+								<div class="col-12">
+									<div class="default-form-box">
+										<label for="country">country <span>*</span></label>
+										<select class="country_option nice-select wide" name="country" id="country">
+											<option disabled selected value="">Select a country</option>
+											<option th:each="c : ${country}" th:value="${c.countryname}">[[${c.countryname}]]</option>
+										</select>
+									</div>
+								</div>
+                                <div class="col-12">
+                                    <div class="default-form-box">
+                                        <label>Street address <span>*</span></label>
+                                        <input placeholder="House number and street name" required type="text" name="address1">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="default-form-box">
+                                        <input placeholder="Apartment, suite, unit etc. (optional)" type="text" name="address2">
+                                    </div>
+                                </div>
+								<div class="col-6">
+									<div class="default-form-box">
+										<label>State <span>*</span></label>
+										<select name="state" id="state" class="country_option nice-select wide">
+											<option disabled selected value="">Select a state</option>
+											<option th:each="s : ${state}" th:value="${s.name}">[[${s.name}]]</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="default-form-box">
+										<label>City <span>*</span></label>
+										<select name="city" id="city" class="country_option nice-select wide">
+											<option disabled selected value="">Select a city</option>
+											<option th:each="c : ${city}" th:value="${c.city}">[[${c.city}]]</option>
+										</select>
+									</div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="default-form-box">
+                                        <label>Phone <span>*</span></label>
+                                        <input type="text" name="phone" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="default-form-box">
+                                        <label> Email Address <span>*</span></label>
+                                        <input type="text" name="email" required>
+                                    </div>
+                                </div>
+                                
+                                <!--<div class="col-12">
+                                    <label class="checkbox-default" for="newShipping" data-bs-toggle="collapse"
+                                        data-bs-target="#anotherShipping">
+                                        <input type="checkbox" id="newShipping">
+                                        <span>Ship to a different address?</span>
+                                    </label>
+
+                                    <div id="anotherShipping" class="collapse mt-3" data-parent="#anotherShipping">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                    <div class="default-form-box">
+                                        <label>First Name <span>*</span></label>
+                                        <input type="text" name="fname">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="default-form-box">
+                                        <label>Last Name <span>*</span></label>
+                                        <input type="text" name="lname">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="default-form-box">
+                                        <label for="country">country <span>*</span></label>
+                                        <select class="country_option nice-select wide" name="country" id="country">
+                                            <option value="2">Bangladesh</option>
+                                            <option value="3">Algeria</option>
+                                            <option value="4">Afghanistan</option>
+                                            <option value="5">Ghana</option>
+                                            <option value="6">Albania</option>
+                                            <option value="7">Bahrain</option>
+                                            <option value="8">Colombia</option>
+                                            <option value="9">Dominican Republic</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="default-form-box">
+                                        <label>Street address <span>*</span></label>
+                                        <input placeholder="House number and street name" type="text" name="address1">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="default-form-box">
+                                        <input placeholder="Apartment, suite, unit etc. (optional)" type="text" name="address2">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="default-form-box">
+                                        <label>City <span>*</span></label>
+                                        <input type="text" name="city">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="default-form-box">
+                                        <label>State <span>*</span></label>
+                                        <input type="text" name="state">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="default-form-box">
+                                        <label>Phone <span>*</span></label>
+                                        <input type="text" name="phone">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="default-form-box">
+                                        <label> Email Address <span>*</span></label>
+                                        <input type="text" name="email">
+                                    </div>
+                                </div>
+                                        </div>
+                                    </div>
+                                </div><!-->
+                            </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                            <h3>Your order</h3>
+                            <div class="order_table table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="c: ${cart}">
+                                            <td>[[${c.product.pname}]] <strong> × [[${c.qty}]]</strong></td>
+                                            <td>₹[[${c.price}]]</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Cart Subtotal</th>
+                                            <td>₹[[${subtotal}]]</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Shipping</th>
+                                            <td><strong>₹[[${charge}]]</strong></td>
+                                        </tr>
+                                        
+                                         <tr class="order_total">
+                                            <th>Order Total</th>
+                                            <td><strong>₹[[${total}]]</strong></td>
+                                        </tr>
+										<tr th:if="${session != null and session.coupon != null and session.coupon.coupon != null}">
+											<th>Coupon ([[${session.coupon.coupon}]])</th>
+											<td>₹-[[${discountAmount}]]</td>
+										</tr>
+										<tr th:if="${session != null and session.coupon != null and session.coupon.coupon != null}">
+											<th>Discount Total</th>
+                                            <td><strong>₹[[${discountedSubtotal}]]</strong></td>
+										</tr>	
+
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class="payment_method">
+                                <div class="panel-default">
+                                    <label class="checkbox-default" for="currencyCod" data-bs-toggle="collapse"
+                                        data-bs-target="#methodCod">
+                                        <input type="checkbox" id="currencyCod">
+                                        <span>Cash on Delivery</span>
+                                    </label>
+
+                                    <div id="methodCod" class="collapse" data-parent="#methodCod">
+                                        <div class="card-body1">
+                                            <p>Please send a check to Store Name, Store Street, Store Town, Store State
+                                                / County, Store Postcode.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-default">
+                                    <label class="checkbox-default" for="currencyPaypal" data-bs-toggle="collapse"
+                                        data-bs-target="#methodPaypal">
+                                        <input type="checkbox" id="currencyPaypal">
+                                        <span>PayPal</span>
+                                    </label>
+                                    <div id="methodPaypal" class="collapse " data-parent="#methodPaypal">
+                                        <div class="card-body1">
+                                            <p>Pay via PayPal; you can pay with your credit card if you don’t have a
+                                                PayPal account.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div th:if="${session.user!=null}" class="order_button pt-3">
+                                    <button class="btn btn-md btn-black-default-hover" type="submit">Proceed to
+                                        PayPal</button>
+                                </div>
+                                <div th:if="${session.user==null}" class="order_button pt-3">
+                                    <a onclick="return confirmation()" class="btn btn-md btn-black-default-hover" type="submit">Proceed to
+                                        PayPal</a>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                </form>
+            </div> <!-- Start User Details Checkout Form -->
+        </div>
+    </div><!-- ...:::: End Checkout Section:::... -->
+	
+	<script type="text/javascript">
+	function confirmation() {
+		const Toast = Swal.mixin({
+		toast: true,
+		position: 'top-end',
+		showConfirmButton: false,
+		timer: 3000,
+		timerProgressBar: true,
+		didOpen: (toast) => {
+		toast.addEventListener('mouseenter', Swal.stopTimer)
+		toast.addEventListener('mouseleave', Swal.resumeTimer)
+		}
+		})
+		
+		Toast.fire({
+		icon: 'error',
+		title: '<p style="font-size:15px;">Please First <a href="logins">Login</a></p>'
+		})}
+	</script>
+	
+    <!-- Start Footer Section -->
+    <div th:insert="include/footer :: footer"> </div>
+    <!-- End Footer Section -->
+
+    <!-- material-scrolltop button -->
+    <button class="material-scrolltop" type="button"></button>
+
+    <!-- Start Modal Add cart -->
+    <div class="modal fade" id="modalAddcart" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col text-right">
+                                <button type="button" class="close modal-close" data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                    <span aria-hidden="true"> <i class="fa fa-times"></i></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="modal-add-cart-product-img">
+                                            <img class="img-fluid"
+                                                src="assets/images/product/default/home-1/default-1.jpg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="modal-add-cart-info"><i class="fa fa-check-square"></i>Added to cart
+                                            successfully!</div>
+                                        <div class="modal-add-cart-product-cart-buttons">
+                                            <a href="cart.html">View Cart</a>
+                                            <a href="checkout.html">Checkout</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5 modal-border">
+                                <ul class="modal-add-cart-product-shipping-info">
+                                    <li> <strong><i class="icon-shopping-cart"></i> There Are 5 Items In Your
+                                            Cart.</strong></li>
+                                    <li> <strong>TOTAL PRICE: </strong> <span>$187.00</span></li>
+                                    <li class="modal-continue-button"><a href="#" data-bs-dismiss="modal">CONTINUE
+                                            SHOPPING</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End Modal Add cart -->
+
+    <!-- Start Modal Quickview cart -->
+    <div class="modal fade" id="modalQuickview" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col text-right">
+                                <button type="button" class="close modal-close" data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                    <span aria-hidden="true"> <i class="fa fa-times"></i></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="product-details-gallery-area mb-7">
+                                    <!-- Start Large Image -->
+                                    <div class="product-large-image modal-product-image-large swiper-container">
+                                        <div class="swiper-wrapper">
+                                            <div class="product-image-large-image swiper-slide img-responsive">
+                                                <img src="assets/images/product/default/home-1/default-1.jpg" alt="">
+                                            </div>
+                                            <div class="product-image-large-image swiper-slide img-responsive">
+                                                <img src="assets/images/product/default/home-1/default-2.jpg" alt="">
+                                            </div>
+                                            <div class="product-image-large-image swiper-slide img-responsive">
+                                                <img src="assets/images/product/default/home-1/default-3.jpg" alt="">
+                                            </div>
+                                            <div class="product-image-large-image swiper-slide img-responsive">
+                                                <img src="assets/images/product/default/home-1/default-4.jpg" alt="">
+                                            </div>
+                                            <div class="product-image-large-image swiper-slide img-responsive">
+                                                <img src="assets/images/product/default/home-1/default-5.jpg" alt="">
+                                            </div>
+                                            <div class="product-image-large-image swiper-slide img-responsive">
+                                                <img src="assets/images/product/default/home-1/default-6.jpg" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Large Image -->
+                                    <!-- Start Thumbnail Image -->
+                                    <div
+                                        class="product-image-thumb modal-product-image-thumb swiper-container pos-relative mt-5">
+                                        <div class="swiper-wrapper">
+                                            <div class="product-image-thumb-single swiper-slide">
+                                                <img class="img-fluid"
+                                                    src="assets/images/product/default/home-1/default-1.jpg" alt="">
+                                            </div>
+                                            <div class="product-image-thumb-single swiper-slide">
+                                                <img class="img-fluid"
+                                                    src="assets/images/product/default/home-1/default-2.jpg" alt="">
+                                            </div>
+                                            <div class="product-image-thumb-single swiper-slide">
+                                                <img class="img-fluid"
+                                                    src="assets/images/product/default/home-1/default-3.jpg" alt="">
+                                            </div>
+                                            <div class="product-image-thumb-single swiper-slide">
+                                                <img class="img-fluid"
+                                                    src="assets/images/product/default/home-1/default-4.jpg" alt="">
+                                            </div>
+                                            <div class="product-image-thumb-single swiper-slide">
+                                                <img class="img-fluid"
+                                                    src="assets/images/product/default/home-1/default-5.jpg" alt="">
+                                            </div>
+                                            <div class="product-image-thumb-single swiper-slide">
+                                                <img class="img-fluid"
+                                                    src="assets/images/product/default/home-1/default-6.jpg" alt="">
+                                            </div>
+                                        </div>
+                                        <!-- Add Arrows -->
+                                        <div class="gallery-thumb-arrow swiper-button-next"></div>
+                                        <div class="gallery-thumb-arrow swiper-button-prev"></div>
+                                    </div>
+                                    <!-- End Thumbnail Image -->
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="modal-product-details-content-area">
+                                    <!-- Start  Product Details Text Area-->
+                                    <div class="product-details-text">
+                                        <h4 class="title">Nonstick Dishwasher PFOA</h4>
+                                        <div class="price"><del>$70.00</del>$80.00</div>
+                                    </div> <!-- End  Product Details Text Area-->
+                                    <!-- Start Product Variable Area -->
+                                    <div class="product-details-variable">
+                                        <!-- Product Variable Single Item -->
+                                        <div class="variable-single-item">
+                                            <span>Color</span>
+                                            <div class="product-variable-color">
+                                                <label for="modal-product-color-red">
+                                                    <input name="modal-product-color" id="modal-product-color-red"
+                                                        class="color-select" type="radio" checked>
+                                                    <span class="product-color-red"></span>
+                                                </label>
+                                                <label for="modal-product-color-tomato">
+                                                    <input name="modal-product-color" id="modal-product-color-tomato"
+                                                        class="color-select" type="radio">
+                                                    <span class="product-color-tomato"></span>
+                                                </label>
+                                                <label for="modal-product-color-green">
+                                                    <input name="modal-product-color" id="modal-product-color-green"
+                                                        class="color-select" type="radio">
+                                                    <span class="product-color-green"></span>
+                                                </label>
+                                                <label for="modal-product-color-light-green">
+                                                    <input name="modal-product-color"
+                                                        id="modal-product-color-light-green" class="color-select"
+                                                        type="radio">
+                                                    <span class="product-color-light-green"></span>
+                                                </label>
+                                                <label for="modal-product-color-blue">
+                                                    <input name="modal-product-color" id="modal-product-color-blue"
+                                                        class="color-select" type="radio">
+                                                    <span class="product-color-blue"></span>
+                                                </label>
+                                                <label for="modal-product-color-light-blue">
+                                                    <input name="modal-product-color"
+                                                        id="modal-product-color-light-blue" class="color-select"
+                                                        type="radio">
+                                                    <span class="product-color-light-blue"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <!-- Product Variable Single Item -->
+                                        <div class="d-flex align-items-center flex-wrap">
+                                            <div class="variable-single-item ">
+                                                <span>Quantity</span>
+                                                <div class="product-variable-quantity">
+                                                    <input min="1" max="100" value="1" type="number">
+                                                </div>
+                                            </div>
+
+                                            <div class="product-add-to-cart-btn">
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#modalAddcart">Add To
+                                                    Cart</a>
+                                            </div>
+                                        </div>
+                                    </div> <!-- End Product Variable Area -->
+                                    <div class="modal-product-about-text">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia iste
+                                            laborum ad impedit pariatur esse optio tempora sint ullam autem deleniti nam
+                                            in quos qui nemo ipsum numquam, reiciendis maiores quidem aperiam, rerum vel
+                                            recusandae</p>
+                                    </div>
+                                    <!-- Start  Product Details Social Area-->
+                                    <div class="modal-product-details-social">
+                                        <span class="title">SHARE THIS PRODUCT</span>
+                                        <ul>
+                                            <li><a href="#" class="facebook"><i class="fa fa-facebook"></i></a></li>
+                                            <li><a href="#" class="twitter"><i class="fa fa-twitter"></i></a></li>
+                                            <li><a href="#" class="pinterest"><i class="fa fa-pinterest"></i></a></li>
+                                            <li><a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
+                                            </li>
+                                            <li><a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a></li>
+                                        </ul>
+
+                                    </div> <!-- End  Product Details Social Area-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End Modal Quickview cart -->
+
+    <!-- ::::::::::::::All JS Files here :::::::::::::: -->
+    <!-- Global Vendor, plugins JS -->
+    <script src="assets/js/vendor/modernizr-3.11.2.min.js"></script>
+    <script src="assets/js/vendor/jquery-3.5.1.min.js"></script>
+    <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="assets/js/vendor/popper.min.js"></script>
+    <script src="assets/js/vendor/bootstrap.min.js"></script>
+    <script src="assets/js/vendor/jquery-ui.min.js"></script>
+
+    <!--Plugins JS-->
+    <script src="assets/js/plugins/swiper-bundle.min.js"></script>
+    <script src="assets/js/plugins/material-scrolltop.js"></script>
+    <script src="assets/js/plugins/jquery.nice-select.min.js"></script>
+    <script src="assets/js/plugins/jquery.zoom.min.js"></script>
+    <script src="assets/js/plugins/venobox.min.js"></script>
+    <script src="assets/js/plugins/jquery.waypoints.js"></script>
+    <script src="assets/js/plugins/jquery.lineProgressbar.js"></script>
+    <script src="assets/js/plugins/aos.min.js"></script>
+    <script src="assets/js/plugins/jquery.instagramFeed.js"></script>
+    <script src="assets/js/plugins/ajax-mail.js"></script>
+
+    <!-- Use the minified version files listed below for better performance and remove the files listed above -->
+    <!-- <script src="assets/js/vendor/vendor.min.js"></script>
+    <script src="assets/js/plugins/plugins.min.js"></script> -->
+
+    <!-- Main JS -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/toast.js"></script>
+</body>
+
+
+</html>

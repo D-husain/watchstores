@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Watch Store - Admin Panel</title>
+	<!-- base:css -->
+	<link rel="stylesheet" href="vendors/typicons/typicons.css">
+	<link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+	<link rel="stylesheet" href="vendors/select2/select2.min.css">
+	<link rel="stylesheet" href="css/vertical-layout-light/style.css">
+	<link rel="shortcut icon" href="adminlogo/favicon.ico" />
+	<link type="text/css" rel="stylesheet" href="te/jquery-te-1.4.0.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	<script type="text/javascript" src="te/jquery-te-1.4.0.min.js" charset="utf-8"></script>
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+	<!--sweet alert-->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="assets/css/toastmessage.css">
+	<style>
+		::-webkit-scrollbar {
+			width: 6px;
+			height: 6px;
+		}
+
+		/* Track */
+		::-webkit-scrollbar-track {
+			background-color: #d4d4d4;
+			border-radius: 5px;
+		}
+
+		/* Handle */
+		::-webkit-scrollbar-thumb {
+			background: #ba2026;
+			border-radius: 5px;
+		}
+		
+		/* CSS for the snackbar */
+	</style>
+</head>
+
+<body>
+	<div class="container-scroller"><br><br><br>
+		<!-- partial:partials/_navbar.html -->
+		<div th:insert="admin-include/header :: nav"></div>
+		<div class="container-fluid page-body-wrapper">
+			<div th:insert="admin-include/slide-bar :: nav"> </div>
+			<div class="main-panel">
+				<div class="content-wrapper">
+					<div class="row">
+						<div class="col-lg-12 grid-margin stretch-card">
+							<div class="card">
+								<div class="card-body">
+									<h4 class="card-title">Sliders</h4>
+									<button data-toggle="modal" data-target="#addmodal" class="btn btn-primary btn-icon-text">
+										<i class="typcn typcn-upload btn-icon-prepend"></i>
+										Add Slider
+									</button>
+									<div class="table-responsive mt-2">
+										<table class="table table-hover table-striped">
+											<thead>
+												<tr>
+													<th>Sr. No.</th>
+													<th>Slider Title</th>
+													<th>category</th>
+													<th>Slider Image</th>
+													<th>Actions</th>
+												</tr>
+											</thead>
+											<tbody>
+
+												<div class="modal fade" id="deletemodal" tabindex="-1"
+													role="dialog" aria-labelledby="exampleModalCenterTitle"
+													aria-hidden="true">
+													<div class="modal-dialog modal-dialog-centered" role="document">
+														<div class="modal-content">
+															<div class="modal-header">
+																<h5 class="modal-title" id="exampleModalLongTitle">
+																	Delete Slider</h5>
+																<button type="button" class="close" data-dismiss="modal"
+																	aria-label="Close">
+																	<span aria-hidden="true">&times;</span>
+																</button>
+															</div>
+															<div class="modal-body">
+																You really want to delete <span class='text-primary'>
+																</span> slider ?
+															</div>
+															<div class="modal-footer">
+																<button type="button" class="btn btn-secondary"
+																	data-dismiss="modal">No</button>
+																<button  type="button" id="confirmDelete"
+																	class="btn btn-primary">Yes</button>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+												<tr th:unless="${slider.size() > 0}">
+													<th colspan="5">No Slider Found</th>
+												</trth>
+
+											</tbody>
+										</table>
+										<div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+											aria-hidden="true">
+											<div class="modal-dialog modal-dialog modal-xl" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="exampleModalLongTitle">Add Slider</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+															<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+													<form id="sliderForm" class="forms-sample" enctype="multipart/form-data">
+														<div class="modal-body">
+															<div class="row">
+																<div class="col-12">
+																	<div class="form-group">
+																		<label for="exampleInputName1">Slider Name</label>
+																		<input type="text" name="name" class="form-control" id="name"
+																			placeholder="Slider Name" onblur="checkslidername()">
+																		<span style="font-size:14px" class="text-danger" id="slidernameerr"></span>
+																	</div>
+																</div>
+																<div class="col-12">
+																	<div class="form-group">
+																		<label for="exampleInputName1">Category</label>
+																		<select name="cname" id="slidercat" onblur="checkslidercat()" class="form-control">
+																			<option selected disabled>Select Category</option>
+																			<div th:each="c: ${category}">
+																				<option th:value="${c.cname}">
+																					[[${c.cname}]]
+																				</option>
+																			</div>
+																		</select>
+																		<span style="font-size:14px" class="text-danger" id="scategoryerr"></span>
+																	</div>
+																</div>
+																<div class="col-12">
+																	<div class="form-group">
+																		<label for="exampleTextarea1">Slider Tital</label>
+																		<textarea class="form-control" name="tital" id="tital" onblur="checkslidertital()"
+																			rows="7" placeholder="Slider Tital" style="resize:auto"></textarea>
+																		<span style="font-size:14px" class="text-danger" id="slidertitalterr"></span>
+																	</div>
+																</div>
+																<div class="col-md-12">
+																	<div class="form-group">
+																		<label>Slider Image</label>
+																		<input type="file" name="image" id="image" class="file-upload-default"
+																			onchange="checksliderimg()">
+																		<div class="input-group col-xs-12">
+																			<input type="text" class="form-control file-upload-info" disabled
+																				placeholder="Upload Slider Image">
+																			<span class="input-group-append">
+																				<button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+																			</span>
+																		</div>
+																		<span style="font-size:14px" class="text-danger" id="sliderimgerr"></span>
+																	</div>
+																</div>
+										
+															</div>
+														</div>
+														<div class="modal-footer">
+															<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+															<button type="submit" id="submitSlider" onclick="return validate()"
+																class="btn btn-primary">Confirm</button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+										
+										<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+											aria-hidden="true">
+											<div class="modal-dialog modal-dialog modal-xl" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="exampleModalLongTitle">Edit Slider</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+															<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+													<form id="sliderForm" class="forms-sample" enctype="multipart/form-data">
+														<div class="modal-body">
+															<div class="row">
+																<input type="hidden" name="id" id="sliderId"/>
+																<div class="col-12">
+																	<div class="form-group">
+																		<label for="exampleInputName1">Slider Name</label>
+																		<input type="text" name="slidername" class="form-control" id="slidername"
+																			placeholder="Slider Name" onblur="checkslidernames()">
+																		<span style="font-size:14px" class="text-danger" id="sslidernameerr"></span>
+																	</div>
+																</div>
+																<div class="col-12">
+																	<div class="form-group">
+																		<label for="exampleInputName1">Category</label>
+																		<select name="category" id="slidercategory" onchange="checkslidercats()" class="form-control">
+																			<option selected id="slidercategory" disabled>Select Category</option>
+																			<div th:each="c: ${category}">
+																				<option th:value="${c.cname}">
+																					[[${c.cname}]]
+																				</option>
+																			</div>
+																		</select>
+																		<span style="font-size:14px" class="text-danger" id="sscategoryerr"></span>
+																	</div>
+																</div>
+																<div class="col-12">
+																	<div class="form-group">
+																		<label for="exampleTextarea1">Slider Tital</label>
+																		<textarea class="form-control" name="tital" id="slidertital" onblur="checkslidertitals()"
+																			rows="7" placeholder="Slider Tital" style="resize:auto"></textarea>
+																		<span style="font-size:14px" class="text-danger" id="sslidertitalterr"></span>
+																	</div>
+																</div>
+																<div class="col-md-12">
+																	<div class="form-group">
+																		<label>Slider Image</label>
+																		<input type="file" name="image" id="sliderimg" class="file-upload-default"
+																			onchange="checksliderimgs()">
+																		<div class="input-group col-xs-12">
+																			<input type="text" class="form-control file-upload-info" disabled
+																				placeholder="Upload Slider Image">
+																			<span class="input-group-append">
+																				<button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+																			</span>
+																		</div>
+																		<span style="font-size:14px" class="text-danger" id="ssliderimgerr"></span>
+																	</div>
+																</div>
+										
+															</div>
+														</div>
+														<div class="modal-footer">
+															<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+															<button type="submit" id="updateSlider" onclick="return validates()"
+																class="btn btn-primary">Update</button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div th:insert="admin-include/footer :: footer"> </div>
+				<!-- partial -->
+			</div>
+			<!-- main-panel ends -->
+		</div>
+		<!-- page-body-wrapper ends -->
+	</div>
+	<!-- Add this HTML structure for the toast message -->
+	<div class="snackbar" id="insert">Slider submitted successfully!</div>
+	<div class="snackbar" id="update">Slider update successfully!</div>
+	<div class="snackbar" id="delete">Slider delete successfully!</div>
+	<script src="ajax/slider.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	<script src="assets/js/pagination.js"></script>
+	<!-- container-scroller -->
+	<script src="vendors/js/vendor.bundle.base.js"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page-->
+	<script src="vendors/chart.js/Chart.min.js"></script>
+	<script src="vendors/select2/select2.min.js"></script>
+	<!-- End plugin js for this page-->
+	<!-- inject:js -->
+	<script src="js/off-canvas.js"></script>
+	<script src="js/hoverable-collapse.js"></script>
+	<script src="js/template.js"></script>
+	<script src="js/settings.js"></script>
+	<script src="js/todolist.js"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script src="js/file-upload.js"></script>
+	<script src="js/dashboard.js"></script>
+	<script src="js/select2.js"></script>
+	<!-- End custom js for this page-->
+
+	<script>
+		if (window.history.replaceState) {
+			window.history.replaceState(null, null, window.location.href);
+		}
+	</script>
+</body>
+
+</html>

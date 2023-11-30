@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Watch Store - Admin Panel</title>
+	<!-- base:css -->
+	<link rel="stylesheet" href="vendors/typicons/typicons.css">
+	<link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+	<link rel="stylesheet" href="vendors/select2/select2.min.css">
+	<link rel="stylesheet" href="css/vertical-layout-light/style.css">
+	<link rel="shortcut icon" href="adminlogo/favicon.ico" />
+	<link type="text/css" rel="stylesheet" href="te/jquery-te-1.4.0.css">
+	<!-- jQuery Modal -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	<script type="text/javascript" src="te/jquery-te-1.4.0.min.js" charset="utf-8"></script>
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+	<!--sweet alert-->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
+	
+	<style>
+		::-webkit-scrollbar {
+			width: 6px;
+			height: 6px;
+		}
+	
+		/* Track */
+		::-webkit-scrollbar-track {
+			background-color: #d4d4d4;
+			border-radius: 5px;
+		}
+	
+		/* Handle */
+		::-webkit-scrollbar-thumb {
+			background: #ba2026;
+			border-radius: 5px;
+		}
+	
+	</style>
+</head>
+
+<body>
+	<div class="container-scroller"><br><br><br>
+		<!-- partial:partials/_navbar.html -->
+		<div th:insert="admin-include/header :: nav"></div>
+		<div class="container-fluid page-body-wrapper">
+			<div th:insert="admin-include/slide-bar :: nav"> </div>
+			<div class="main-panel">
+				<div class="content-wrapper">
+					<div class="row">
+						<div class="col-12 grid-margin stretch-card">
+							<div class="card">
+								<div class="card-body">
+									<h4 class="card-title">Edit Profile : <span class="text-primary">[[${session.admin.name}]] </span></h4>
+				
+											<form class="forms-sample" action="updateprofile" method="POST">
+												<div class="row">
+													<input type="hidden" name="id" th:value="${session.admin.id}" />
+													<div class="col-6">
+														<div class="form-group">
+															<label for="exampleInputName1">Username</label>
+															<input type="text" name="name" id="user" onblur="checkuser()"
+																class="form-control" th:value="${session.admin.name}"
+																placeholder="Username">
+															<span style="font-size:14px" class="text-danger" id="usererr"></span>
+														</div>
+													</div>
+													<div class="col-12">
+														<button type="submit" onclick="return validate()"
+															class="btn btn-primary mr-2">Submit</button>
+														<button type="reset" class="btn btn-light">Cancel</button>
+														<button id="resetbtn" type="button" class="btn btn-info">Reset Password</button>
+													</div>
+												</div>
+											</form>
+											<div class="mt-5" id="resetform">
+												<h4>Reset password</h4>
+												<form class="forms-sample" action="AdminReset" method="POST">
+													<div class="row">
+														<div class="col-6">
+															<div class="form-group">
+																<label for="exampleInputName1">Email</label>
+																<input type="text" name="email" id="email" onblur="checkemail()"
+																	class="form-control" value=""
+																	placeholder="registered email">
+																<span style="font-size:14px" class="text-danger" id="emailerr"></span>
+															</div>
+														</div>
+				
+														<div class="col-12">
+															<button type="submit" onclick="return validate1()"
+																class="btn btn-primary mr-2">Submit</button>
+															<button id="clsbtn" type="button" class="btn btn-light">Cancel</button>
+														</div>
+													</div>
+												</form>
+											</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div th:insert="admin-include/footer :: footer"> </div>
+				<!-- partial -->
+			</div>
+			<!-- main-panel ends -->
+		</div>
+		<!-- page-body-wrapper ends -->
+	</div>
+	
+	<script>
+		function checkuser() {
+			let user = document.getElementById('user').value;
+			let usererr = document.getElementById('usererr');
+			if (user == "") {
+				usererr.innerHTML = "Please enter the username";
+			}
+			else {
+				usererr.innerHTML = "";
+			}
+		}
+		function checkemail() {
+			let email = document.getElementById('email').value;
+			let emailerr = document.getElementById('emailerr');
+			let pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+			if (email == "") {
+				emailerr.innerHTML = "Please enter the email";
+			}
+			else if (!email.match(pattern)) {
+				emailerr.innerHTML = "Please enter valid email";
+			}
+			else {
+				emailerr.innerHTML = "";
+			}
+		}
+
+
+		function validate() {
+			let user = document.getElementById('user').value;
+			let usererr = document.getElementById('usererr');
+			if (user == "") {
+				usererr.innerHTML = "Please enter the username";
+				return false;
+			}
+			else {
+				usererr.innerHTML = "";
+				return true;
+			}
+		}
+		function validate1() {
+			let email = document.getElementById('email').value;
+			let emailerr = document.getElementById('emailerr');
+			let pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+			if (email == "") {
+				emailerr.innerHTML = "Please enter the email";
+				return false;
+			}
+			else if (!email.match(pattern)) {
+				emailerr.innerHTML = "Please enter valid email";
+			}
+			else {
+				emailerr.innerHTML = "";
+				return true;
+			}
+		}
+	</script>
+	<script>
+		$(document).ready(function () {
+			$('#resetform').hide();
+			$('#resetbtn').click(function () {
+				$('#resetform').toggle(300);
+			})
+			$('#clsbtn').click(function () {
+				$('#resetform').toggle(200);
+			})
+		})
+	</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	<!-- container-scroller -->
+	<script src="vendors/js/vendor.bundle.base.js"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page-->
+	<script src="vendors/chart.js/Chart.min.js"></script>
+	<script src="vendors/select2/select2.min.js"></script>
+	<!-- End plugin js for this page-->
+	<!-- inject:js -->
+	<script src="js/off-canvas.js"></script>
+	<script src="js/hoverable-collapse.js"></script>
+	<script src="js/template.js"></script>
+	<script src="js/settings.js"></script>
+	<script src="js/todolist.js"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script src="js/file-upload.js"></script>
+	<script src="js/dashboard.js"></script>
+	<script src="js/select2.js"></script>
+	<!-- End custom js for this page-->
+
+	<script>
+		if (window.history.replaceState) {
+			window.history.replaceState(null, null, window.location.href);
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Watch Store - Admin Panel</title>
+	<!-- base:css -->
+	<link rel="stylesheet" href="vendors/typicons/typicons.css">
+	<link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+	<link rel="stylesheet" href="vendors/select2/select2.min.css">
+	<link rel="stylesheet" href="css/vertical-layout-light/style.css">
+	<link rel="shortcut icon" href="adminlogo/favicon.ico" />
+	<link type="text/css" rel="stylesheet" href="te/jquery-te-1.4.0.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	<script type="text/javascript" src="te/jquery-te-1.4.0.min.js" charset="utf-8"></script>
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+	<style>
+		::-webkit-scrollbar {
+			width: 6px;
+			height: 6px;
+		}
+
+		/* Track */
+		::-webkit-scrollbar-track {
+			background-color: #d4d4d4;
+			border-radius: 5px;
+		}
+
+		/* Handle */
+		::-webkit-scrollbar-thumb {
+			background: #ba2026;
+			border-radius: 5px;
+		}
+
+		body {
+			counter-reset: section;
+		}
+
+		#id::before {
+			counter-increment: section;
+			content: "" counter(section) "";
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container-scroller"><br><br><br>
+		<!-- partial:partials/_navbar.html -->
+		<div th:insert="admin-include/header :: nav"></div>
+		<div class="container-fluid page-body-wrapper">
+			<div th:insert="admin-include/slide-bar :: nav"> </div>
+			<div class="main-panel">
+				<div class="content-wrapper">
+					<div class="row">
+						<div class="col-lg-12 grid-margin stretch-card">
+							<div class="card">
+								<div class="card-body">
+									<h4 class="card-title">Products</h4>
+									<button data-toggle="modal" data-target="#addmodal" class="btn btn-primary btn-icon-text">
+										<i class="typcn typcn-upload btn-icon-prepend"></i>
+										Add Product
+									</button>
+
+									<div class="d-flex justify-content-between align-items-center  mt-5">
+										<p class="text-sm text-primary" style="margin:auto 0">*Click on Product name to
+											show full details</p>
+										<div class="d-flex justify-content-end align-items-center ">
+											<select class="form-control form-control-sm" name="state" id="maxRows"
+												style="width: 150px;margin-right:20px">
+												<option value="5000">Show All</option>
+												<option value="10">10</option>
+												<option value="20">20</option>
+												<option value="50">50</option>
+												<option value="70">70</option>
+												<option value="100">100</option>
+											</select>
+											<input type="text" class="form-control form-control-sm"
+												style="width: 300px;" id="myInput" placeholder="search for product" />
+										</div>
+									</div>
+								</div>
+								<div class="px-4">
+									<div class="table-responsive ">
+
+
+										<table class=" table table-hover table-striped" id="myTable">
+											<thead>
+												<tr id="heading">
+													<th>Sr. No.</th>
+													<th>Product Name</th>
+													<th>Category</th>
+													<th>Availability</th>
+													<th>Actions</th>
+												</tr>
+											</thead>
+											<tbody>
+												
+												<div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+													aria-hidden="true">
+													<div class="modal-dialog modal-lg modal-dialog-centered"
+														role="document">
+														<div class="modal-content">
+															<div class="modal-header">
+																<h5 class="modal-title" id="exampleModalLongTitle">
+																	Product Details</h5>
+																<button type="button" class="close" data-dismiss="modal"
+																	aria-label="Close">
+																	<span aria-hidden="true">&times;</span>
+																</button>
+															</div>
+															<div class="modal-body p-5">
+																<div class="row">
+																	<div class="col-md-6">
+																		<h6 style="margin-bottom: 10px;font-size:12px"
+																			class="text-primary">Product Name</h6>
+																		<h4 id="proname" style="margin-bottom: 20px;"></h4>
+																	</div>
+																	<div class="col-md-3">
+																		<h6 style="margin-bottom: 10px;font-size:12px"
+																			class="text-primary">Category Name</h6>
+																		<h4 id="procat" style="margin-bottom: 20px;"></h4>
+																	</div>
+																	<div class="col-md-3">
+																		<h6 style="margin-bottom: 10px;font-size:12px"
+																			class="text-primary">Main Image</h6>
+																		<img src="proimg1" id="proimg1" alt="image" class="img-fluid"
+																		width="200" />
+																	</div>
+																	<div class="col-md-3">
+																		<div class="row">
+																			<div class="col-md-6">
+																				<h6 style="margin-bottom: 10px;font-size:12px"
+																					class="text-primary">Quality</h6>
+                                                                           <!--<p>No quality selected</p>-->
+																				<p id="proqty" style="margin-bottom: 20px;"></p>
+																				
+																			</div>
+																			<div class="col-md-6">
+																				<h6 style="margin-bottom: 10px;font-size:12px"
+																					class="text-primary">Availability
+																				</h6>
+																				<h4 id="proavailability" style="margin-bottom: 20px;"></h4>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-md-6">
+																		<h6 style="margin-bottom: 10px;font-size:12px"
+																			class="text-primary">Product Description
+																		</h6>
+																		<p id="prodesc" style="margin-bottom: 20px;"></p>
+																	</div>
+																	<div class="col-md-6 mt-4">
+																		<h6 style="margin-bottom: 10px;font-size:12px"
+																			class="text-primary">Product Specification</h6>
+																		<p id="prospec" style="margin-bottom: 20px;"></p>
+																	</div>
+																	<div class="col-md-4 mt-4">
+																		<h6 style="margin-bottom: 10px;font-size:12px"
+																			class="text-primary">Product Price </h6>
+																			<p id="proprice" style="margin-bottom: 20px;"></p>
+																	</div>
+																	<div class="col-md-2 mt-4">
+																		<h6 style="margin-bottom: 10px;font-size:12px"
+																			class="text-primary">Product Color </h6>
+																			<p id="procolore" style="margin-bottom: 20px;"></p>
+																	</div>
+																</div>
+															</div>
+															<div class="modal-footer">
+																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+																<!--<button th:data-id="${p.id}" class="btn btn-primary edit">Edit</button>-->
+															</div>
+														</div>
+													</div>
+												</div>
+												
+
+												<div class="modal fade" id="deleteModal" tabindex="-1"
+													role="dialog" aria-labelledby="exampleModalCenterTitle"
+													aria-hidden="true">
+													<div class="modal-dialog modal-dialog-centered" role="document">
+														<div class="modal-content">
+															<div class="modal-header">
+																<h5 class="modal-title" id="exampleModalLongTitle">
+																	Delete Product</h5>
+																<button type="button" class="close" data-dismiss="modal"
+																	aria-label="Close">
+																	<span aria-hidden="true">&times;</span>
+																</button>
+															</div>
+															<div class="modal-body">
+																You really want to delete <span class='text-primary'></span> product ?
+															</div>
+															<div class="modal-footer">
+																<button type="button" class="btn btn-secondary"
+																	data-dismiss="modal">No</button>
+																<button id="confirmDelete" type="button" class="btn btn-primary deleteproduct">Yes</button>
+															</div>
+														</div>
+													</div>
+												</div>
+
+											</tbody>
+										</table>
+									</div>
+									
+									<div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+										<div class="modal-dialog modal-dialog modal-xl" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="exampleModalLongTitle">Add Product</h5>
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<form id="productForm" class="forms-sample" enctype="multipart/form-data">
+													<div class="modal-body">
+														<div class="row">
+															<div class="col-md-12">
+																<div class="form-group">
+																	<label for="">Product Name</label>
+																	<input type="text" name="pname" class="form-control" id="pname"
+																		placeholder="Product Name" onblur="checkproname()">
+																	<span id="pronameerr" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Product Category</label>
+																	<select name="category" id="category" onblur="checkprocat()" class="form-control">
+																		<option disabled selected value="">Select Category</option>
+																		<div th:each="c : ${category}">
+																			<option th:value="${c.cname}">
+																				[[${c.cname}]]
+																			</option>
+																		</div>
+																	</select>
+																	<span id="procaterr" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Product Brand</label>
+																	<select name="brand" id="brand" onblur="checkprobrand()" class="form-control">
+																		<option disabled selected value="">Select Brand</option>
+																		<div th:each="b : ${brand}">
+																			<option th:value="${b.brand}">
+																				[[${b.brand}]]
+																			</option>
+																		</div>
+																	</select>
+																	<span id="probranderr" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Product Image 1</label>
+																	<input type="file" name="img1" id="img1" class="file-upload-default"
+																		onchange="checkproimg1()">
+																	<div class="input-group col-xs-12">
+																		<input type="text" id="promainimg-text" class="form-control file-upload-info"
+																			disabled placeholder="Upload Main Image">
+																		<span class="input-group-append">
+																			<button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+																		</span>
+																	</div>
+																	<span id="proimg1err" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Product Image 2</label>
+																	<input type="file" name="img2" id="img2" class="file-upload-default"
+																		onchange="checkproimg2()">
+																	<div class="input-group col-xs-12">
+																		<input type="text" id="promainimg-text" class="form-control file-upload-info"
+																			disabled placeholder="Upload Main Image">
+																		<span class="input-group-append">
+																			<button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+																		</span>
+																	</div>
+																	<span id="proimg2err" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Product Image 3</label>
+																	<input type="file" name="img3" id="img3" class="file-upload-default"
+																		onchange="checkproimg3()">
+																	<div class="input-group col-xs-12">
+																		<input type="text" id="promainimg-text" class="form-control file-upload-info"
+																			disabled placeholder="Upload Main Image">
+																		<span class="input-group-append">
+																			<button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+																		</span>
+																	</div>
+																	<span id="proimg3err" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Product Image 4</label>
+																	<input type="file" name="img4" id="img4" class="file-upload-default"
+																		onchange="checkproimg4()">
+																	<div class="input-group col-xs-12">
+																		<input type="text" id="promainimg-text" class="form-control file-upload-info"
+																			disabled placeholder="Upload Main Image">
+																		<span class="input-group-append">
+																			<button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+																		</span>
+																	</div>
+																	<span id="proimg4err" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label for="">Product Description</label>
+																	<textarea class="form-control" name="description" id="description" rows="7"
+																		placeholder="Product Description" style="resize:auto" onblur="checkprodesc()"></textarea>
+																	<span id="prodeserr" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label for="">Product Specification</label>
+																	<textarea class="form-control" name="specification" id="specification" rows="7"
+																		placeholder="Product Description" style="resize:auto" onblur="checkprospec()"></textarea>
+																	<span id="prospecerr" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-4">
+																<div class="form-group">
+																	<label>Generic Name</label>
+																	<input type="text" name="gname" id="gname" onblur="checkprogname()" class="form-control"
+																		placeholder="Generic Name">
+																	<span id="prognameerr" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-4">
+																<div class="form-group">
+																	<label>Country Of Origin</label>
+																	<select name="country" id="country" onblur="checkprocountry()" class="form-control">
+																		<option disabled selected value="">Select Country of Origin</option>
+																		<div th:each="c : ${countryorigin}">
+																			<option th:value="${c.countryname}">
+																				[[${c.countryname}]]
+																			</option>
+																		</div>
+																	</select>
+																	<span id="procountryerr" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-4">
+																<div class="form-group">
+																	<label>Product Color</label>
+																	<select name="colore" id="colore" onblur="checkprocolor()" class="form-control">
+																		<option disabled selected value="">Select Color</option>
+																		<option value="Black">Black</option>
+																		<option value="White">White</option>
+																		<option value="Blue">Blue</option>
+																		<option value="Brown">Brown</option>
+																		<option value="Green">Green</option>
+																		<option value="Silver">Silver</option>
+																	</select>
+																	<span id="procolorerr" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Product Qty</label>
+																	<input type="tel" name="qty" onblur="checkproqty()" class="form-control" id="qty" placeholder="Qty">
+																	<span id="progqtyerr" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Product Price</label>
+																	<input type="tel" name="price" onblur="checkproprice()" class="form-control" id="price" placeholder="Price">
+																	<span id="propriceerr" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<!--<div class="col-md-8">
+																<div class="form-group">
+																	<label>Product Price</label>
+																	<table class="tables">
+																		<thead>
+																			<tr>
+																				<th>qty</th>
+																				<th>Price</th>
+																			</tr>
+																		</thead>
+																		<tbody id="your-father">
+																			<tr>
+																				<td><input type="tel" name="qty" onblur="checkproqty()" class="form-control" id="qty"
+																						placeholder="Qty">
+																						<span id="progqtyerr" class="text-danger" style="font-size:14px"></span>
+																				</td>
+																				<td><input type="tel" name="price" onblur="checkproprice()" class="form-control" id="price"
+																						placeholder="Price">
+																						<span id="propriceerr" class="text-danger" style="font-size:14px"></span>
+																				</td>
+																			</tr>
+																		</tbody>
+																	</table>
+																</div>
+															</div>-->
+									
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Availability</label>
+																	<div class="row">
+																		<div class="col-sm-4">
+																			<div class="form-check">
+																				<label for="availability1" class="form-check-label">
+																					<input type="radio" class="form-check-input" name="availability"
+																						id="availability1" value="yes" checked>In Stock
+																				</label>
+																			</div>
+																		</div>
+																		<div class="col-sm-5">
+																			<div class="form-check">
+																				<label for="availability2" class="form-check-label">
+																					<input type="radio" class="form-check-input" name="availability"
+																						id="availability2" value="no">Out of Stock
+																				</label>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+														<button type="submit" id="submitProduct" onclick="return validate()" class="btn btn-primary">Submit</button>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+									
+									<div class="modal fade" id="editmodel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+										<div class="modal-dialog modal-dialog modal-xl" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="exampleModalLongTitle">Edit Product</h5>
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<form method="post" class="forms-sample" enctype="multipart/form-data">
+													<div class="modal-body">
+														<div class="row">
+															<input type="hidden" id="productId" name="id"/>
+															<div class="col-md-12">
+																<div class="form-group">
+																	<label for="">Product Name</label>
+																	<input type="text" name="pname" class="form-control" id="productname"
+																		placeholder="Product Name" onblur="checkpronames()">
+																	<span id="pronameerrs" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Product Category</label>
+																	<select name="category" id="productcat" onblur="checkprocats()" class="form-control">
+																		<option disabled selected id="productcat" value="">Select Category</option>
+																		<div th:each="c : ${category}">
+																			<option th:value="${c.cname}">
+																				[[${c.cname}]]
+																			</option>
+																		</div>
+																	</select>
+																	<span id="procaterrs" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Product Brand</label>
+																	<select name="brand" id="productbrand" onblur="checkprobrands()" class="form-control">
+																		<option disabled selected id="productbrand" value="">Select Brand</option>
+																		<div th:each="b : ${brand}">
+																			<option th:value="${b.brand}">
+																				[[${b.brand}]]
+																			</option>
+																		</div>
+																	</select>
+																	<span id="probranderrs" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Product Image 1</label>
+																	<input type="file" name="img1" id="productimg1" class="file-upload-default"
+																		onchange="checkproimgs1()" accept="image/*">
+																	<div class="input-group col-xs-12">
+																		<input type="text" id="productimg1" class="form-control file-upload-info"
+																			disabled placeholder="Upload Main Image">
+																		<span class="input-group-append">
+																			<button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+																		</span>
+																	</div>
+																	<span id="proimg1errs" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Product Image 2</label>
+																	<input type="file" name="img2" id="productimg2" class="file-upload-default"
+																		onchange="checkproimgs2()">
+																	<div class="input-group col-xs-12">
+																		<input type="text" id="productimg2" class="form-control file-upload-info"
+																			disabled placeholder="Upload Main Image">
+																		<span class="input-group-append">
+																			<button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+																		</span>
+																	</div>
+																	<span id="proimg2errs" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Product Image 3</label>
+																	<input type="file" name="img3" id="productimg3" class="file-upload-default"
+																		onchange="checkproimgs3()">
+																	<div class="input-group col-xs-12">
+																		<input type="text" id="productimg3" class="form-control file-upload-info"
+																			disabled placeholder="Upload Main Image">
+																		<span class="input-group-append">
+																			<button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+																		</span>
+																	</div>
+																	<span id="proimg3errs" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Product Image 4</label>
+																	<input type="file" name="img4" id="productimg4" class="file-upload-default"
+																		onchange="checkproimgs4">
+																	<div class="input-group col-xs-12">
+																		<input type="text" id="productimg4" class="form-control file-upload-info"
+																			disabled placeholder="Upload Main Image">
+																		<span class="input-group-append">
+																			<button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+																		</span>
+																	</div>
+																	<span id="proimg4errs" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-12">
+																<div class="form-group">
+																	<label for="">Product Description</label>
+																	<textarea class="form-control" name="description" id="productdesc" rows="7"
+																		placeholder="Product Description" style="resize:auto" onblur="checkprodescs()"></textarea>
+																	<span id="prodeserrs" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-12">
+																<div class="form-group">
+																	<label for="">Product Specification</label>
+																	<textarea class="form-control" name="specification" id="productspec" rows="7"
+																		placeholder="Product Description" style="resize:auto" onblur="checkprospecs()"></textarea>
+																	<span id="prospecerrs" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-4">
+																<div class="form-group">
+																	<label>Generic Name</label>
+																	<input type="text" name="gname" id="productgname" onblur="checkprognames()" class="form-control"
+																		placeholder="Generic Name">
+																	<span id="prognameerrs" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-4">
+																<div class="form-group">
+																	<label>Country Of Origin</label>
+																	<select name="country" id="productcountry" onblur="checkprocountrys()" class="form-control">
+																		<option disabled selected id="productcountry" value="">Select Country of Origin</option>
+																		<div th:each="c : ${countryorigin}">
+																			<option th:value="${c.countryname}">
+																				[[${c.countryname}]]
+																			</option>
+																		</div>
+																	</select>
+																	<span id="procountryerrs" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-4">
+																<div class="form-group">
+																	<label>Product Color</label>
+																	<select name="colore" id="productcolore" onblur="checkprocolors()"class="form-control">
+																		<option disabled selected id="productcolore" value="">Select Color</option>
+																		<option value="Black">Black</option>
+																		<option value="White">White</option>
+																		<option value="Blue">Blue</option>
+																		<option value="Brown">Brown</option>
+																		<option value="Green">Green</option>
+																		<option value="Silver">Silver</option>
+																	</select>
+																	<span id="procolorerrs" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Product Qty</label>
+																	<input type="tel" name="qty" onblur="checkproqtys()" class="form-control" id="productqty" placeholder="Qty">
+																	<span id="progqtyerrs" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Product Price</label>
+																	<input type="tel" name="price" onblur="checkproprices()" class="form-control" id="productprice" placeholder="Price">
+																	<span id="propriceerrs" class="text-danger" style="font-size:14px"></span>
+																</div>
+															</div>
+															<!--<div class="col-md-8">
+																<div class="form-group">
+																	<label>Product Price</label>
+																	<table class="tables">
+																		<thead>
+																			<tr>
+																				<th>qty</th>
+																				<th>Price</th>
+																			</tr>
+																		</thead>
+																		<tbody id="your-father">
+																			<tr>
+																				<td><input type="tel" name="qty" onblur="checkproqtys()" class="form-control" id="productqty"
+																						placeholder="Qty">
+																						<span id="progqtyerrs" class="text-danger" style="font-size:14px"></span>
+																				</td>
+																				<td><input type="tel" name="price" onblur="checkproprices()" class="form-control" id="productprice"
+																						placeholder="Price">
+																						<span id="propriceerrs" class="text-danger" style="font-size:14px"></span>
+																				</td>
+																			</tr>
+																		</tbody>
+																	</table>
+																</div>
+															</div>-->
+									
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Availability</label>
+																	<div class="row">
+																		<div class="col-sm-4">
+																			<div class="form-check">
+																				<label for="availability1" class="form-check-label">
+																					<input type="radio" class="form-check-input" name="availability"
+																						id="inStockRadio" value="yes" checked>In Stock
+																				</label>
+																			</div>
+																		</div>
+																		<div class="col-sm-5">
+																			<div class="form-check">
+																				<label for="availability2" class="form-check-label">
+																					<input type="radio" class="form-check-input" name="availability"
+																						id="outOfStockRadio" value="no">Out of Stock
+																				</label>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+														<button type="submit" id="updateProduct" onclick="return validates()" class="btn btn-primary">Submit</button>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+									
+									<div class='pagination-container my-4' style="width:fit-content;margin-left:auto">
+										<nav>
+											<ul class="pagination">
+												<li class="btn btn-sm btn-light m-1" data-page="prev">
+													<span>
+														< <span class="sr-only">(current)
+													</span></span>
+												</li>
+												<li class="btn btn-sm btn-light m-1" data-page="next" id="prev">
+													<span> > <span class="sr-only">(current)</span></span>
+												</li>
+											</ul>
+										</nav>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div th:insert="admin-include/footer :: footer"> </div>
+				<!-- partial -->
+			</div>
+			<!-- main-panel ends -->
+		</div>
+		<!-- page-body-wrapper ends -->
+	</div>
+	<script src="ajax/product.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	<script src="assets/js/pagination.js"></script>
+	<!-- container-scroller -->
+	<script src="vendors/js/vendor.bundle.base.js"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page-->
+	<script src="vendors/chart.js/Chart.min.js"></script>
+	<script src="vendors/select2/select2.min.js"></script>
+	<!-- End plugin js for this page-->
+	<!-- inject:js -->
+	<script src="js/off-canvas.js"></script>
+	<script src="js/hoverable-collapse.js"></script>
+	<script src="js/template.js"></script>
+	<script src="js/settings.js"></script>
+	<script src="js/todolist.js"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script src="js/file-upload.js"></script>
+	<script src="js/dashboard.js"></script>
+	<script src="js/select2.js"></script>
+	<!-- End custom js for this page-->
+
+	<script>
+		if (window.history.replaceState) {
+			window.history.replaceState(null, null, window.location.href);
+		}
+	</script>
+</body>
+
+</html>

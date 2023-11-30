@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<div id="offcanvas-wishlish" class="offcanvas offcanvas-rightside offcanvas-add-cart-section">
+        <!-- Start Offcanvas Header -->
+        <div class="offcanvas-header text-right">
+            <button class="offcanvas-close"><i class="ion-android-close"></i></button>
+        </div> <!-- ENd Offcanvas Header -->
+
+        <!-- Start Offcanvas Mobile Menu Wrapper -->
+        <div class="offcanvas-wishlist-wrapper">
+            <h4 class="offcanvas-title">Wishlist</h4>
+            <ul class="offcanvas-wishlist">
+				
+                <li th:each="w: ${wishlist}" class="offcanvas-wishlist-item-single">
+                    <div class="offcanvas-wishlist-item-block">
+                        <a th:href="@{/product-details(id=${w.product.id})}" class="offcanvas-wishlist-item-image-link">
+                            <img th:src="@{'../images/'+${w.product.img1}}" alt=""
+                                class="offcanvas-wishlist-image">
+                        </a>
+                        <div class="offcanvas-wishlist-item-content">
+                            <a href="#" class="offcanvas-wishlist-item-link">[[${w.product.pname}]]</a>
+                            <div class="offcanvas-wishlist-item-details">
+                                <!--<span class="offcanvas-wishlist-item-details-quantity">1 x </span>-->
+                                <span class="offcanvas-wishlist-item-details-price">₹ [[${w.price}]]</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="offcanvas-wishlist-item-delete text-right">
+                        <a th:href="@{/deletewishlist/{id}(id=${w.id})}" class="offcanvas-wishlist-item-delete"><i class="fa fa-trash-o"></i></a>
+                    </div>
+                </li>
+                
+            </ul>
+            
+             <!--<tr th:unless="${wishlist.size() > 0}">
+				   <h4 class="title">Your Wishlist Cart is Empty</h4>
+			 </tr>-->
+            <ul class="offcanvas-wishlist-action-button">
+                <li><a href="wishlist" class="btn btn-block btn-pink">View wishlist</a></li>
+            </ul>
+        </div> <!-- End Offcanvas Mobile Menu Wrapper -->
+
+    </div>
+</body>
+</html>

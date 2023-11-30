@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Watch Store - Admin Panel</title>
+	<!-- base:css -->
+	<link rel="stylesheet" href="vendors/typicons/typicons.css">
+	<link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+	<link rel="stylesheet" href="vendors/select2/select2.min.css">
+	<link rel="stylesheet" href="css/vertical-layout-light/style.css">
+	<link rel="shortcut icon" href="adminlogo/favicon.ico" />
+	<link type="text/css" rel="stylesheet" href="te/jquery-te-1.4.0.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	<script type="text/javascript" src="te/jquery-te-1.4.0.min.js" charset="utf-8"></script>
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+	 <link rel="stylesheet" href="assets/css/toastmessage.css">
+	<style>
+		::-webkit-scrollbar {
+			width: 6px;
+			height: 6px;
+		}
+
+		/* Track */
+		::-webkit-scrollbar-track {
+			background-color: #d4d4d4;
+			border-radius: 5px;
+		}
+
+		/* Handle */
+		::-webkit-scrollbar-thumb {
+			background: #ba2026;
+			border-radius: 5px;
+		}
+		body {
+			counter-reset: section;
+		}
+		#id::before {
+			counter-increment: section;
+			content: "" counter(section) "";
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container-scroller"><br><br><br>
+		<!-- partial:partials/_navbar.html -->
+		<div th:insert="admin-include/header :: nav"></div>
+		<div class="container-fluid page-body-wrapper">
+			<div th:insert="admin-include/slide-bar :: nav"> </div>
+			<div class="main-panel">
+				<div class="content-wrapper">
+					<div class="row">
+						<div class="col-lg-12 grid-margin stretch-card">
+							<div class="card">
+								<div class="card-body">
+									<h4 class="card-title">Inquiries</h4>
+				
+									<div class="d-flex justify-content-end align-items-center  mt-5 mb-2">
+										<!-- <p class="text-sm text-primary">*Click on category name to show full details</p> -->
+										<div class="d-flex justify-content-end align-items-center ">
+											<select class="form-control form-control-sm" name="state" id="maxRows"
+												style="width: 150px;margin-right:20px">
+												<option value="5000">Show All</option>
+												<option value="10">10</option>
+												<option value="20">20</option>
+												<option value="50">50</option>
+												<option value="70">70</option>
+												<option value="100">100</option>
+											</select>
+											<input type="text" class="form-control form-control-sm" style="width: 300px;" id="myInput"
+												placeholder="search for inquiry" />
+										</div>
+									</div>
+									<div class="table-responsive mt-2">
+										<table class="table table-hover table-striped" id="myTable">
+											<thead>
+												<tr id="heading">
+													<th>Sr. No.</th>
+													<th>Inquirer Name</th>
+													<th>Email</th>
+													<th>Actions</th>
+												</tr>
+											</thead>
+											<tbody>
+				
+				
+													<div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+														aria-hidden="true">
+														<div class="modal-dialog modal-dialog-centered" role="document">
+															<div class="modal-content">
+																<div class="modal-body" id="replyFormSection">
+																	<form id="replyForm">
+																			<input type="hidden" name="email" id="inquirerEmail" />
+																			<div class="row">
+																				<div class="col-12">
+																					<label>Inquirer Message</label>
+																					<div class="form-group">
+																						<textarea readonly class="form-control" name="message" id="inquirerMessages"
+																							rows="4" placeholder="Inquirer's message" style="resize:auto"></textarea>
+																					</div>
+																					<input type="hidden" name="contactId" id="inquirerId" />
+																				</div>
+																				<div class="col-12">
+																					<label>Your reply</label>
+																					<div class="form-group">
+																						<textarea class="form-control" name="reply"
+																							id="inquirerReplay" rows="6"
+																							placeholder="your message"
+																							style="resize:auto"></textarea>
+																					</div>
+																				</div>
+																			</div>
+																		<div class="modal-footer" id="replyFormFooter">
+																			<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+																			<button type="submit" class="btn btn-primary" id="sendReplyButton">Send</button>
+																		</div>
+																	</form>
+																</div>
+																<div class="modal-body" id="replyDetailsSection" style="display: none;">
+																	<div class="row">
+																		<div class="col-12">
+																			<label>Inquirer Message</label>
+																			<div class="form-group">
+																				<p id="inquirerMessage"></p>
+																			</div>
+																		</div>
+																		<div class="col-12">
+																			<label>Your Reply</label>
+																			<div class="form-group">
+																				<p id="yourReply"></p>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+																		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+
+
+				
+												<tr th:unless="${contact.size() > 0}">
+													<th colspan="5">No Inquiries Found</th>
+												</tr>
+				
+											</tbody>
+										</table>
+									</div>
+									<div class='pagination-container my-4' style="width:fit-content;margin-left:auto">
+										<nav>
+											<ul class="pagination">
+												<li class="btn btn-sm btn-light m-1" data-page="prev">
+													<span>
+														< <span class="sr-only">(current)
+													</span></span>
+												</li>
+												<li class="btn btn-sm btn-light m-1" data-page="next" id="prev">
+													<span> > <span class="sr-only">(current)</span></span>
+												</li>
+											</ul>
+										</nav>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div th:insert="admin-include/footer :: footer"> </div>
+				<!-- partial -->
+			</div>
+			<!-- main-panel ends -->
+		</div>
+		<!-- page-body-wrapper ends -->
+	</div>
+	<div class="snackbar" id="error">Error this replay submitted faild!</div>
+	<div class="snackbar" id="replay">Replay submitted successfully!</div>
+	<!-- container-scroller -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	<script src="assets/js/pagination.js"></script>
+	<script src="ajax/contact.js"></script>
+	<script src="vendors/js/vendor.bundle.base.js"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page-->
+	<script src="vendors/chart.js/Chart.min.js"></script>
+	<script src="vendors/select2/select2.min.js"></script>
+	<!-- End plugin js for this page-->
+	<!-- inject:js -->
+	<script src="js/off-canvas.js"></script>
+	<script src="js/hoverable-collapse.js"></script>
+	<script src="js/template.js"></script>
+	<script src="js/settings.js"></script>
+	<script src="js/todolist.js"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script src="js/file-upload.js"></script>
+	<script src="js/dashboard.js"></script>
+	<script src="js/select2.js"></script>
+	<!-- End custom js for this page-->
+
+	<script>
+		if (window.history.replaceState) {
+			window.history.replaceState(null, null, window.location.href);
+		}
+	</script>
+</body>
+
+</html>
