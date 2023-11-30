@@ -11,6 +11,7 @@ $.getJSON('http://localhost:8081/user/data', function(json) {
 			tr.push('</tr>');
 			count++;
 		}
+		getPagination('#myTable');
 		$('table').append($(tr.join('')));
 	});
 		

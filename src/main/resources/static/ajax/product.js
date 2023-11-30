@@ -229,9 +229,12 @@ $(document).ready(function() {
 				contentType: false,
 				success: function() {
 					$('#addmodal').modal('hide');
-					alert('Saved successfully!')
+					$('#insert').addClass('show');
 					getAllProduct();
 					$('#productForm')[0].reset();
+					setTimeout(function() {
+						$('#insert').removeClass('show');
+					}, 3000);
 				},
 				error: function(error) {
 					alert(error)
@@ -251,9 +254,10 @@ function getAllProduct() {
             tableBody.empty();
 
             $(json).each(function(index, product) {
+                var truncatedName = (product.pname.length > 25) ? product.pname.substring(0, 25) + '...' : product.pname;
                 var tr = '<tr>' +
                     '<td>' + (index + 1) + '</td>' +
-                    '<td style="cursor:pointer" class=\'detail\' data-id=' + product.id + '>' + product.pname + '</td>' +
+                    '<td style="cursor:pointer" class=\'detail\' data-id=' + product.id + ' title="' + product.pname + '">' + truncatedName + '</td>' +
                     '<td>' + product.category + '</td>' +
                     '<td>' + product.availability + '</td>' +
                     '<td>' +
@@ -263,12 +267,14 @@ function getAllProduct() {
                     '</tr>';
                 tableBody.append(tr);
             });
+            getPagination('#myTable');
         },
         error: function(error) {
             alert('Error fetching products: ' + error);
         }
     });
 }
+
 
 
 // Event handling for edit buttons
@@ -538,8 +544,10 @@ $(document).on('click', '#updateProduct', function(event) {
 	var qty = $('#productqty').val();
 	var price = $('#productprice').val();
 	var colore = $('#productcolore').val();
+
 	var availabilityRadio = $('input[name="availability"]:checked');
 	var availability = (availabilityRadio.length > 0) ? availabilityRadio.val() : null;
+
 	var img1 = $('#productimg1').val();
 	var img2 = $('#productimg2').val();
 	var img3 = $('#productimg3').val();
@@ -565,23 +573,35 @@ $(document).on('click', '#updateProduct', function(event) {
 	formData.append('img2', $('#productimg2')[0].files[0]);
 	formData.append('img3', $('#productimg3')[0].files[0]);
 	formData.append('img4', $('#productimg4')[0].files[0]);
-	
+
 	if (validates()) {
-	$.ajax({
-		type: 'PUT',
-		url: 'http://localhost:8081/product/update/' + id,
-		data: formData,
-		contentType: false,
-		processData: false,
-		success: function() {
-			$('#editmodel').modal('hide');
-			alert("Product edit susccesfully")
-			getAllProduct();
-		},
-		error: function(error) {
-			alert(error)
-		}
-	});
+		$.ajax({
+			type: 'PUT',
+			url: 'http://localhost:8081/product/update/' + id,
+			data: formData,
+			contentType: false,
+			processData: false,
+			success: function() {
+				if (availability === 'yes') {
+					$('#inStockRadio').prop('checked', true);
+				} else if (availability === 'no') {
+					$('#outOfStockRadio').prop('checked', true);
+				}
+				$('#editmodel').modal('hide');
+				$('#productimg1').val('');
+				$('#productimg2').val('');
+				$('#productimg3').val('');
+				$('#productimg4').val('');
+				$('#update').addClass('show');
+				getAllProduct();
+				setTimeout(function() {
+					$('#update').removeClass('show');
+				}, 3000);
+			},
+			error: function(error) {
+				alert(error)
+			}
+		});
 	}
 });
 
@@ -590,18 +610,18 @@ $(document).on('click', '#updateProduct', function(event) {
 $('table').on('click', '.detail', function() {
 	var id = $(this).data('id');
 	$.getJSON('http://localhost:8081/product/' + id, function(product) {
-		$('#pId').val(product.id);
-		$('#proname').val(product.pname);
-		$('#prodesc').val(product.description);
-		$('#prospec').val(product.specification);
-		$('#procat').val(product.category);
-		$('#probrand').val(product.brand);
-		$('#procountry').val(product.country);
-		$('#prpgname').val(product.genericname);
-		$('#proqty').val(product.qty);
-		$('#proprice').val(product.price);
-		$('#procolore').val(product.colore);
-		$('#proavailability').val(product.availability);
+		//$('#proId').attr('data-id', product.id);
+		$('#proname').text(product.pname);
+		$('#prodesc').text(product.description);
+		$('#prospec').text(product.specification);
+		$('#procat').text(product.category);
+		$('#probrand').text(product.brand);
+		$('#procountry').text(product.country);
+		$('#prpgname').text(product.genericname);
+		$('#proqty').text(product.qty);
+		$('#proprice').text(product.price);
+		$('#procolore').text(product.colore);
+		$('#proavailability').text(product.availability);
 		$('#proimg1').attr('src', '../images/' + product.img1);
 		$('#proimg2').attr('src', '../images/' + product.img2);
 		$('#promg3').attr('src', '../images/' + product.img3);
@@ -628,6 +648,10 @@ $('table').on('click', '.delete', function() {
 				$('button[data-id="' + id + '"]').closest('tr').fadeOut('slow', function() {
 					$(this).remove();
 				});
+				$('#delete').addClass('show');
+				setTimeout(function() {
+					$('#delete').removeClass('show');
+				}, 3000);
 			},
 			error: function(error) {
 				console.error('Error deleting category:', error);

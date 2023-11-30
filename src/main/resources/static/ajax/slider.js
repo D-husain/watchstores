@@ -116,6 +116,7 @@ function getAllSlider() {
 					'</tr>';
 				tableBody.append(tr);
 			});
+			getPagination('#myTable');
 		},
 		error: function(error) {
 			alert('Error fetching slider data: ' + error);

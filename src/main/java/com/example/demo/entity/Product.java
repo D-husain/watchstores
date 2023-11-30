@@ -33,8 +33,8 @@ public class Product {
 	private String specification;
 	private String genericname;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "countruid")
-	private Country country;
+	@JoinColumn(name = "countryid")
+	private ProductCountryOrigin country;
 	private double price;
 	private int qty;
 	private String availability;
@@ -44,7 +44,7 @@ public class Product {
 		// TODO Auto-generated constructor stub
 	}
 	public Product(int id, String pname, Category category, String img1, String img2, String img3, String img4,
-			ProductBrand brand, String colore, String description, String specification, String genericname, Country country,
+			ProductBrand brand, String colore, String description, String specification, String genericname, ProductCountryOrigin country,
 			double price, int qty, String availability) {
 		super();
 		this.id = id;
@@ -143,10 +143,10 @@ public class Product {
 	public void setGenericname(String genericname) {
 		this.genericname = genericname;
 	}
-	public Country getCountry() {
+	public ProductCountryOrigin getCountry() {
 		return country;
 	}
-	public void setCountry(Country country) {
+	public void setCountry(ProductCountryOrigin country) {
 		this.country = country;
 	}
 	public double getPrice() {

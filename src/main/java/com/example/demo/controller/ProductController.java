@@ -84,7 +84,7 @@ public class ProductController {
 
 		ProductBrand b = adao.getbrandByName(brand);
 		Category c = adao.getCategoryByName(category);
-		Country coo = adao.getCountryByName(country);
+		ProductCountryOrigin coo = adao.getCountryOriginByName(country);
 
 		Product product = new Product();
 		product.setPname(pname);
@@ -152,7 +152,7 @@ public class ProductController {
 
 		ProductBrand b = adao.getbrandByName(brand);
 		Category c = adao.getCategoryByName(category);
-		Country coo = adao.getCountryByName(country);
+		ProductCountryOrigin coo = adao.getCountryOriginByName(country);
 
 		Product product = new Product();
 		product.setId(id);
@@ -263,7 +263,7 @@ public class ProductController {
 
         ProductBrand b = adao.getbrandByName(brand);
 		Category c = adao.getCategoryByName(category);
-		Country coo = adao.getCountryByName(country);
+		ProductCountryOrigin coo = adao.getCountryOriginByName(country);
 
 		Product product = new Product();
 		product.setPname(pname);
@@ -327,7 +327,7 @@ public class ProductController {
 
 		ProductBrand b = adao.getbrandByName(brand);
 		Category c = adao.getCategoryByName(category);
-		Country coo = adao.getCountryByName(country);
+		ProductCountryOrigin coo = adao.getCountryOriginByName(country);
 
 		 if (existingProduct.isPresent()) {
 		        try {

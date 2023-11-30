@@ -16,29 +16,25 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 	<script type="text/javascript" src="te/jquery-te-1.4.0.min.js" charset="utf-8"></script>
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
+	 <link rel="stylesheet" href="assets/css/toastmessage.css">
 	<style>
 		::-webkit-scrollbar {
 			width: 6px;
 			height: 6px;
 		}
-
 		/* Track */
 		::-webkit-scrollbar-track {
 			background-color: #d4d4d4;
 			border-radius: 5px;
 		}
-
 		/* Handle */
 		::-webkit-scrollbar-thumb {
 			background: #ba2026;
 			border-radius: 5px;
 		}
-
 		body {
 			counter-reset: section;
 		}
-
 		#id::before {
 			counter-increment: section;
 			content: "" counter(section) "";
@@ -97,116 +93,98 @@
 												</tr>
 											</thead>
 											<tbody>
-												
-												<div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-													aria-hidden="true">
-													<div class="modal-dialog modal-lg modal-dialog-centered"
-														role="document">
-														<div class="modal-content">
-															<div class="modal-header">
-																<h5 class="modal-title" id="exampleModalLongTitle">
-																	Product Details</h5>
-																<button type="button" class="close" data-dismiss="modal"
-																	aria-label="Close">
-																	<span aria-hidden="true">&times;</span>
-																</button>
-															</div>
-															<div class="modal-body p-5">
-																<div class="row">
-																	<div class="col-md-6">
-																		<h6 style="margin-bottom: 10px;font-size:12px"
-																			class="text-primary">Product Name</h6>
-																		<h4 id="proname" style="margin-bottom: 20px;"></h4>
-																	</div>
-																	<div class="col-md-3">
-																		<h6 style="margin-bottom: 10px;font-size:12px"
-																			class="text-primary">Category Name</h6>
-																		<h4 id="procat" style="margin-bottom: 20px;"></h4>
-																	</div>
-																	<div class="col-md-3">
-																		<h6 style="margin-bottom: 10px;font-size:12px"
-																			class="text-primary">Main Image</h6>
-																		<img src="proimg1" id="proimg1" alt="image" class="img-fluid"
-																		width="200" />
-																	</div>
-																	<div class="col-md-3">
-																		<div class="row">
-																			<div class="col-md-6">
-																				<h6 style="margin-bottom: 10px;font-size:12px"
-																					class="text-primary">Quality</h6>
-                                                                           <!--<p>No quality selected</p>-->
-																				<p id="proqty" style="margin-bottom: 20px;"></p>
-																				
-																			</div>
-																			<div class="col-md-6">
-																				<h6 style="margin-bottom: 10px;font-size:12px"
-																					class="text-primary">Availability
-																				</h6>
-																				<h4 id="proavailability" style="margin-bottom: 20px;"></h4>
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-md-6">
-																		<h6 style="margin-bottom: 10px;font-size:12px"
-																			class="text-primary">Product Description
-																		</h6>
-																		<p id="prodesc" style="margin-bottom: 20px;"></p>
-																	</div>
-																	<div class="col-md-6 mt-4">
-																		<h6 style="margin-bottom: 10px;font-size:12px"
-																			class="text-primary">Product Specification</h6>
-																		<p id="prospec" style="margin-bottom: 20px;"></p>
-																	</div>
-																	<div class="col-md-4 mt-4">
-																		<h6 style="margin-bottom: 10px;font-size:12px"
-																			class="text-primary">Product Price </h6>
-																			<p id="proprice" style="margin-bottom: 20px;"></p>
-																	</div>
-																	<div class="col-md-2 mt-4">
-																		<h6 style="margin-bottom: 10px;font-size:12px"
-																			class="text-primary">Product Color </h6>
-																			<p id="procolore" style="margin-bottom: 20px;"></p>
-																	</div>
-																</div>
-															</div>
-															<div class="modal-footer">
-																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-																<!--<button th:data-id="${p.id}" class="btn btn-primary edit">Edit</button>-->
-															</div>
-														</div>
-													</div>
-												</div>
-												
-
-												<div class="modal fade" id="deleteModal" tabindex="-1"
-													role="dialog" aria-labelledby="exampleModalCenterTitle"
-													aria-hidden="true">
-													<div class="modal-dialog modal-dialog-centered" role="document">
-														<div class="modal-content">
-															<div class="modal-header">
-																<h5 class="modal-title" id="exampleModalLongTitle">
-																	Delete Product</h5>
-																<button type="button" class="close" data-dismiss="modal"
-																	aria-label="Close">
-																	<span aria-hidden="true">&times;</span>
-																</button>
-															</div>
-															<div class="modal-body">
-																You really want to delete <span class='text-primary'></span> product ?
-															</div>
-															<div class="modal-footer">
-																<button type="button" class="btn btn-secondary"
-																	data-dismiss="modal">No</button>
-																<button id="confirmDelete" type="button" class="btn btn-primary deleteproduct">Yes</button>
-															</div>
-														</div>
-													</div>
-												</div>
-
 											</tbody>
 										</table>
 									</div>
 									
+									<div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+										aria-hidden="true">
+										<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="exampleModalLongTitle">
+														Product Details</h5>
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body p-5">
+													<div class="row">
+														<div class="col-md-6">
+															<h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Product Name</h6>
+															<h4 id="proname" style="margin-bottom: 20px;"></h4>
+														</div>
+														<div class="col-md-3">
+															<h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Category Name</h6>
+															<h4 id="procat" style="margin-bottom: 20px;"></h4>
+														</div>
+														<div class="col-md-3">
+															<h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Main Image</h6>
+															<img src="proimg1" id="proimg1" alt="image" class="img-fluid" width="100" />
+														</div>
+														<div class="col-md-3">
+															<div class="row">
+																<div class="col-md-6">
+																	<h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Quality</h6>
+																	<!--<p>No quality selected</p>-->
+																	<p id="proqty" style="margin-bottom: 20px;"></p>
+									
+																</div>
+																<div class="col-md-6">
+																	<h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Availability
+																	</h6>
+																	<h4 id="proavailability" style="margin-bottom: 20px;"></h4>
+																</div>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Product Description
+															</h6>
+															<p id="prodesc" style="margin-bottom: 20px;"></p>
+														</div>
+														<div class="col-md-6 mt-4">
+															<h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Product Specification</h6>
+															<p id="prospec" style="margin-bottom: 20px;"></p>
+														</div>
+														<div class="col-md-4 mt-4">
+															<h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Product Price </h6>
+															<p id="proprice" style="margin-bottom: 20px;"></p>
+														</div>
+														<div class="col-md-2 mt-4">
+															<h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Product Color </h6>
+															<p id="procolore" style="margin-bottom: 20px;"></p>
+														</div>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+													<!--<button id="proId" class="btn btn-primary edit">Edit</button>-->
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+										aria-hidden="true">
+										<div class="modal-dialog modal-dialog-centered" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="exampleModalLongTitle">
+														Delete Product</h5>
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body">
+													You really want to delete <span class='text-primary'></span> product ?
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+													<button id="confirmDelete" type="button" class="btn btn-primary deleteproduct">Yes</button>
+												</div>
+											</div>
+										</div>
+									</div>
+
 									<div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 										<div class="modal-dialog modal-dialog modal-xl" role="document">
 											<div class="modal-content">
@@ -652,7 +630,7 @@
 																			<div class="form-check">
 																				<label for="availability1" class="form-check-label">
 																					<input type="radio" class="form-check-input" name="availability"
-																						id="inStockRadio" value="yes" checked>In Stock
+																						id="inStockRadio" value="yes">In Stock
 																				</label>
 																			</div>
 																		</div>
@@ -671,7 +649,7 @@
 													</div>
 													<div class="modal-footer">
 														<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-														<button type="submit" id="updateProduct" onclick="return validates()" class="btn btn-primary">Submit</button>
+														<button type="submit" id="updateProduct" onclick="return validates()" class="btn btn-primary">Update</button>
 													</div>
 												</form>
 											</div>
@@ -704,6 +682,9 @@
 		</div>
 		<!-- page-body-wrapper ends -->
 	</div>
+	<div class="snackbar" id="insert">Product submitted successfully!</div>
+	<div class="snackbar" id="update">Product update successfully!</div>
+	<div class="snackbar" id="delete">Product delete successfully!</div>
 	<script src="ajax/product.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 	<script src="assets/js/pagination.js"></script>

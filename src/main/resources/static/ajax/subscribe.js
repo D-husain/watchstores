@@ -26,6 +26,7 @@ function getAllSubscribe() {
 						'</tr>';
 					tableBody.append(tr);
 				});
+				getPagination('#myTable');
 			} else {
 				var message = '<tr>' +
 					'<th colspan="4">No subscribers found</th>' +

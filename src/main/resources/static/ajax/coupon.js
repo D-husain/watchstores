@@ -91,8 +91,15 @@ $(document).delegate('#addcoupon', 'click', function(event) {
 			cache: false,
 			success: function() {
 				$('#addmodal').modal('hide');
-				alert('Saved successfully!');
+				$('#couponcode').val('');
+				$('#coupontype').val('');
+				$('#couponval').val('');
+				$('#mincartvalue').val('');
+				$('#insert').addClass('show');
 				getAllCoupon();
+				setTimeout(function() {
+						$('#insert').removeClass('show');
+					}, 3000);
 			},
 			error: function(error) {
 				alert(error);
@@ -121,6 +128,7 @@ function getAllCoupon() {
 					'</tr>';
 				tableBody.append(tr);
 			});
+			getPagination('#myTable');
 		},
 		error: function(error) {
 			alert('Error fetching coupons: ' + error);
@@ -145,6 +153,10 @@ $('table').on('click', '.delete', function() {
 				$('button[data-id="' + id + '"]').closest('tr').fadeOut('slow', function() {
 					$(this).remove();
 				});
+				$('#delete').addClass('show');
+				setTimeout(function() {
+					$('#delete').removeClass('show');
+				}, 3000);
 			},
 			error: function(error) {
 				console.error('Error deleting category:', error);

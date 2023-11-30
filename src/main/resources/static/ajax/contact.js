@@ -18,6 +18,7 @@ $.ajax({
                     '</tr>';
                 tableBody.append(tr);
             });
+            getPagination('#myTable');
         },
         error: function(error) {
             alert('Error fetching inquiries: ' + error);
