@@ -107,15 +107,15 @@
 																					<label>Your reply</label>
 																					<div class="form-group">
 																						<textarea class="form-control" name="reply"
-																							id="inquirerReplay" rows="6"
-																							placeholder="your message"
-																							style="resize:auto"></textarea>
+																							id="inquirerReplay" rows="6" onkeypress="checkreply()"
+																							placeholder="your message" style="resize:auto"></textarea>
+																							<span id='reperr' class='text-danger'></span>
 																					</div>
 																				</div>
 																			</div>
 																		<div class="modal-footer" id="replyFormFooter">
 																			<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-																			<button type="submit" class="btn btn-primary" id="sendReplyButton">Send</button>
+																			<button onclick='return sendReplyButton()' type="submit" class="btn btn-primary">Send</button>
 																		</div>
 																	</form>
 																</div>

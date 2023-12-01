@@ -194,28 +194,32 @@
                                 <div class="col-lg-6">
                                     <div class="default-form-box">
                                         <label>First Name <span>*</span></label>
-                                        <input type="text" name="fname" required>
+                                        <input type="text" onkeypress="checkfname()" id="fname" name="fname">
+                                         <span id='fnameerr' class='text-danger'></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="default-form-box">
                                         <label>Last Name <span>*</span></label>
-                                        <input type="text" name="lname" required>
+                                        <input type="text" onkeypress="checklname()" id="lname" name="lname">
+                                        <span id='lnameerr' class='text-danger'></span>
                                     </div>
                                 </div>
 								<div class="col-12">
 									<div class="default-form-box">
 										<label for="country">country <span>*</span></label>
-										<select class="country_option nice-select wide" name="country" id="country">
+										<select onchange="checkcountry()" id="country" class="country_option nice-select wide" name="country">
 											<option disabled selected value="">Select a country</option>
 											<option th:each="c : ${country}" th:value="${c.countryname}">[[${c.countryname}]]</option>
 										</select>
+										<span id='countryerr' class='text-danger'></span>
 									</div>
 								</div>
                                 <div class="col-12">
                                     <div class="default-form-box">
                                         <label>Street address <span>*</span></label>
-                                        <input placeholder="House number and street name" required type="text" name="address1">
+                                        <input onblur="checkadd()" id="address" placeholder="House number and street name" type="text" name="address1">
+                                        <span id='adderr' class='text-danger'></span>
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -226,31 +230,35 @@
 								<div class="col-6">
 									<div class="default-form-box">
 										<label>State <span>*</span></label>
-										<select name="state" id="state" class="country_option nice-select wide">
+										<select onchange="checkstate()" id="state" name="state" class="country_option nice-select wide">
 											<option disabled selected value="">Select a state</option>
 											<option th:each="s : ${state}" th:value="${s.name}">[[${s.name}]]</option>
 										</select>
+										<span id='stateerr' class='text-danger'></span>
 									</div>
 								</div>
 								<div class="col-6">
 									<div class="default-form-box">
 										<label>City <span>*</span></label>
-										<select name="city" id="city" class="country_option nice-select wide">
+										<select onchange="checkcity()" id="city" name="city" class="country_option nice-select wide">
 											<option disabled selected value="">Select a city</option>
 											<option th:each="c : ${city}" th:value="${c.city}">[[${c.city}]]</option>
 										</select>
+										<span id='cityerr' class='text-danger'></span>
 									</div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="default-form-box">
                                         <label>Phone <span>*</span></label>
-                                        <input type="text" name="phone" required>
+                                        <input onkeypress="checkphone()" id="phone" type="text" name="phone">
+                                        <span id='phoneerr' class='text-danger'></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="default-form-box">
                                         <label> Email Address <span>*</span></label>
-                                        <input type="text" name="email" required>
+                                        <input onkeypress="checkemail()" id="email" type="text" name="email">
+                                        <span id='emailerr' class='text-danger'></span>
                                     </div>
                                 </div>
                                 
@@ -372,46 +380,18 @@
                                     </tfoot>
                                 </table>
                             </div>
-                            <div class="payment_method">
-                                <div class="panel-default">
-                                    <label class="checkbox-default" for="currencyCod" data-bs-toggle="collapse"
-                                        data-bs-target="#methodCod">
-                                        <input type="checkbox" id="currencyCod">
-                                        <span>Cash on Delivery</span>
-                                    </label>
-
-                                    <div id="methodCod" class="collapse" data-parent="#methodCod">
-                                        <div class="card-body1">
-                                            <p>Please send a check to Store Name, Store Street, Store Town, Store State
-                                                / County, Store Postcode.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel-default">
-                                    <label class="checkbox-default" for="currencyPaypal" data-bs-toggle="collapse"
-                                        data-bs-target="#methodPaypal">
-                                        <input type="checkbox" id="currencyPaypal">
-                                        <span>PayPal</span>
-                                    </label>
-                                    <div id="methodPaypal" class="collapse " data-parent="#methodPaypal">
-                                        <div class="card-body1">
-                                            <p>Pay via PayPal; you can pay with your credit card if you don’t have a
-                                                PayPal account.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div th:if="${session.user!=null}" class="order_button pt-3">
-                                    <button class="btn btn-md btn-black-default-hover" type="submit">Proceed to
-                                        PayPal</button>
-                                </div>
-                                <div th:if="${session.user==null}" class="order_button pt-3">
-                                    <a onclick="return confirmation()" class="btn btn-md btn-black-default-hover" type="submit">Proceed to
-                                        PayPal</a>
-                                </div>
-                            </div>
-                    </div>
-                </div>
+							<div class="payment_method">
+								<div th:if="${session.user!=null}" class="order_button pt-3">
+									<button onclick='return checkvalidate()' class="btn btn-md btn-black-default-hover" type="submit">Proceed to
+										PayPal</button>
+								</div>
+								<div th:if="${session.user==null}" class="order_button pt-3">
+									<a onclick="return confirmation()" class="btn btn-md btn-black-default-hover" type="submit">Proceed to
+										PayPal</a>
+								</div>
+							</div>
+						</div>
+					</div>
                 </form>
             </div> <!-- Start User Details Checkout Form -->
         </div>
@@ -659,7 +639,137 @@
             </div>
         </div>
     </div> <!-- End Modal Quickview cart -->
+	<script>
+		function checkfname() {
+			let fname = document.getElementById('fname').value;
+			let fnameerr = document.getElementById('fnameerr');
+			let f = /^[a-zA-Z]+$/
+			if (fname === "") {
+				fnameerr.innerHTML = "Please enter the first name";
+				return false;
+			} else if (!fname.match(f)) {
+				fnameerr.innerHTML = "First name must be in alphabets only";
+				return false;
+			} else {
+				fnameerr.innerHTML = "";
+				return true;
+			}
+		}
 
+		function checklname() {
+			let lname = document.getElementById('lname').value;
+			let lnameerr = document.getElementById('lnameerr');
+			let l = /^[a-zA-Z]+$/
+			if (lname === "") {
+				lnameerr.innerHTML = "Please enter the last name";
+				return false;
+			} else if (!lname.match(l)) {
+				lnameerr.innerHTML = "Last name must be in alphabets only";
+				return false;
+			} else {
+				lnameerr.innerHTML = "";
+				return true;
+			}
+		}
+
+		function checkemail() {
+			let email = document.getElementById('email').value;
+			let emailerr = document.getElementById('emailerr');
+			let ep = /[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+			if (email === "") {
+				emailerr.innerHTML = "Please enter the email address";
+				return false;
+			} else if (!email.match(ep)) {
+				emailerr.innerHTML = "Invalid email address";
+				return false;
+			}
+			else {
+				emailerr.innerHTML = "";
+				return true;
+			}
+		}
+
+		function checkphone() {
+			let contact = document.getElementById('phone').value;
+			let phoneerr = document.getElementById('phoneerr');
+			let p = /^(0|91)?[6-9][0-9]{9}$/;
+			if (contact === "") {
+				phoneerr.innerHTML = "Please enter the contact";
+				return false;
+			} else if (!contact.match(p)) {
+				phoneerr.innerHTML = "Invalid contact number";
+				return false;
+			}
+			else {
+				phoneerr.innerHTML = "";
+				return true;
+			}
+		}
+
+		function checkadd() {
+			let address = document.getElementById('address').value;
+			let adderr = document.getElementById('adderr');
+			let a = /[a-zA-Z0-9@,]+$/
+			if (address === "") {
+				adderr.innerHTML = "Please enter the address";
+				return false;
+			} else {
+				adderr.innerHTML = "";
+				return true;
+			}
+		}
+
+		function checkcountry() {
+			let country = document.getElementById('country').value;
+			let countryerr = document.getElementById('countryerr');
+			if (country === "") {
+				countryerr.innerHTML = "Please select country";
+				return false;
+			} else {
+				countryerr.innerHTML = "";
+				return true;
+			}
+		}
+
+		function checkstate() {
+			let state = document.getElementById('state').value;
+			let stateerr = document.getElementById('stateerr');
+			if (state === "") {
+				stateerr.innerHTML = "Please select state";
+				return false;
+			} else {
+				stateerr.innerHTML = "";
+				return true;
+			}
+		}
+
+		function checkcity() {
+			let city = document.getElementById('city').value;
+			let cityerr = document.getElementById('cityerr');
+			if (city === "") {
+				cityerr.innerHTML = "Please select city";
+				return false;
+			} else {
+				cityerr.innerHTML = "";
+				return true;
+			}
+		}
+
+		function checkvalidate() {
+			let isfnameValid = checkfname();
+			let islastValid = checklname();
+			let isemailValid = checkemail();
+			let iscontactValid = checkphone();
+			let isaddressValid = checkadd();
+			let iscountryValid = checkcountry();
+			let isstateValid = checkstate();
+			let iscityValid = checkcity();
+
+			return isfnameValid && islastValid && isemailValid && iscontactValid && isaddressValid
+				&& iscountryValid && isstateValid && iscityValid;
+		}
+	</script>
     <!-- ::::::::::::::All JS Files here :::::::::::::: -->
     <!-- Global Vendor, plugins JS -->
     <script src="assets/js/vendor/modernizr-3.11.2.min.js"></script>

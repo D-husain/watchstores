@@ -44,6 +44,27 @@ $('table').on('click', '.reply', function() {
     });
 });
 
+function checkreply() {
+	let reply = document.getElementById('inquirerReplay').value;
+	let reperr = document.getElementById('reperr');
+	let r = /[a-zA-Z0-9@,]+$/
+	if (reply === "") {
+		reperr.innerHTML = "Please enter the your reply";
+		return false;
+	} else if (!reply.match(r)) {
+		reperr.innerHTML = "Invalid your reply";
+		return false;
+	} else {
+		reperr.innerHTML = "";
+		return true;
+	}
+}
+
+function sendReplyButton() {
+	let isreplyValid = checkreply();
+	return isreplyValid;
+}
+
 $(document).ready(function() {
     $('#replyForm').submit(function(e) {
         e.preventDefault(); 
@@ -61,10 +82,10 @@ $(document).ready(function() {
             data: formData,
 			success: function() {
 				$('#replyModal').modal('hide');
-				$('#replay').addClass('show');
+				$('#error').addClass('show');
 				getAllinquirie();
 				setTimeout(function() {
-					$('#replay').removeClass('show');
+					$('#error').removeClass('show');
 				}, 3000);
 			},
             error: function(xhr, status, error){

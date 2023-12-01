@@ -204,19 +204,18 @@
 											<h3 class="card-title">Billing Address</h3><!-- End .card-title -->
 							
 											<p>[[${session.user.fname}]] [[${session.user.lname}]]<br>
-												[[${session.user.address}]]
+												[[${session.user.address}]]<br>
 												[[${session.user.contact}]]<br>
 												[[${session.user.email}]]<br>
-												<!--<a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-													aria-controls="collapseExample">Edit <i class="icon-edit"></i></a>-->
-													<button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Edit <i class="icon-edit"></i></button>
+												<button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
+													Edit <i class="icon-edit"></i></button>
 											</p>
 										</div><!-- End .card-body -->
 									</div><!-- End .card-dashboard -->
 								</div><!-- End .col-lg-6 -->
 								
 								<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-								<div class="modal-dialog">
+								<div class="modal-dialog modal-dialog-centered" role="document">
 									<div class="modal-content">
 										<div class="modal-header">
 											<h5 class="modal-title" id="exampleModalLabel">Edit Address</h5>
@@ -273,14 +272,13 @@
 									<div class="card card-dashboard">
 										<div class="card-body">
 											<h3 class="card-title">Shipping Address</h3><!-- End .card-title -->
-											<!--<p><%=s.getFname()%>
-																					<%=s.getLname()%><br>
-																					<%=s.getAddress1()%><br>
-																					<%=s.getContact()%><br>
-																					<%=s.getEmail()%><br>-->
-											<p>You have not set up this type of address yet.<br>
+											<p th:each="s: ${shipping}">
+												[[${s.fname}]]
+													[[${s.lname}]]<br>
+														[[${s.address1}]]<br>
+															[[${s.phone}]]<br>
+																[[${s.email}]]<br>
 												<a href="#">Edit <i class="icon-edit"></i></a>
-											</p>
 										</div><!-- End .card-body -->
 									</div><!-- End .card-dashboard -->
 								</div><!-- End .col-lg-6 -->

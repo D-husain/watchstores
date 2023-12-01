@@ -270,29 +270,16 @@ public class UserDao {
 		return reviewrepo.findByUser(user);
 	}
 	
-	//------------------------------------------------ user Address------------------------------------------------------
-		
-	/*
-		 * public void AddUserAddress(Address address) { Addressrepo.save(address); }
-		 * 
-		 * public Address getAddressgById(int id) { Optional<Address> Address =
-		 * Addressrepo.findById(id); if (Address.isPresent()) { return Address.get(); }
-		 * return null; }
-		 */
-	
 	//------------------------------------------------ shipping Address------------------------------------------------------
-	
-	/*
-	 * public void AddshippingAddress(ShippingAddress shippingAddress) {
-	 * shippingrepo.save(shippingAddress); }
-	 * 
-	 * public boolean AddShippingAddress(ShippingAddress shippingaddress) { return
-	 * this.shippingrepo.save(shippingaddress)!= null; }
-	 */
 	
 	public List<ShippingAddress> ShowShippingAddress() {
 		return shippingrepo.findAll();
 	}
+	
+	public List<ShippingAddress> showShippingAddressesByUserId(int userId) {
+	    return shippingrepo.findByUserId(userId);
+	}
+
 
 	public ShippingAddress getShippingById(int id) {
 		Optional<ShippingAddress> shipping = shippingrepo.findById(id);
@@ -333,10 +320,50 @@ public class UserDao {
 	
 	//------------------------------------------------ userOrder ------------------------------------------------------
 	
-	public void SaveUserOrder(Order order,ShippingAddress shippingAddress) {
-		shippingrepo.save(shippingAddress);
-		order.setShippingAddress(shippingAddress); 
-		orderrepo.save(order);
+	
+	
+	//------------------------------------------------ userOrder ------------------------------------------------------
+	
+	/*
+	 * public void SaveUserOrder(Order order, ShippingAddress shippingAddress) {
+	 * 
+	 * if (shippingAddress.getUser().getId()==null) {
+	 * 
+	 * shippingrepo.save(shippingAddress); } else { upadte shhping id with data }
+	 * order.setShippingAddress(shippingAddress); orderrepo.save(order); }
+	 */
+	
+	public void SaveUserOrder(Order order, ShippingAddress shippingAddress) {
+		if (shippingAddress.getUser().getId() != null && shippingAddress.getUser().getId().equals(shippingAddress.getUser().getId())) {
+
+			List<ShippingAddress> existingShippingAddresses = shippingrepo.findByUserId(shippingAddress.getUser().getId());
+
+			if (!existingShippingAddresses.isEmpty()) {
+				if (existingShippingAddresses.size() == 1) {
+
+					ShippingAddress existingShippingAddress = existingShippingAddresses.get(0);
+					existingShippingAddress.setAddress1(shippingAddress.getAddress1());
+					existingShippingAddress.setAddress2(shippingAddress.getAddress2());
+					existingShippingAddress.setCity(shippingAddress.getCity());
+					existingShippingAddress.setCountry(shippingAddress.getCountry());
+					existingShippingAddress.setEmail(shippingAddress.getEmail());
+					existingShippingAddress.setFname(shippingAddress.getFname());
+					existingShippingAddress.setLname(shippingAddress.getLname());
+					existingShippingAddress.setPhone(shippingAddress.getPhone());
+					existingShippingAddress.setState(shippingAddress.getState());
+
+					shippingrepo.save(existingShippingAddress);
+
+					order.setShippingAddress(existingShippingAddress);
+				}
+			} else {
+				shippingrepo.save(shippingAddress);
+
+				order.setShippingAddress(shippingAddress);
+			}
+
+			orderrepo.save(order);
+		}
 	}
 	
 	public List<Order> viewUserOrders(User user) {

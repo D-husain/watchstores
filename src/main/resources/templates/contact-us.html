@@ -194,29 +194,33 @@
                                 <div class="col-lg-6">
                                     <div class="default-form-box mb-20">
                                         <label for="contact-name">Name</label>
-                                        <input name="name" type="text" id="name">
+                                        <input onkeypress="checkname()" name="name" type="text" id="name">
+                                        <span id='nameerr' class='text-danger'></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="default-form-box mb-20">
                                         <label for="contact-email">Email</label>
-                                        <input name="email" type="email" id="email">
+                                        <input onkeypress="checkemail()" name="email" type="email" id="email">
+                                        <span id='emailerr' class='text-danger'></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="default-form-box mb-20">
                                         <label for="contact-subject">Subject</label>
-                                        <input name="subject" type="text" id="subject">
+                                        <input onkeypress="checksubject()" name="subject" type="text" id="subject">
+                                        <span id='suberr' class='text-danger'></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="default-form-box mb-20">
                                         <label for="contact-message">Your Message</label>
-                                        <textarea name="message" id="message" cols="30" rows="10"></textarea>
+                                        <textarea onkeypress="checkmessage()" name="message" id="message" cols="30" rows="10"></textarea>
+                                        <span id='messerr' class='text-danger'></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
-                                    <button class="btn btn-lg btn-black-default-hover" type="submit">SEND</button>
+                                    <button onclick='return contactvalidate()' class="btn btn-lg btn-black-default-hover" type="submit">SEND</button>
                                 </div>
                                 <p class="form-messege"></p>
                             </div>
@@ -227,7 +231,82 @@
         </div>
     </div>
     <!-- ...::::ENd Contact Section:::... -->
+	<script>
+		function checkname() {
+			let name = document.getElementById('name').value;
+			let nameerr = document.getElementById('nameerr');
+			let f = /^[a-zA-Z\s-,]+$/
+			if (name === "") {
+				nameerr.innerHTML = "Please enter the first name";
+				return false;
+			} else if (!name.match(f)) {
+				nameerr.innerHTML = "Name must be in alphabets only";
+				return false;
+			} else {
+				nameerr.innerHTML = "";
+				return true;
+			}
+		}
 
+		function checkemail() {
+			let email = document.getElementById('email').value;
+			let emailerr = document.getElementById('emailerr');
+			let ep = /[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+			if (email === "") {
+				emailerr.innerHTML = "Please enter the email address";
+				return false;
+			} else if (!email.match(ep)) {
+				emailerr.innerHTML = "Invalid email address";
+				return false;
+			}
+			else {
+				emailerr.innerHTML = "";
+				return true;
+			}
+		}
+
+		function checksubject() {
+			let subject = document.getElementById('subject').value;
+			let suberr = document.getElementById('suberr');
+			let s = /[a-zA-Z0-9@,]+$/
+			if (subject === "") {
+				suberr.innerHTML = "Please enter the subject";
+				return false;
+			}else if(!subject.match(s)){
+				suberr.innerHTML = "Invalid subject";
+				return false;
+			}else {
+				suberr.innerHTML = "";
+				return true;
+			}
+		}
+
+		function checkmessage() {
+			let message = document.getElementById('message').value;
+			let messerr = document.getElementById('messerr');
+			let a = /[a-zA-Z0-9@,]+$/
+			if (message === "") {
+				messerr.innerHTML = "Please enter the address";
+				return false;
+			}else if(!message.match(a)){
+				messerr.innerHTML = "Invalid address";
+				return false;
+			}else {
+				messerr.innerHTML = "";
+				return true;
+			}
+		}
+
+		function contactvalidate() {
+			let isnameValid = checkname();
+			let isemailValid = checkemail();
+			let issubValid = checksubject();
+			let ismessValid = checkmessage();
+
+			return isnameValid && isemailValid && issubValid && ismessValid;
+		}
+	</script>
     <!-- Start Footer Section -->
     <div th:replace="include/footer :: footer"> </div>
     <!-- End Footer Section -->

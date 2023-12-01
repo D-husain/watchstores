@@ -152,14 +152,13 @@
                                                         <div class="modal-body">
                                                             <h6 style="margin-bottom: 10px;font-size:12px" class="text-primary">Order Id</h6>
                                                             <h4 style="margin-bottom: 20px;">[[${o.id}]]</h4>
-                                                            <span class="text-danger" th:id="'mainerr'+${o.id}" style="font-size:14px"></span>
                                                                 <input type="hidden" name="orderId" th:value="${o.id}">
+																<span class="text-danger" th:id="'mainerr'+${o.id}" style="font-size:14px"></span>
                                                                 <div class="row">
-
                                                                     <div class="col-12">
                                                                         <div class="form-group">
                                                                             <label for="exampleInputName1">Cancellation Reason ( please fill any one field )</fieldset></label>
-                                                                            <select name="cancelorder" th:id="'cancelselect'+${o.id}" th:onchange="'checkcancelselect'+${o.id}" class="form-control">
+                                                                            <select name="cancelorder" th:id="'cancelselect'+${o.id}"  class="form-control">
                                                                                 <option selected disabled value="">Select Category</option>
                                                                                 <option value="Product is not available">Product is not available</option>
                                                                                 <option value="Out of Stock">Out of Stock</option>
@@ -170,7 +169,7 @@
                                                                     <h6 style="margin:0 auto 20px;">OR</h6>
                                                                    <div class="col-12">
                                                                         <div class="form-group">
-                                                                            <textarea class="form-control" name="cancelorder" th:id="'cancelfield'+${o.id}" onblur="checkcancelfield" rows="7" placeholder="Cancellation reason" style="resize:auto"></textarea>
+                                                                            <textarea class="form-control" name="cancelorder" th:id="'cancelfield'+${o.id}" rows="7" placeholder="Cancellation reason" style="resize:auto"></textarea>
                                                                             <span class="text-danger" th:id="'cancelfielderr'+${o.id}" style="font-size:14px"></span>
                                                                         </div>
                                                                     </div>
@@ -178,7 +177,7 @@
                                                        </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                                            <button type="submit" onclick="return validate" class="btn btn-primary">Confirm</button>
+                                                            <button type="submit" th:onclick="'return validate'+ ${o.id}+'()'" class="btn btn-primary">Confirm</button>
                                                         </div>
                                                             </form>
                                                         </div>
@@ -188,7 +187,7 @@
                                             
  											<tr th:each="o: ${orders}">
                                             <script>
-                                                function validate() {
+                                                function validate[[${o.id}]]() {
                                                     let cancelselect= document.getElementById('cancelselect[[${o.id}]]').value;
                                                     let cancelselecterr= document.getElementById('cancelselecterr[[${o.id}]]');
                                                     let cancelfield = document.getElementById('cancelfield[[${o.id}]]').value;
@@ -197,6 +196,8 @@
 
                                                     if (cancelselect == "" && cancelfield == "") {
                                                         mainerr.innerHTML = "Please fillout/select any one field";
+                                                        //cancelselecterr.innerHTML = "Please fillout/select any one field";
+                                                         //cancelfielderr.innerHTML = "Please fillout/select any one field";
                                                         return false
                                                     } else {
                                                         return true

@@ -291,6 +291,7 @@ public class MainController {
 			return "redirect:/logins";
 		} else {
 			model.addAttribute("orders", udao.viewUserOrders(user));
+			model.addAttribute("shipping", udao.showShippingAddressesByUserId(user.getId()));
 		}
 		return "my-account";
 	}
