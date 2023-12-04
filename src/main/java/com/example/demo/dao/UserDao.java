@@ -100,6 +100,10 @@ public class UserDao {
 		return null;
 	}
 	
+	public void updateUser(User user) {
+		userrepo.save(user);
+	}
+	
 	public void updatePassword(User user, String newPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(newPassword);
@@ -477,6 +481,5 @@ public class UserDao {
     public void ApplyCoupon(UserCoupon userCoupon) {
     	UserCouponRepo.save(userCoupon);
 	}
-
 
 }

@@ -35,16 +35,13 @@
     <link rel="stylesheet" href="assets/css/plugins/plugins.min.css">
     <link rel="stylesheet" href="assets/css/style.min.css"> -->
 	<style>
-		.toast-container {
-			animation: slideIn 0.5s ease-in-out forwards;
-		}
 		@keyframes slideIn {
 			0% {
-				right: -100%;
+				left: -100%;
 			}
 	
 			100% {
-				right: 10px;
+				left: 10px;
 			}
 		}
 	</style>
@@ -132,17 +129,9 @@
                 </div>
             </div>
         </div>
-    </div> <!-- ...:::: End Breadcrumb Section:::... -->
-	<div th:if="${error}" class="toast-container" style="position: absolute; top: 10px; right: 10px;">
-		<div style="background-color:#ff365d;" class="toast fade show" id="errorToast">
-			<div class="toast-body text-white">[[${error}]]</a></div>
-		</div>
-	</div>
-	<div th:if="${success}" class="toast-container" style="position: absolute; top: 10px; right: 10px;">
-		<div style="background-color:#ff365d;" class="toast fade show" id="errorToast">
-			<div class="toast-body text-white">[[${success}]]</a></div>
-		</div>
-	</div>
+    </div>
+     <!-- ...:::: End Breadcrumb Section:::... -->
+	
     <!-- ...:::: Start Customer Login Section :::... -->
     <div class="customer-login">
         <div class="container">
@@ -151,8 +140,6 @@
                 <div class="col-lg-12 col-md-6">
                     <div class="account_form" data-aos="fade-up" data-aos-delay="0">
                         <h3>Otp</h3>
-                        <div class="alert alert-primary" role="alert" th:text="${success}" th:if="${success}"></div>
-                        <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
                         <form th:action="@{/varify-otp}" method="POST">
                             <div class="default-form-box">
                                 <label>Enter Otp <span>*</span></label>
@@ -174,7 +161,18 @@
     <!-- Start Footer Section -->
     <div th:insert="include/footer :: footer"> </div>
     <!-- End Footer Section -->
-
+	<div th:if="${error}" class="toast-container fixed-bottom bottom-0 start-0 p-3 border-l-4 border-first" 
+	     style="animation: slideIn 0.5s ease-in-out forwards; z-index: 100;">
+		<div style="background-color:#ff365d;" class="toast fade show" id="errorToast">
+			<div class="toast-body text-white"><i class="fa fa-check-square"></i> [[${error}]]</div>
+		</div>
+	</div>
+	<div th:if="${success}" class="toast-container fixed-bottom bottom-0 start-0 p-3 border-l-4 border-first" 
+	     style="animation: slideIn 0.5s ease-in-out forwards; z-index: 100;">
+		<div style="background-color:#ff365d;" class="toast fade show" id="errorToast">
+			<div class="toast-body text-white"><i class="fa fa-check-square"></i> [[${success}]]</div>
+		</div>
+	</div>
     <!-- material-scrolltop button -->
     <button class="material-scrolltop" type="button"></button>
 

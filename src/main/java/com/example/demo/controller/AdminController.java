@@ -73,6 +73,7 @@ public class AdminController {
 				page_move = "redirect:/admin";
 			} else if (!admin_email.equals(admin.getEmail()) && !password.equals(admin.getPassword())) {
 				redirAttrs.addFlashAttribute("error", "Login failed. Invalid username or password.");
+				return page_move;
 			}
 		}
 		return page_move;

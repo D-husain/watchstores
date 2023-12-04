@@ -177,7 +177,7 @@ function validate() {
 		&& iscountryValid && isstateValid && iscityValid && iszipValid && ispassValid;
 }
 
-$(document).delegate('#register_user', 'click', function(event) {
+/*$(document).delegate('#register_user', 'click', function(event) {
 	event.preventDefault();
 
 	var fname = $('#fname').val();
@@ -203,10 +203,11 @@ $(document).delegate('#register_user', 'click', function(event) {
 			cache: false,
 			success: function(result) {
 				window.setTimeout(function() { window.location.href = "/logins"; }, 500)
+				$('#userregister').addClass('show');
 			},
 			error: function(err) {
 				$("#msg").html("<span style='color: red'>Name is required</span>");
 			}
 		});
 	}
-});
+});*/

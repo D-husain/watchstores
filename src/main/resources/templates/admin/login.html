@@ -19,16 +19,13 @@
     <!-- endinject -->
     <link rel="shortcut icon" href="adminlogo/favicon.ico" />
     <style>
-		.toast-container {
-			animation: slideIn 0.5s ease-in-out forwards;
-		}
 		@keyframes slideIn {
 			0% {
-				right: -100%;
+				left: -100%;
 			}
 	
 			100% {
-				right: 10px;
+				left: 10px;
 			}
 		}
 	</style>
@@ -44,15 +41,9 @@
                             <div class="brand-logo text-center">
                                 <img src="adminlogo/logo_black.png" alt="logo">
                             </div>
-							<div th:if="${error}" class="toast-container position-absolute top-0 end-0 p-3">
-								<div style="background-color:#ff365d;" class="toast fade show" role="alert" aria-live="assertive"
-									aria-atomic="false" id="errorToast">
-									<div class="toast-body text-white">[[${error}]]</a></div>
-								</div>
-							</div>
                             <h4 class='text-center'>Welcome Back!</h4>
                             <h6 class="font-weight-light mb-4 text-center">Login in to continue.</h6>
-                            
+                           <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
                             <form method="POST" th:action="@{/login_admin}">
                                 <div class="form-group">
                                     <input type="email" name="email" onblur="checkusername()" class="form-control form-control-lg" id="username" placeholder="Username">
@@ -74,6 +65,12 @@
         </div>
         <!-- page-body-wrapper ends -->
     </div>
+    <div th:if="${error}" class="toast-container fixed-bottom bottom-0 start-0 p-3 border-l-4 border-first" 
+	     style="animation: slideIn 0.5s ease-in-out forwards; z-index: 100;">
+		<div style="background-color:#ba2026;" class="toast fade show" id="errorToast">
+			<div class="toast-body text-white"><i class="fa fa-check-square"></i> [[${error}]]</div>
+		</div>
+	</div>
     <!-- container-scroller -->
     <!-- base:js -->
     <script src="vendors/js/vendor.bundle.base.js"></script>

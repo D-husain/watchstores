@@ -129,25 +129,9 @@
                 </div>
             </div>
         </div>
-    </div> <!-- ...:::: End Breadcrumb Section:::... -->
-	<div th:if="${error}" class="toast-container fixed position-absolute bottom-0 start-0 p-3 border-l-4 border-first"
-	     style="animation: slideIn 0.5s ease-in-out forwards; z-index: 100;">
-		<div style="background-color:#ff365d;" class="toast fade show" id="errorToast">
-			<div class="toast-body text-white"><i class="fa fa-check-square"></i> [[${error}]]</div>
-		</div>
-	</div>
-	<div th:if="${success}" class="toast-container fixed position-absolute bottom-0 start-0 p-3 border-l-4 border-first" 
-	     style="animation: slideIn 0.5s ease-in-out forwards; z-index: 100;">
-		<div style="background-color:#ff365d;" class="toast fade show" id="errorToast">
-			<div class="toast-body text-white"><i class="fa fa-check-square"></i> [[${success}]]</div>
-		</div>
-	</div>
-	<div th:if="${update}" class="toast-container fixed position-absolute bottom-0 start-0 p-3 border-l-4 border-first" 
-	     style="animation: slideIn 0.5s ease-in-out forwards; z-index: 100;">
-		<div style="background-color:#ff365d;" class="toast fade show" id="errorToast">
-			<div class="toast-body text-white"><i class="fa fa-check-square"></i> [[${update}]]</div>
-		</div>
-	</div>
+    </div> 
+    <!-- ...:::: End Breadcrumb Section:::... -->
+
     <!-- ...:::: Start Cart Section:::... -->
     <div class="cart-section">
         <!-- Start Cart Table -->
@@ -284,7 +268,24 @@
     <!-- Start Footer Section -->
     <div th:insert="include/footer :: footer"> </div>
     <!-- End Footer Section -->
-
+	<div th:if="${error}" class="toast-container fixed-bottom bottom-0 start-0 p-3 border-l-4 border-first" 
+	     style="animation: slideIn 0.5s ease-in-out forwards; z-index: 100;">
+		<div style="background-color:#ff365d;" class="toast fade show" id="errorToast">
+			<div class="toast-body text-white"><i class="fa fa-check-square"></i> [[${error}]]</div>
+		</div>
+	</div>
+	<div th:if="${success}" class="toast-container fixed-bottom bottom-0 start-0 p-3 border-l-4 border-first" 
+	     style="animation: slideIn 0.5s ease-in-out forwards; z-index: 100;">
+		<div style="background-color:#ff365d;" class="toast fade show" id="errorToast">
+			<div class="toast-body text-white"><i class="fa fa-check-square"></i> [[${success}]]</div>
+		</div>
+	</div>
+	<div th:if="${update}" class="toast-container fixed-bottom bottom-0 start-0 p-3 border-l-4 border-first" 
+	     style="animation: slideIn 0.5s ease-in-out forwards; z-index: 100;">
+		<div style="background-color:#ff365d;" class="toast fade show" id="errorToast">
+			<div class="toast-body text-white"><i class="fa fa-check-square"></i> [[${update}]]</div>
+		</div>
+	</div>
     <!-- material-scrolltop button -->
     <button class="material-scrolltop" type="button"></button>
 

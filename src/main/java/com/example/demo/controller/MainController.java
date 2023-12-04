@@ -120,13 +120,18 @@ public class MainController {
 	
 	
 	@GetMapping("/logins")
-	public String login() {
+	public String login(HttpSession session) {
+		User user = (User) session.getAttribute("user");
+
+		if (user != null) {
+			return "redirect:/account";
+		}
 		return "login";
 	}
 
 	@PostMapping("/login_user")
 	public String userlogin(@RequestParam("name") String user_name, @RequestParam("password") String password,
-			HttpServletRequest request, Model model, HttpSession s, RedirectAttributes redirAttrs) {
+			HttpServletRequest request, Model model, HttpSession session, RedirectAttributes redirAttrs) {
 		List<User> list = udao.fechAllUser();
 
 		String page_move = "redirect:/logins";
@@ -134,9 +139,9 @@ public class MainController {
 
 		for (User user : list) {
 			if (user_name.equals(user.getFname()) && password.equals(user.getPassword())) {
-				s.setAttribute("user", user);
-				page_move = "redirect:/account";
-				s.setAttribute("user", user);
+				user.setLoginCount(user.getLoginCount() + 1);
+	        	udao.updateUser(user);
+				session.setAttribute("user", user);
 				page_move = "redirect:/account";
 				loggedIn = true;
 				break;
@@ -160,6 +165,8 @@ public class MainController {
 
 	    for (User user : userList) {
 	        if (user_name.equals(user.getFname()) && password.equals(user.getPassword())) {
+	        	user.setLoginCount(user.getLoginCount() + 1);
+	        	udao.updateUser(user);
 	            session.setAttribute("user", user);
 	            loggedIn = true;
 	            break;
@@ -173,10 +180,12 @@ public class MainController {
 	    }
 	}
 
-
 	@GetMapping("/user-logout")
-	public String login_animation(HttpSession s) {
-		s.invalidate();
+	public String login_animation(HttpSession session, RedirectAttributes redirAttrs) {
+		if (session != null) {
+			session.invalidate();
+			redirAttrs.addFlashAttribute("success", "User logout successfully");
+		}
 		return "redirect:/logins";
 	}
 
@@ -222,7 +231,7 @@ public class MainController {
 				session.setAttribute("otp", otp);
 				session.setAttribute("email", email);
 				redirAttrs.addFlashAttribute("success", "OTP is sent to your email id");
-				return "varify-otp";
+				return "redirect:/varify-otp";
 			} else {
 
 				return "redirect:/forgot";
@@ -232,6 +241,11 @@ public class MainController {
 			return "redirect:/forgot";
 		}
 	}
+	
+	@GetMapping("/varify-otp")
+	public String varifyOtp() {
+		return "varify-otp";
+	}
 
 	@PostMapping("/varify-otp")
 	public String varifyotp(@RequestParam("otp") int otp, HttpSession session,RedirectAttributes redirAttrs) {
@@ -239,11 +253,16 @@ public class MainController {
 		int myotp = (int) session.getAttribute("otp");
 		if (myotp == otp) {
 			redirAttrs.addFlashAttribute("success", "Email varify successfully");
-			return "reset-password";
+			return "redirect:/reset_password";
 		} else {
 			redirAttrs.addFlashAttribute("error", "Please enter valid Otp");
-			return "varify-otp";
+			return "redirect:/varify-otp";
 		}
+	}
+	
+	@GetMapping("reset_password")
+	public String resetPassword() {
+		return"reset-password";
 	}
 
 	@PostMapping("/reset_password")
@@ -252,8 +271,8 @@ public class MainController {
 		String email = (String) session.getAttribute("email");
 		
 		if (!newpassword.equals(confirmPassword)) {
-	        redirAttrs.addFlashAttribute("error", "Password and confirmation password do not match.");
-	        return "reset-password";
+	        redirAttrs.addFlashAttribute("error", "Do not match password.");
+	        return "redirect:/reset_password";
 	    }
 
 		User user = this.userrepo.getUserByUserName(email);

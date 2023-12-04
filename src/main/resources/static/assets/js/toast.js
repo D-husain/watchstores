@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		var errorToast = document.getElementById('errorToast');
 		var bsToast = new bootstrap.Toast(errorToast);
 		bsToast.hide();
-	}, 1300); // Adjust the time in milliseconds as needed
+	}, 1500); // Adjust the time in milliseconds as needed
 });
 
 document.addEventListener('DOMContentLoaded', function () {

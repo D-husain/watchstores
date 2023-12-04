@@ -33,7 +33,6 @@
     <!-- <link rel="stylesheet" href="assets/css/vendor/vendor.min.css">
     <link rel="stylesheet" href="assets/css/plugins/plugins.min.css">
     <link rel="stylesheet" href="assets/css/style.min.css"> -->
-    <link rel="stylesheet" href="assets/css/toastmessage.css">
 
 </head>
 
@@ -129,10 +128,7 @@
                 <div class="col-lg-12 col-md-6">
                     <div class="account_form register" data-aos="fade-up" data-aos-delay="200">
                         <h3>Register</h3>
-                        <div class="alert alert-info" role="alert" th:text="${info}" th:if="${error}"></div>
-                        <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
-                        <div class="alert alert-success" role="alert" th:text="${success}" th:if="${error}"></div>
-                        <form >
+                        <form action="register_user" method="post">
                         <div class="row">
                         <div class="default-form-box col-md-6">
                                 <label>First Name<span>*</span></label>
@@ -194,7 +190,7 @@
                                 <span id='passeerr' class='text-danger'></span>
                             </div>
                             <div class="login_submit col-md-12">
-                                <button class="btn btn-md btn-black-default-hover" id="register_user" onclick='return checkvalidate()' type="submit">Register</button>
+                                <button class="btn btn-md btn-black-default-hover" onclick='return validate()' type="submit">Register</button>
                             </div>
                             <div class="text-center p-t-40">
 						<span class="txt1">
@@ -217,9 +213,24 @@
     <!-- Start Footer Section -->
     <div th:replace="include/footer :: footer"> </div>
     <!-- End Footer Section -->
-	<div class="snackbar" id="insert">Slider submitted successfully!</div>
-	<div class="snackbar" id="update">Slider update successfully!</div>
-	<div class="snackbar" id="delete">Slider delete successfully!</div>
+	<div th:if="${error}" class="toast-container fixed-bottom bottom-0 start-0 p-3 border-l-4 border-first" 
+	     style="animation: slideIn 0.5s ease-in-out forwards; z-index: 100;">
+		<div style="background-color:#ff365d;" class="toast fade show" id="errorToast">
+			<div class="toast-body text-white"><i class="fa fa-check-square"></i> [[${error}]]</div>
+		</div>
+	</div>
+	<div th:if="${success}" class="toast-container fixed-bottom bottom-0 start-0 p-3 border-l-4 border-first" 
+	     style="animation: slideIn 0.5s ease-in-out forwards; z-index: 100;">
+		<div style="background-color:#ff365d;" class="toast fade show" id="errorToast">
+			<div class="toast-body text-white"><i class="fa fa-check-square"></i> [[${success}]]</div>
+		</div>
+	</div>
+	<div th:if="${info}" class="toast-container fixed-bottom bottom-0 start-0 p-3 border-l-4 border-first" 
+	     style="animation: slideIn 0.5s ease-in-out forwards; z-index: 100;">
+		<div style="background-color:#ff365d;" class="toast fade show" id="errorToast">
+			<div class="toast-body text-white"><i class="fa fa-check-square"></i> [[${info}]]</div>
+		</div>
+	</div>
     <!-- material-scrolltop button -->
     <button class="material-scrolltop" type="button"></button>
 

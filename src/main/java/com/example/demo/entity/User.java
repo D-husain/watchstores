@@ -26,13 +26,14 @@ public class User {
 	private String country;
 	private Integer zip;
 	private String password;
+	private int loginCount;
 	
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public User(Integer id, String fname, String lname, String email, String contact, String address, String city,
-			String state, String country, Integer zip, String password) {
+			String state, String country, Integer zip, String password, int loginCount) {
 		super();
 		this.id = id;
 		this.fname = fname;
@@ -45,12 +46,13 @@ public class User {
 		this.country = country;
 		this.zip = zip;
 		this.password = password;
+		this.loginCount = loginCount;
 	}
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", fname=" + fname + ", lname=" + lname + ", email=" + email + ", contact=" + contact
 				+ ", address=" + address + ", city=" + city + ", state=" + state + ", country=" + country + ", zip="
-				+ zip + ", password=" + password + "]";
+				+ zip + ", password=" + password + ", loginCount=" + loginCount + "]";
 	}
 	public Integer getId() {
 		return id;
@@ -117,5 +119,11 @@ public class User {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public int getLoginCount() {
+		return loginCount;
+	}
+	public void setLoginCount(int loginCount) {
+		this.loginCount = loginCount;
 	}
 }

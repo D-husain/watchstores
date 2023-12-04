@@ -129,13 +129,8 @@
                 </div>
             </div>
         </div>
-    </div> <!-- ...:::: End Breadcrumb Section:::... -->
-	<div th:if="${error}" class="toast-container position-absolute bottom-0 start-0 p-3" 
-	     style="animation: slideIn 0.5s ease-in-out forwards;">
-		<div style="background-color:#ff365d;" class="toast fade show" id="errorToast">
-			<div class="toast-body text-white">[[${error}]]</a></div>
-		</div>
-	</div>
+    </div> 
+    <!-- ...:::: End Breadcrumb Section:::... -->
     <!-- ...:::: Start Customer Login Section :::... -->
     <div class="customer-login">
         <div class="container">
@@ -175,7 +170,12 @@
     <!-- Start Footer Section -->
     <div th:insert="include/footer :: footer"> </div>
     <!-- End Footer Section -->
-
+	<div th:if="${error}" class="toast-container fixed-bottom bottom-0 start-0 p-3 border-l-4 border-first" 
+	     style="animation: slideIn 0.5s ease-in-out forwards; z-index: 100;">
+		<div style="background-color:#ff365d;" class="toast fade show" id="errorToast">
+			<div style="font-size: 17px;" class="toast-body text-white text-center"><i class="fa fa-times"></i> [[${error}]]</div>
+		</div>
+	</div>
     <!-- material-scrolltop button -->
     <button class="material-scrolltop" type="button"></button>
 
