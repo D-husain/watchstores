@@ -40,6 +40,7 @@ public class SliderController {
 	private Upload_File fileuploadhelper;
 	@Autowired
 	private SliderRepository sliderRepository;
+	String uploadSlider = "src/main/resources/static/images/slider";
 	
 	@GetMapping("/sliders")
 	public String slider(Model model) {
@@ -67,7 +68,7 @@ public class SliderController {
 
 		try {
 			if (!image.isEmpty()) {
-				boolean uploadfile = fileuploadhelper.uploadFile(image);
+				boolean uploadfile = fileuploadhelper.uploadFile(image, uploadSlider);
 				if (uploadfile) {
 					session.setAttribute("message", "data successfully Inserted");
 				}
@@ -131,7 +132,7 @@ public class SliderController {
 
 		try {
 			if (!image.isEmpty()) {
-				boolean uploadFile = fileuploadhelper.uploadFile(image);
+				boolean uploadFile = fileuploadhelper.uploadFile(image, uploadSlider);
 				if (uploadFile) {
 					response.put("message", "Data successfully inserted");
 				}
@@ -190,7 +191,7 @@ public class SliderController {
 	private void handleFileUpload(MultipartFile image, Slider foundSlider) throws FileUploadException {
 	    if (image != null && !image.isEmpty()) {
 	        try {
-	            boolean uploadSuccessful = fileuploadhelper.uploadFile(image);
+	            boolean uploadSuccessful = fileuploadhelper.uploadFile(image, uploadSlider);
 	            if (uploadSuccessful) {
 	            	foundSlider.setImage(image.getOriginalFilename());
 	            } else {

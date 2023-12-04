@@ -297,10 +297,10 @@ $('table').on('click', '.edit', function() {
 		} else if (product.availability === 'no') {
 			$('#outOfStockRadio').prop('checked', true);
 		}
-		$('#productimg1').attr('src', '../images/' + product.img1);
-		$('#productimg2').attr('src', '../images/' + product.img2);
-		$('#productimg3').attr('src', '../images/' + product.img3);
-		$('#productimg4').attr('src', '../images/' + product.img4);
+		$('#productimg1').attr('src', '../images/product/' + product.img1);
+		$('#productimg2').attr('src', '../images/product/' + product.img2);
+		$('#productimg3').attr('src', '../images/product/' + product.img3);
+		$('#productimg4').attr('src', '../images/product/' + product.img4);
 
 		$('#editmodel').modal('show');
 	});
@@ -622,10 +622,10 @@ $('table').on('click', '.detail', function() {
 		$('#proprice').text(product.price);
 		$('#procolore').text(product.colore);
 		$('#proavailability').text(product.availability);
-		$('#proimg1').attr('src', '../images/' + product.img1);
-		$('#proimg2').attr('src', '../images/' + product.img2);
-		$('#promg3').attr('src', '../images/' + product.img3);
-		$('#proimg4').attr('src', '../images/' + product.img4);
+		$('#proimg1').attr('src', '../images/product/' + product.img1);
+		$('#proimg2').attr('src', '../images/product/' + product.img2);
+		$('#promg3').attr('src', '../images/product/' + product.img3);
+		$('#proimg4').attr('src', '../images//product' + product.img4);
 
 		$('#detailmodal').modal('show');
 	});

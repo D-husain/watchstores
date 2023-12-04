@@ -1,8 +1,8 @@
 package com.example.demo.uplod;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
@@ -16,22 +16,25 @@ public class Upload_File {
 
 	}
 
-	public boolean uploadFile(MultipartFile file) {
-		boolean f = false;
+	public boolean uploadFile(MultipartFile file, String uploadDirectory) {
+	    boolean isUploaded = false;
 
-		try {
+	    try {
+	        Path uploadPath = Paths.get(uploadDirectory);
+	        if (!Files.exists(uploadPath)) {
+	            Files.createDirectories(uploadPath);
+	        }
 
-			Files.copy(file.getInputStream(),
-					Paths.get("src/main/resources/static/images/" + File.separator + file.getOriginalFilename()),
-					StandardCopyOption.REPLACE_EXISTING);
+	        Path filePath = uploadPath.resolve(file.getOriginalFilename());
+	        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+	        isUploaded = true;
 
-			f = true;
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return f;
+	    return isUploaded;
 	}
+
 }
 

@@ -54,6 +54,7 @@ public class ProductController {
 	private UserDao udao;
 	@Autowired
 	private OriginRepository originRepository;
+	String uploadProduct = "src/main/resources/static/images/product";
 	
 	
 	@GetMapping("/products")
@@ -105,10 +106,10 @@ public class ProductController {
 
 		try {
 			if (!img1.isEmpty()) {
-				boolean uploadfile = fileuploadhelper.uploadFile(img1);
-				fileuploadhelper.uploadFile(img2);
-				fileuploadhelper.uploadFile(img3);
-				fileuploadhelper.uploadFile(img4);
+				boolean uploadfile = fileuploadhelper.uploadFile(img1, uploadProduct);
+				fileuploadhelper.uploadFile(img2, uploadProduct);
+				fileuploadhelper.uploadFile(img3, uploadProduct);
+				fileuploadhelper.uploadFile(img4, uploadProduct);
 				if (uploadfile) {
 					hs.setAttribute("message", "data successfully Inserted");
 				}
@@ -174,10 +175,10 @@ public class ProductController {
 
 		try {
 			if (!img1.isEmpty()) {
-				boolean uploadfile = fileuploadhelper.uploadFile(img1);
-				fileuploadhelper.uploadFile(img2);
-				fileuploadhelper.uploadFile(img3);
-				fileuploadhelper.uploadFile(img4);
+				boolean uploadfile = fileuploadhelper.uploadFile(img1, uploadProduct);
+				fileuploadhelper.uploadFile(img2, uploadProduct);
+				fileuploadhelper.uploadFile(img3, uploadProduct);
+				fileuploadhelper.uploadFile(img4, uploadProduct);
 				if (uploadfile) {
 					hs.setAttribute("message", "data successfully Inserted");
 				}
@@ -284,10 +285,10 @@ public class ProductController {
 
         try {
         	if (!img1.isEmpty()) {
-				boolean uploadfile = fileuploadhelper.uploadFile(img1);
-				fileuploadhelper.uploadFile(img2);
-				fileuploadhelper.uploadFile(img3);
-				fileuploadhelper.uploadFile(img4);
+        		boolean uploadfile = fileuploadhelper.uploadFile(img1, uploadProduct);
+				fileuploadhelper.uploadFile(img2, uploadProduct);
+				fileuploadhelper.uploadFile(img3, uploadProduct);
+				fileuploadhelper.uploadFile(img4, uploadProduct);
                 if (uploadfile) {
                     response.put("message", "Image successfully inserted");
                 }
@@ -360,7 +361,7 @@ public class ProductController {
 	private void handleFileUpload(MultipartFile img1, MultipartFile img2, MultipartFile img3, MultipartFile img4, Product foundProduct) throws FileUploadException {
 	    if (img1 != null && !img1.isEmpty()) {
 	        try {
-	            boolean uploadSuccessful = fileuploadhelper.uploadFile(img1);
+	            boolean uploadSuccessful = fileuploadhelper.uploadFile(img1, uploadProduct);
 	            if (uploadSuccessful) {
 	                foundProduct.setImg1(img1.getOriginalFilename());
 	                foundProduct.setImg2(img2.getOriginalFilename()); 

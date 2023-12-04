@@ -32,6 +32,7 @@ public class LocationController {
     private UserDao udao;
     @Autowired
 	private Upload_File fileuploadhelper;
+    String uploadLocation = "src/main/resources/static/images/location";
 
     
     @GetMapping("/country")
@@ -54,7 +55,7 @@ public class LocationController {
 
 		try {
 			if (!cimg.isEmpty()) {
-				boolean uploadfile = fileuploadhelper.uploadFile(cimg);
+				boolean uploadfile = fileuploadhelper.uploadFile(cimg, uploadLocation);
 				if (uploadfile) {
 					hs.setAttribute("message", "data successfully Inserted");
 				}

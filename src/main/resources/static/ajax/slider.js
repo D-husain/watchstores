@@ -108,7 +108,7 @@ function getAllSlider() {
 					'<td>' + (index + 1) + '</td>' +
 					'<td>' + slider.tital + '</td>' +
 					'<td>' + slider.category + '</td>' +
-					'<td><img src="../images/' + slider.image + '" alt="Image"></td>' +
+					'<td><img src="../images/slider/' + slider.image + '" alt="Image"></td>' +
 					'<td>' +
 					'<button class=\'btn-sm btn-secondary btn-icon-text mr-2 text-decoration-none edit\' data-id="' + slider.id + '">Edit<i class="typcn typcn-pencil btn-icon-append"></i></button>' +
 					'<button class=\'btn btn-danger delete\' data-id=' + slider.id + '>Delete</button>' +
@@ -133,7 +133,7 @@ $('table').on('click', '.edit', function() {
 		$('#slidername').val(slider.name);
 		$('#slidercategory').val(slider.category);
 		$('#slidertital').val(slider.tital);
-		$('#sliderimg').attr('src', '../images/' + slider.image);
+		$('#sliderimg').attr('src', '../images/slider/' + slider.image);
 
 		$('#editModal').modal('show');
 	});

@@ -82,7 +82,7 @@ function getAllCategories() {
 				var tr = '<tr>' +
 					'<td>' + (index + 1) + '</td>' +
 					'<td>' + category.cname + '</td>' +
-					'<td><img src="../images/' + category.cimg + '" alt="Image"></td>' +
+					'<td><img src="../images/category/' + category.cimg + '" alt="Image"></td>' +
 					'<td><button class=\'btn-sm btn-secondary btn-icon-text mr-2 text-decoration-none edit\' data-id="' + category.id + '">Edit<i class="typcn typcn-pencil btn-icon-append"></i></button>&nbsp;&nbsp;' +
 					'<button class=\'btn btn-danger delete\' data-id=' + category.id + '>Delete</button></td>' +
 					'</tr>';
@@ -102,7 +102,7 @@ $('table').on('click', '.edit', function() {
 	$.getJSON('http://localhost:8081/category/' + id, function(category) {
 		$('#categoryId').val(category.id);
 		$('#categoryname').val(category.cname);
-		$('#categoryimg').attr('src', '../images/' + category.cimg);
+		$('#categoryimg').attr('src', '../images/category/' + category.cimg);
 
 		$('#editModal').modal('show');
 	});

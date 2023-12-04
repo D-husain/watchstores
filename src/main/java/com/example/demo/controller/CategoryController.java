@@ -15,13 +15,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dao.AdminDao;
 import com.example.demo.entity.Category;
-import com.example.demo.entity.Product;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.uplod.Upload_File;
 
@@ -36,6 +34,8 @@ public class CategoryController {
 	private Upload_File fileuploadhelper;
 	@Autowired
 	CategoryRepository categoryRepository;
+	
+	String uploadCategory = "src/main/resources/static/images/category";
 
 	@GetMapping("/category")
 	public String category(Model model) {
@@ -58,8 +58,8 @@ public class CategoryController {
 
 		try {
 			if (!cimg.isEmpty()) {
-				boolean uploadfile = fileuploadhelper.uploadFile(cimg);
-				if (uploadfile) {
+				boolean isUploaded = fileuploadhelper.uploadFile(cimg, uploadCategory);
+				if (isUploaded) {
 					hs.setAttribute("message", "data successfully Inserted");
 				}
 			} else {
@@ -80,6 +80,7 @@ public class CategoryController {
 		return "redirect:/category";
 	}
 
+
 	@GetMapping("/editcategory")
 	public String edit(@RequestParam("id") Integer id, Model m) {
 		Category category = adao.getCategoryById(id);
@@ -90,7 +91,7 @@ public class CategoryController {
 	@PostMapping("/updatecategory")
 	public String updatecategory(@RequestParam("cimg") MultipartFile cimg, @RequestParam("cname") String cname,
 			@RequestParam("id") int cid, HttpSession hs) {
-
+		
 		Category category = new Category();
 		category.setId(cid);
 		category.setCname(cname);
@@ -98,8 +99,8 @@ public class CategoryController {
 
 		try {
 			if (!cimg.isEmpty()) {
-				boolean uploadfile = fileuploadhelper.uploadFile(cimg);
-				if (uploadfile) {
+				boolean isUploaded = fileuploadhelper.uploadFile(cimg, uploadCategory);
+				if (isUploaded) {
 					hs.setAttribute("message", "data successfully Inserted");
 				}
 			} else {
@@ -141,15 +142,14 @@ public class CategoryController {
 	public ResponseEntity<Map<String, String>> categoryadd(@RequestParam("cimg") MultipartFile cimg,
 			@RequestParam("cname") String cname) {
 		Map<String, String> response = new HashMap<>();
-
 		Category category = new Category();
 		category.setCname(cname);
 		category.setCimg(cimg.getOriginalFilename());
 
 		try {
 			if (!cimg.isEmpty()) {
-				boolean uploadFile = fileuploadhelper.uploadFile(cimg);
-				if (uploadFile) {
+				boolean isUploaded = fileuploadhelper.uploadFile(cimg, uploadCategory);
+				if (isUploaded) {
 					response.put("message", "Image successfully inserted");
 				}
 			} else {
@@ -187,8 +187,8 @@ public class CategoryController {
 
 			if (cimg != null && !cimg.isEmpty()) {
 				try {
-					boolean uploadFile = fileuploadhelper.uploadFile(cimg);
-					if (uploadFile) {
+					boolean isUploaded = fileuploadhelper.uploadFile(cimg, uploadCategory);
+					if (isUploaded) {
 						foundCategory.setCimg(cimg.getOriginalFilename());
 					} else {
 						return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
