@@ -162,7 +162,7 @@
                                         <!-- Start Wishlist Single Item-->
                                         <tr th:each="w: ${wishlist}">
                                             <td class="product_thumb"><a th:href="@{/product-details(id=${w.product.id})}">
-												<img th:src="@{'../images/'+${w.product.img1}}" alt=""></a></td>
+												<img th:src="@{'../images/product/'+${w.product.img1}}" alt=""></a></td>
                                             <td class="product_name"><a href="product-details">[[${w.product.pname}]]</a></td>
                                             <td class="product-price">₹ [[${w.price}]]</td>
                                             <!--<td class="product_stock">[[${w.product.availability}]]</td>-->

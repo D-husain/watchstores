@@ -112,7 +112,7 @@
                 <div th:each="s : ${slider}" class="hero-single-slider-item swiper-slide">
                     <!-- Hero Slider Image -->
                     <div class="hero-slider-bg">
-                        <img th:src="@{'../images/'+${s.image}}" alt="">
+                        <img th:src="@{'../images/slider/'+${s.image}}" alt="">
                     </div>
                     <!-- Hero Slider Content -->
                     <div class="hero-slider-wrapper">
@@ -213,7 +213,7 @@
                 <div class="banner-single-item banner-style-7 banner-animation banner-color--green float-left"
                     data-aos="fade-up" data-aos-delay="0">
                     <div class="image">
-                        <img class="img-fluid" th:src="@{'../images/'+${c.cimg}}" alt="">
+                        <img class="img-fluid" th:src="@{'../images/category/'+${c.cimg}}" alt="">
                     </div>
                 </div>
             </a>
@@ -255,8 +255,8 @@
                                     <div class="product-default-single-item product-color--pink swiper-slide" th:each="p: ${product}">
                                         <div class="image-box">
                                             <a th:href="@{/product-details(id=${p.id})}" class="image-link">
-                                                <img th:src="@{'../images/'+${p.img1}}" alt="">
-                                                <img th:src="@{'../images/'+${p.img2}}" alt="">
+                                                <img th:src="@{'../images/product/'+${p.img1}}" alt="">
+                                                <img th:src="@{'../images/product/'+${p.img2}}" alt="">
                                             </a>
                                             <div class="tag">
                                                 <span>sale</span>
@@ -399,8 +399,8 @@
                                     <div th:each="p: ${product}" class="product-default-single-item product-color--pink swiper-slide">
                                         <div class="image-box">
                                             <a th:href="@{/product-details(id=${p.id})}" class="image-link">
-                                                <img th:src="@{'../images/'+${p.img1}}" alt="">
-                                                <img th:src="@{'../images/'+${p.img2}}" alt="">
+                                                <img th:src="@{'../images/product/'+${p.img1}}" alt="">
+                                                <img th:src="@{'../images/product/'+${p.img2}}" alt="">
                                             </a>
 											<div class="action-link">
 												<th:block th:if="${p.availability eq 'yes'}">

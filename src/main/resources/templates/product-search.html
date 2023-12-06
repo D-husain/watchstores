@@ -275,22 +275,30 @@
                                                         data-aos="fade-up" data-aos-delay="0" >
                                                         <div class="image-box">
                                                             <a th:href="@{/product-details(id=${p.id})}" class="image-link">
-                                                                <img th:src="@{'../images/'+${p.img1}}"
+                                                                <img th:src="@{'../images/product/'+${p.img1}}"
                                                                     alt="">
-                                                                <img th:src="@{'../images/'+${p.img2}}"
+                                                                <img th:src="@{'../images/product/'+${p.img2}}"
                                                                     alt="">
                                                             </a>
                                                             <div class="action-link">
-                                                                <div class="action-link-left">
-                                                                    <a href="#" data-bs-toggle="modal"
-                                                                        data-bs-target="#modalAddcart">Add to Cart</a>
-                                                                </div>
-                                                                <div class="action-link-right">
-                                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview">
-																		<i class="icon-magnifier"></i></a>
-                                                                    <a href="wishlist">
-																		<i class="icon-heart"></i></a>
-                                                                </div>
+																<th:block th:if="${p.availability eq 'yes'}">
+																	<div class="action-link-left">
+																		<form th:action="@{/addToCart}" method="post">
+																			<input type="hidden" name="pid" th:value="${p.id}">
+																			<input type="hidden" name="qty" th:value="1">
+																			<button style="color: aliceblue;" href="#">Add to Cart</button>
+																		</form>
+																	</div>
+																</th:block>
+																<th:block th:if="${p.availability eq 'no'}">
+																	<button style="color: aliceblue; cursor:no-drop;" href="#">Add to Cart</button>
+																</th:block>
+																<div class="action-link-right">
+																	<form th:action="@{/addToWishlist}" method="post">
+																		<input type="hidden" name="pid" th:value="${p.id}">
+																		<button style="color: white;"><i class="icon-heart"></i></button>
+																	</form>
+																</div>
                                                             </div>
                                                         </div>
                                                         <div class="content">
@@ -335,8 +343,8 @@
                                                     <div class="product-list-single product-color--golden" th:each="p: ${product}">
                                                         <a th:href="@{/product-details(id=${p.id})}"
                                                             class="product-list-img-link">
-                                                            <img class="" th:src="@{'../images/'+${p.img1}}" height="300px;" alt="">
-                                                            <img class="" th:src="@{'../images/'+${p.img2}}" height="300px;" alt="">
+                                                            <img class="" th:src="@{'../images/product/'+${p.img1}}" height="300px;" alt="">
+                                                            <img class="" th:src="@{'../images/product/'+${p.img2}}" height="300px;" alt="">
                                                         </a>
                                                         <div class="product-list-content">
                                                             <h5 class="product-list-link">
@@ -350,17 +358,26 @@
                                                             </ul>
                                                             <span class="product-list-price">[[${p.price}]]</span>
                                                             <p>[[${p.description}]]</p>
-                                                            <div class="product-action-icon-link-list">
-                                                                <a href="#" data-bs-toggle="modal"
-                                                                    data-bs-target="#modalAddcart"
-                                                                    class="btn btn-lg btn-black-default-hover">Add to
-                                                                    cart</a>
-                                                                <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview"
-                                                                    class="btn btn-lg btn-black-default-hover">
-                                                                    <i class="icon-magnifier"></i></a>
-                                                                <a href="wishlist" class="btn btn-lg btn-black-default-hover">
-																	<i class="icon-heart"></i></a>
-                                                            </div>
+                                                            <div class="product-action-icon-link-list d-md-flex justify-content-md-start">
+																<th:block th:if="${p.availability eq 'yes'}">
+																<form th:action="@{/addToCart}" method="post">
+																	<input type="hidden" name="pid" th:value="${p.id}">
+																	<input type="hidden" name="qty" th:value="1">
+																	<button class="btn btn-lg btn-black-default-hover">
+																		Add to cart</button>
+																</form>
+																</th:block>
+																<th:block th:if="${p.availability eq 'no'}">
+																	<button style="cursor:no-drop;" class="btn btn-lg btn-black-default-hover">
+																		Add to cart</button>
+																</th:block>	
+																&nbsp;
+																<form th:action="@{/addToWishlist}" method="post">
+																	<input type="hidden" name="pid" th:value="${p.id}">
+																	<button class="btn btn-lg btn-black-default-hover">
+																		<i class="icon-heart"></i></button>
+																</form>
+															</div>
                                                         </div>
                                                     </div> 
                                                     <!-- End Product Defautlt Single -->

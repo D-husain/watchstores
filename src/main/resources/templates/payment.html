@@ -235,29 +235,29 @@
                                     <tbody>
                                         <tr th:each="c: ${cart}">
                                             <td> [[${c.product.pname}]] <strong> × [[${c.qty}]]</strong></td>
-                                            <td>₹ [[${c.price}]]</td>
+                                            <td>₹[[${c.price}]]</td>
                                         </tr>
                                     </tbody>
                                     <tfoot>
                                         <tr>
                                             <th>Cart Subtotal</th>
-                                            <td>₹ [[${subtotal}]]</td>
+                                            <td>₹[[${subtotal}]]</td>
                                         </tr>
                                         <tr>
                                             <th>Shipping</th>
-                                            <td><strong>₹ [[${charge}]]</strong></td>
+                                            <td><strong>₹[[${charge}]]</strong></td>
                                         </tr>
                                         <tr class="order_total">
                                             <th>Order Total</th>
-                                            <td><strong>₹ [[${total}]]</strong></td>
+                                            <td><strong>₹[[${total}]]</strong></td>
                                         </tr>
 										<tr th:if="${session != null and session.coupon != null and session.coupon.coupon != null}">
 											<th>Coupon ([[${session.coupon.coupon}]])</th>
-											<td>₹ -[[${discountAmount}]]</td>
+											<td>₹-[[${discountAmount}]]</td>
 										</tr>
 										<tr th:if="${session != null and session.coupon != null and session.coupon.coupon != null}">
 											<th>Discount Total</th>
-                                            <td><strong>₹ [[${discountedSubtotal}]]</strong></td>
+                                            <td><strong>₹[[${discountedSubtotal}]]</strong></td>
 										</tr>	
                                     </tfoot>
                                 </table>

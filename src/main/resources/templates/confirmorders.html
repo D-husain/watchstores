@@ -34,7 +34,17 @@
     <!-- <link rel="stylesheet" href="assets/css/vendor/vendor.min.css">
     <link rel="stylesheet" href="assets/css/plugins/plugins.min.css">
     <link rel="stylesheet" href="assets/css/style.min.css"> -->
-    
+     <style>
+		@keyframes slideIn {
+			0% {
+				left: -100%;
+			}
+	
+			100% {
+				left: 10px;
+			}
+		}
+	</style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
     
@@ -157,7 +167,12 @@
     <!-- Start Footer Section -->
     <div th:insert="include/footer :: footer"> </div>
     <!-- End Footer Section -->
-
+	<div th:if="${success}" class="toast-container fixed-bottom bottom-0 start-0 p-3 border-l-4 border-first" 
+	     style="animation: slideIn 0.5s ease-in-out forwards; z-index: 100;">
+		<div style="background-color:#ff365d;" class="toast fade show" id="errorToast">
+			<div class="toast-body text-white"><i class="fa fa-check-square"></i> [[${success}]]</div>
+		</div>
+	</div>
     <!-- material-scrolltop button -->
     <button class="material-scrolltop" type="button"></button>
 
@@ -405,6 +420,7 @@
 
     <!-- Main JS -->
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/toast.js"></script>
 </body>
 
 

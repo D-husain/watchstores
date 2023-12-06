@@ -275,9 +275,9 @@
                                                         data-aos="fade-up" data-aos-delay="0" >
                                                         <div class="image-box">
                                                             <a th:href="@{/product-details(id=${p.id})}" class="image-link">
-                                                                <img th:src="@{'../images/'+${p.img1}}"
+                                                                <img th:src="@{'../images/product/'+${p.img1}}"
                                                                     alt="">
-                                                                <img th:src="@{'../images/'+${p.img2}}"
+                                                                <img th:src="@{'../images/product/'+${p.img2}}"
                                                                     alt="">
                                                             </a>
                                                             <div class="action-link">
@@ -343,8 +343,8 @@
                                                     <div class="product-list-single product-color--golden" th:each="p: ${products}">
                                                         <a th:href="@{/product-details(id=${p.id})}"
                                                             class="product-list-img-link">
-                                                            <img class="" th:src="@{'../images/'+${p.img1}}" height="300px;" alt="">
-                                                            <img class="" th:src="@{'../images/'+${p.img2}}" height="300px;" alt="">
+                                                            <img class="" th:src="@{'../images/product/'+${p.img1}}" height="300px;" alt="">
+                                                            <img class="" th:src="@{'../images/product/'+${p.img2}}" height="300px;" alt="">
                                                         </a>
                                                         <div class="product-list-content">
                                                             <h5 class="product-list-link">

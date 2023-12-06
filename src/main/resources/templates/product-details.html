@@ -133,16 +133,16 @@
                         <div class="product-large-image product-large-image-horaizontal swiper-container">
                             <div class="swiper-wrapper">
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img th:src="@{'../images/'+${product.img1}}" alt="">
+                                    <img th:src="@{'../images/product/'+${product.img1}}" alt="">
                                 </div>
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img th:src="@{'../images/'+${product.img2}}" alt="">
+                                    <img th:src="@{'../images/product/'+${product.img2}}" alt="">
                                 </div>
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img th:src="@{'../images/'+${product.img3}}" alt="">
+                                    <img th:src="@{'../images/product/'+${product.img3}}" alt="">
                                 </div>
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img th:src="@{'../images/'+${product.img4}}" alt="">
+                                    <img th:src="@{'../images/product/'+${product.img4}}" alt="">
                                 </div>
                                 <!--<div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
                                     <img src="assets/images/product/default/home-1/default-5.jpg" alt="">
@@ -158,19 +158,19 @@
                             class="product-image-thumb product-image-thumb-horizontal swiper-container pos-relative mt-5">
                             <div class="swiper-wrapper">
                                 <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" th:src="@{'../images/'+${product.img1}}"
+                                    <img class="img-fluid" th:src="@{'../images/product/'+${product.img1}}"
                                         alt="">
                                 </div>
                                 <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" th:src="@{'../images/'+${product.img2}}"
+                                    <img class="img-fluid" th:src="@{'../images/product/'+${product.img2}}"
                                         alt="">
                                 </div>
                                 <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" th:src="@{'../images/'+${product.img3}}"
+                                    <img class="img-fluid" th:src="@{'../images/product/'+${product.img3}}"
                                         alt="">
                                 </div>
                                 <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" th:src="@{'../images/'+${product.img4}}"
+                                    <img class="img-fluid" th:src="@{'../images/product/'+${product.img4}}"
                                         alt="">
                                 </div>
                                 <!--<div class="product-image-thumb-single swiper-slide">
@@ -213,8 +213,8 @@
                             <h4 class="title">Available Options</h4>
                             <!-- Product Variable Single Item -->
                             <div class="variable-single-item">
-                                <div class="product-stock"> <span class="product-stock-in"><i
-                                            class="ion-checkmark-circled"></i></span> [[${product.qty}]] IN STOCK</div>
+                                <div class="product-stock"> <span class="product-stock-in">
+									<i class="ion-checkmark-circled"></i></span> [[${product.qty}]] IN STOCK</div>
                             </div>
                             <!-- Product Variable Single Item -->
                             <form th:action="@{/addToCart}" method="post">
@@ -456,8 +456,8 @@
                                     <div th:each="p:${related}" class="product-default-single-item product-color--golden swiper-slide" >
                                         <div class="image-box">
                                             <a href="product-details-default.html" class="image-link">
-                                                <img th:src="@{'../images/'+${p.img1}}" alt="">
-                                                <img th:src="@{'../images/'+${p.img2}}" alt="">
+                                                <img th:src="@{'../images/product/'+${p.img1}}" alt="">
+                                                <img th:src="@{'../images/product/'+${p.img2}}" alt="">
                                             </a>
                                             <div class="action-link">
 												<th:block th:if="${p.availability eq 'yes'}">
@@ -475,7 +475,7 @@
 												</div>
 												</th:block>	
                                                 <div class="action-link-right">
-                                                    <!--<a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview">
+                                                   <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#modalAddcart">
 														<i class="icon-magnifier"></i></a>-->
 													<form th:action="@{/addToWishlist}" method="post">
 														<input type="hidden" name="pid" th:value="${p.id}">
@@ -498,7 +498,6 @@
                                             <div class="content-right">
                                                 <span class="price">₹[[${p.price}]]</span>
                                             </div>
-
                                         </div>
                                     </div>
                                     <!-- End Product Default Single Item -->
