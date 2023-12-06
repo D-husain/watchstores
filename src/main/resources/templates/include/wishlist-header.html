@@ -19,7 +19,7 @@
                 <li th:each="w: ${wishlist}" class="offcanvas-wishlist-item-single">
                     <div class="offcanvas-wishlist-item-block">
                         <a th:href="@{/product-details(id=${w.product.id})}" class="offcanvas-wishlist-item-image-link">
-                            <img th:src="@{'../images/'+${w.product.img1}}" alt=""
+                            <img th:src="@{'../images/product/'+${w.product.img1}}" alt=""
                                 class="offcanvas-wishlist-image">
                         </a>
                         <div class="offcanvas-wishlist-item-content">

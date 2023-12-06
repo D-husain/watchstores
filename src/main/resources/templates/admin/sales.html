@@ -13,10 +13,12 @@
 	<link rel="stylesheet" href="css/vertical-layout-light/style.css">
 	<link rel="shortcut icon" href="adminlogo/favicon.ico" />
 	<link type="text/css" rel="stylesheet" href="te/jquery-te-1.4.0.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 	<script type="text/javascript" src="te/jquery-te-1.4.0.min.js" charset="utf-8"></script>
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
+	
+	<!--excel pdf downlode cdn-->
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.0.37/jspdf.plugin.autotable.js"></script> 
 	<style>
 		::-webkit-scrollbar {
 			width: 6px;
@@ -122,7 +124,11 @@
 											</form>
 										</div>
 									</div>
-
+									
+									<span style="margin-right: 840px;"></span> <!-- Adjust the margin-right value to create space -->
+									<!--<button class="btn btn-primary btn-icon-text" onclick="generateExcel()">Excel</button>-->
+									<button class="btn btn-primary btn-icon-text" onclick="generatePDF()">PDF</button>
+									
 									<div class="d-flex justify-content-end align-items-center  mt-5 mb-2">
 										<!-- <p class="text-sm text-primary">*Click on order id to show full details</p> -->
 										<div class="d-flex justify-content-end align-items-center ">
@@ -150,12 +156,13 @@
 															<th>Email</th>
 															<th>Order Date</th>
 															<th>Status</th>
-															<th>Actions</th>
+															<th class="notexport">Actions</th>
 														</tr>
 													</thead>
 													<tbody>
-															<tr th:each="o: ${orders}">
-																<td id="id">
+															<tr th:each="o, iterStat : ${orders}">
+																<td>
+																	[[${iterStat.index+1}]]
 																</td>
 																<td>
 																	[[${o.id}]]
@@ -412,7 +419,6 @@
 															</div>
 														</div>
 													</div>
-				<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 				<script>
 					function validate() {
 						let from = document.getElementById('from').value;
@@ -488,143 +494,67 @@
 		<!-- page-body-wrapper ends -->
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	<script src="assets/js/pagination.js"></script>
+	
 	<script>
-		$(document).ready(function () {
-			$("#myInput").on("keyup", function () {
-				var value = $(this).val().toLowerCase();
-				$("#myTable tr:not(#heading)").filter(function () {
-					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-				});
-			});
-		});
+		// Function to generate Excel file
+		function generateExcel() {
+			var data_type = 'data:application/vnd.ms-excel';
+			var table = document.getElementById('myTable');
 
-		function getPagination(table) {
-			var lastPage = 1;
+			// Clone the table to avoid altering the original
+			var clonedTable = table.cloneNode(true);
 
-			$('#maxRows')
-				.on('change', function (evt) {
-					//$('.paginationprev').html('');						// reset pagination
-
-					lastPage = 1;
-					$('.pagination')
-						.find('li')
-						.slice(1, -1)
-						.remove();
-					var trnum = 0; // reset tr counter
-					var maxRows = parseInt($(this).val()); // get Max Rows from select option
-
-					if (maxRows == 5000) {
-						$('.pagination').hide();
-					} else {
-						$('.pagination').show();
-					}
-
-					var totalRows = $(table + ' tbody tr').length; // numbers of rows
-					$(table + ' tr:gt(0)').each(function () {
-						// each TR in  table and not the header
-						trnum++; // Start Counter
-						if (trnum > maxRows) {
-							// if tr number gt maxRows
-
-							$(this).hide(); // fade it out
-						}
-						if (trnum <= maxRows) {
-							$(this).show();
-						} // else fade in Important in case if it ..
-					}); //  was fade out to fade it in
-					if (totalRows > maxRows) {
-						// if tr total rows gt max rows option
-						var pagenum = Math.ceil(totalRows / maxRows); // ceil total(rows/maxrows) to get ..
-						//	numbers of pages
-						for (var i = 1; i <= pagenum;) {
-							// for each page append pagination li
-							$('.pagination #prev')
-								.before(
-									'<li class="btn btn-sm btn-light m-1" data-page="' +
-									i +
-									'">\
-								  <span>' +
-									i++ +
-									'<span class="sr-only">(current)</span></span>\
-								</li>'
-								)
-								.show();
-						} // end for i
-					} // end if row count > max rows
-					$('.pagination [data-page="1"]').addClass('active'); // add active class to the first li
-					$('.pagination li').on('click', function (evt) {
-						// on click each page
-						evt.stopImmediatePropagation();
-						evt.preventDefault();
-						var pageNum = $(this).attr('data-page'); // get it's number
-
-						var maxRows = parseInt($('#maxRows').val()); // get Max Rows from select option
-
-						if (pageNum == 'prev') {
-							if (lastPage == 1) {
-								return;
-							}
-							pageNum = --lastPage;
-						}
-						if (pageNum == 'next') {
-							if (lastPage == $('.pagination li').length - 2) {
-								return;
-							}
-							pageNum = ++lastPage;
-						}
-
-						lastPage = pageNum;
-						var trIndex = 0; // reset tr counter
-						$('.pagination li').removeClass('active'); // remove active class from all li
-						$('.pagination [data-page="' + lastPage + '"]').addClass('active'); // add active class to the clicked
-						// $(this).addClass('active');					// add active class to the clicked
-						limitPagging();
-						$(table + ' tr:gt(0)').each(function () {
-							// each tr in table not the header
-							trIndex++; // tr index counter
-							// if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
-							if (
-								trIndex > maxRows * pageNum ||
-								trIndex <= maxRows * pageNum - maxRows
-							) {
-								$(this).hide();
-							} else {
-								$(this).show();
-							} //else fade in
-						}); // end of for each tr in table
-					}); // end of on click pagination list
-					limitPagging();
-				})
-				.val(10)
-				.change();
-
-			// end of on select change
-
-			// END OF PAGINATION
-		}
-
-		function limitPagging() {
-			// alert($('.pagination li').length)
-
-			if ($('.pagination li').length > 7) {
-				if ($('.pagination li.active').attr('data-page') <= 3) {
-					$('.pagination li:gt(5)').hide();
-					$('.pagination li:lt(5)').show();
-					$('.pagination [data-page="next"]').show();
-				}
-				if ($('.pagination li.active').attr('data-page') > 3) {
-					$('.pagination li:gt(0)').hide();
-					$('.pagination [data-page="next"]').show();
-					for (let i = (parseInt($('.pagination li.active').attr('data-page')) - 2); i <= (parseInt($('.pagination li.active').attr('data-page')) + 2); i++) {
-						$('.pagination [data-page="' + i + '"]').show();
-
-					}
-
+			// Get all headers with the class 'notexport' and remove their respective columns from the cloned table
+			var notExportHeaders = clonedTable.getElementsByClassName('notexport');
+			for (var i = 0; i < notExportHeaders.length; i++) {
+				var columnIndex = notExportHeaders[i].cellIndex;
+				for (var j = 0; j < clonedTable.rows.length; j++) {
+					clonedTable.rows[j].deleteCell(columnIndex);
 				}
 			}
+
+			var table_html = clonedTable.outerHTML.replace(/ /g, '%20');
+
+			var a = document.createElement('a');
+			a.href = data_type + ', ' + table_html;
+			a.download = 'Sales_Excel.xls';
+			a.click();
 		}
 
-		getPagination('#myTable');
+		//export table to pdf
+		function generatePDF() {
+				var doc = new jsPDF('l', 'pt');
+
+				// Add title/header at the top of the PDF
+				doc.setFontSize(16);
+				doc.text('Sales Orders', 35, 30); // Title text positioned at (35, 30)
+
+				var elem = document.getElementById('myTable');
+
+				// Clone the table to avoid altering the original
+				var clonedTable = elem.cloneNode(true);
+
+				// Get all elements with the class 'notexport' and remove them from the cloned table
+				var elementsToRemove = clonedTable.querySelectorAll('.notexport');
+				elementsToRemove.forEach(function (element) {
+					if (element.parentNode) {
+						element.parentNode.removeChild(element);
+					}
+				});
+
+				var data = doc.autoTableHtmlToJson(clonedTable);
+				doc.autoTable(data.columns, data.rows, {
+					margin: {left: 35, top: 50}, // Adjust top margin to accommodate the title
+					theme: 'grid',
+					tableWidth: 'auto',
+					fontSize: 8,
+					overflow: 'linebreak',
+				});
+
+				doc.save('Sales_PDF.pdf');
+			}
+
 	</script>
 	<!-- container-scroller -->
 	<script src="vendors/js/vendor.bundle.base.js"></script>

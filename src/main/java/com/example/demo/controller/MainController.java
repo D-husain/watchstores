@@ -1402,7 +1402,7 @@ public class MainController {
 			+ "</div>"
 			+ "</div>"
 			+ "</div>"
-			+ "</div>"
+			+ "</div>";
 
 			/*
 			 * + "<div style='background-color: transparent'>" +
@@ -1472,8 +1472,8 @@ public class MainController {
 			 * "</p>" + "</div>" + "</div>" + "</div>" + "</div>" + "</div>" + "</div>" +
 			 * "</div>" + "</div>"
 			 */
-
-			+ "<div style='background-color: transparent'>"
+			 if(order.getDiscount()!=0) {
+			String productdiscount ="<div style='background-color: transparent'>"
 			+ "<div class='block-grid three-up no-stack' style='min-width: 320px; max-width: 680px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; margin: 0 auto; background-color: transparent;'>"
 			+ "<div style='border-collapse: collapse; display: table; width: 100%; background-color: transparent;'>"
 			+ "<!--[if (mso)|(IE)]>"
@@ -1578,9 +1578,11 @@ public class MainController {
 			+ "</div>"
 			+ "</div>"
 			+ "</div>"
-			+ "</div>"
+			+ "</div>";
+			fullHTML += productdiscount;
+			 }
 
-			+ "<div style='background-color: transparent'>"
+			 String fullHTML1 = "<div style='background-color: transparent'>"
 			+ "<div class='block-grid' style='min-width: 320px; max-width: 680px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; margin: 0 auto; background-color: transparent;'>"
 			+ "<div style='border-collapse: collapse; display: table; width: 100%; background-color: transparent;'>"
 			+ "<div class='col num12' style='min-width: 320px; max-width: 680px; display: table-cell; vertical-align: top; width: 680px;'>"
@@ -1835,7 +1837,7 @@ public class MainController {
 
 			+ "</body>";
 
-	productHTML += fullHTML;
+	productHTML += fullHTML+fullHTML1;
 		
 		String to=email;
 
@@ -1934,13 +1936,29 @@ public class MainController {
 			charge = product.getOrder().getCharge();
 		}
 
-		String totalInfo = "<tr>" + "<td colspan='4' style='text-align: left;'>Total Price</td>" + "<td>&#8377; "
-				+ totalAmount + "</td>" + "</tr>" + "<tr>" + "<td colspan='4' style='text-align: left;'>Shipping</td>"
-				+ "<td>&#8377; " + charge + "</td>" + "</tr>" + "<tr>"
-				+ "<td colspan='4' style='text-align: left;'>Discount Price</td>" + "<td>&#8377; " + discount + "</td>"
-				+ "</tr>" + "<tr>" + "<td colspan='4' style='text-align: left;'>Total</td>" + "<td>&#8377; "
-				+ totalPrice + "</td>" + "</tr>";
-		jspContent += totalInfo;
+		String totalInfo = "<tr>" + 
+			    "<td colspan='4' style='text-align: left;'>Total Price</td>" + 
+			    "<td>&#8377; " + totalAmount + "</td>" + 
+			    "</tr>" + 
+			    "<tr>" + 
+			    "<td colspan='4' style='text-align: left;'>Shipping</td>" + 
+			    "<td>&#8377; " + charge + "</td>" + 
+			    "</tr>";
+
+			if (discount != 0) {
+			    totalInfo += "<tr>" +
+			        "<td colspan='4' style='text-align: left;'>Discount Price</td>" +
+			        "<td>&#8377; " + discount + "</td>" +
+			        "</tr>";
+			}
+
+			totalInfo += "<tr>" + 
+			    "<td colspan='4' style='text-align: left;'>Total</td>" + 
+			    "<td>&#8377; " + totalPrice + "</td>" + 
+			    "</tr>";
+
+			jspContent += totalInfo;
+
 
 		String fullHTML = "</table>" + "</body>\n" + "</html>";
 		jspContent += fullHTML;

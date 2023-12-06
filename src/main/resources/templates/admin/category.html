@@ -20,7 +20,11 @@
 	<!--sweet alert-->
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
-	 <link rel="stylesheet" href="assets/css/toastmessage.css">
+	<link rel="stylesheet" href="assets/css/toastmessage.css">
+	
+	<!--excel pdf downlode cdn-->
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.0.37/jspdf.plugin.autotable.js"></script>
 	<style>
 		::-webkit-scrollbar {
 			width: 6px;
@@ -67,6 +71,9 @@
 										<i class="typcn typcn-upload btn-icon-prepend"></i>
 										Add Category
 									</button>
+									<span style="margin-right: 660px;"></span> <!-- Adjust the margin-right value to create space -->
+									<!--<button class="btn btn-primary btn-icon-text" onclick="generateExcel()">Excel</button>-->
+									<button class="btn btn-primary btn-icon-text" onclick="generatePDF()">PDF</button>
 									<div class="d-flex flex-column flex-lg-row justify-content-lg-end align-items-lg-center  mt-5 mb-2">
 										<div class="d-flex flex-column flex-sm-row justify-content-end align-items-sm-center ">
 											<select class="form-control form-control-sm" name="state" id="maxRows"
@@ -90,8 +97,8 @@
 													<tr id="heading">
 														<th>Sr. No.</th>
 														<th>Category Name</th>
-														<th>Category Image</th>
-														<th>Actions</th>
+														<th class="notexport">Category Image</th>
+														<th class="notexport">Actions</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -256,6 +263,66 @@
 	<div class="snackbar" id="insert">Category submitted successfully!</div>
 	<div class="snackbar" id="update">Category update successfully!</div>
 	<div class="snackbar" id="delete">Category delete successfully!</div>
+	
+	<script>
+		// Function to generate Excel file
+		function generateExcel() {
+			var data_type = 'data:application/vnd.ms-excel';
+			var table = document.getElementById('myTable');
+
+			// Clone the table to avoid altering the original
+			var clonedTable = table.cloneNode(true);
+
+			// Get all headers with the class 'notexport' and remove their respective columns from the cloned table
+			var notExportHeaders = clonedTable.getElementsByClassName('notexport');
+			for (var i = 0; i < notExportHeaders.length; i++) {
+				var columnIndex = notExportHeaders[i].cellIndex;
+				for (var j = 0; j < clonedTable.rows.length; j++) {
+					clonedTable.rows[j].deleteCell(columnIndex);
+				}
+			}
+
+			var table_html = clonedTable.outerHTML.replace(/ /g, '%20');
+
+			var a = document.createElement('a');
+			a.href = data_type + ', ' + table_html;
+			a.download = 'Category_Excel.xls';
+			a.click();
+		}
+
+		//export table to pdf
+		function generatePDF() {
+				var doc = new jsPDF('l', 'pt');
+
+				// Add title/header at the top of the PDF
+				doc.setFontSize(16);
+				doc.text('Category Data', 35, 30); // Title text positioned at (35, 30)
+
+				var elem = document.getElementById('myTable');
+
+				// Clone the table to avoid altering the original
+				var clonedTable = elem.cloneNode(true);
+
+				// Get all elements with the class 'notexport' and remove them from the cloned table
+				var elementsToRemove = clonedTable.querySelectorAll('.notexport');
+				elementsToRemove.forEach(function (element) {
+					if (element.parentNode) {
+						element.parentNode.removeChild(element);
+					}
+				});
+
+				var data = doc.autoTableHtmlToJson(clonedTable);
+				doc.autoTable(data.columns, data.rows, {
+					margin: {left: 35, top: 50}, // Adjust top margin to accommodate the title
+					theme: 'grid',
+					tableWidth: 'auto',
+					fontSize: 8,
+					overflow: 'linebreak',
+				});
+
+				doc.save('Category_PDF.pdf');
+			}
+	</script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 	<script src="assets/js/pagination.js"></script>
 	<!-- container-scroller -->

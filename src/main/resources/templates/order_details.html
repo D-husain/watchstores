@@ -129,171 +129,173 @@
     </div> <!-- ...:::: End Breadcrumb Section:::... -->
 
 	<div th:object="${order}" class="p-8 lg:px-16 md:px-10 px-5 py-10">
-    <div class="px-0 xl:px-16">
-        <div class="d-flex gap-10 my-5 mx-auto">
-            <div class="col-span-1 mx-auto">
-                <table class="w-full">
-                    <tr class="border-b-2">
-                        <th colspan='2' class="text-left py-1 font-semibold text-first">Order information</th>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">Order id</td>
-                        <td class="pt-1 font-medium">: <span>[[${order.id}]]</span></td>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">Order date</td>
-                        <td class="pt-1 font-medium">: <span>[[${order.orderdate}]]</span></td>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">Total payment</td>
-                        <td class="pt-1 font-medium">: <span>&#8377; [[${order.total}]]</span></td>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">Payment method</td>
-                        <td class="pt-1 font-medium">: <span>online</span></td>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">Order status</td>
-						<td class="pt-1 font-medium">:
-							<th:block th:if="${order.status == 1}">
-								<label class="text-warning">Pending</label>
-							</th:block>
-							<th:block th:if="${order.status == 2}">
-								<label class="text-primary">Active</label>
-							</th:block>
-							<th:block th:if="${order.status == 3}">
-								<label class="text-info">Shipping</label>
-							</th:block>
-							<th:block th:if="${order.status == 4}">
-								<label class="text-success">Delivered</label>
-							</th:block>
-							<th:block th:if="${order.status == 5}">
-								<label class="text-danger">Cancelled</label>
-							</th:block>
-						</td>
-                   </tr>
-                   <tr>
-                   
-                   		<td class="pt-1 text-gray-600">Invoice</td>
-                        <td class="pt-1 font-medium">: <label class="badge badge-dark" ><a class="text-black" th:href="@{/invoice/{id}(id=${order.id})}"> Download </a></label></td>
-                   
-                    </tr>
-                </table>
-            </div>
-            <div class="col-span-1 mx-auto">
-                <table class="w-full">
-                    <tr class="border-b-2">
-                        <th colspan='2' class="text-left py-1 font-semibold text-first">Shipping address</th>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">Name</td>
-                        <td class="pt-1 font-medium">: <span>[[${order.ShippingAddress.fname}]] [[${order.ShippingAddress.lname}]]</span></td>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">Email</td>
-                        <td class="pt-1 font-medium">: <span>[[${order.ShippingAddress.email}]]</span></td>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">Phone</td>
-                        <td class="pt-1 font-medium">: <span>[[${order.ShippingAddress.phone}]]</span></td>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">Address</td>
-                        <td class="pt-1 font-medium address-cell">: <span>[[${order.ShippingAddress.address1}]]</span></td>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">Suburb</td>
-                        <td class="pt-1 font-medium">: <span>[[${order.ShippingAddress.city}]]</span></td>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">State/Territory</td>
-                        <td class="pt-1 font-medium">: <span>[[${order.ShippingAddress.country}]]</span></td>
-                    </tr>
-                   <!-- <tr>
-                        <td class="pt-1 text-gray-600">Postal code</td>
-                        <td class="pt-1 font-medium">: <span>[[${order.ShippingAddress}]]</span></td>
-                    </tr>-->
-                </table>
-            </div>
-            <div class="col-span-1 mx-auto">
-                <table class="w-full">
-                    <tr class="border-b-2">
-                        <th colspan='2' class="text-left py-1 font-semibold text-first">Billing address</th>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">Name</td>
-                        <td class="pt-1 font-medium">: <span>[[${session.user.fname}]] [[${session.user.lname}]]</span></td>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">Email</td>
-                        <td class="pt-1 font-medium">: <span>[[${session.user.email}]]</span></td>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">Phone</td>
-                        <td class="pt-1 font-medium">: <span>[[${session.user.contact}]]</span></td>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">Address</td>
-                        <td class="pt-1 font-medium address-cell">: <span>[[${session.user.address}]]</span></td>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">Suburb</td>
-                        <td class="pt-1 font-medium">: <span>[[${session.user.city}]]</span></td>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">State/Territory</td>
-                        <td class="pt-1 font-medium">: <span>[[${session.user.state}]]</span></td>
-                    </tr>
-                    <tr>
-                        <td class="pt-1 text-gray-600">Postal code</td>
-                        <td class="pt-1 font-medium">: <span>[[${session.user.zip}]]</span></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <div class="col-10 p-5 bg-light mb-3 mx-auto">
-            <h1 class="text-xl font-semibold text-first">Order details</h1>
-            <div class="overflow-auto">
-                
-            <table class="min-w-[500px] w-full my-8 table">
-                	<tr class="border-b-2">
-                   		<th class="w-2/3 text-left py-2">Product</th>
-                    	<th class="text-left py-2">Price</th>
-                    	<th class="text-left py-2">Quantity</th>
-                    	<th class="text-left py-2">Total</th>
-                	</tr>
-                     
-					<tr th:each="od:${sproductList}" class="text-sm">
-                        <td class="py-2"><a th:href="@{/product-details(id=${od.product.id})}">[[${od.product.pname}]]</a></td>
-                        <td class="py-2">&#8377; [[${od.price}]]</td>
-                        <td class="py-2">x [[${od.qty}]]</td>
-                        <td class="py-2">&#8377; [[${od.total}]]</td>
-                    </tr>
-                    
-                    <tr class="border-y-2">
-                       <td colspan="3" class="py-2 font-semibold">Subtotal</td>
-                       <td class="py-2">&#8377; [[${order.amount}]]</td>
-                    </tr>
-                	<tr class="border-b-2">
-                    	<td colspan="3" class="py-2 font-semibold">Shipping Charges</td>
-                    	<td>&#8377; [[${order.charge}]]</td>
-                	</tr>
-                	
-                	
-                	<tr class="border-y-2">
-                    	<td colspan="3" class="py-2 font-semibold">Discount</td>
-                    	<td>&#8377; -[[${order.discount}]]</td>
-                	</tr>
-
-                    <tr class="border-b-2">
-                   		<td colspan="3" class="py-2 font-semibold">Total</td>
-                    	<td class="text-first font-semibold">&#8377; [[${order.total}]]</td>
-                	</tr>
-            </table>
-            </div>
-        </div>
-    </div>
-</div>
+		<div class="px-0 xl:px-16">
+			<div class="d-flex gap-10 my-5 mx-auto">
+				<div class="col-span-1 mx-auto">
+					<table class="w-full">
+						<tr class="border-b-2">
+							<th colspan='2' class="text-left py-1 font-semibold text-first">Order information</th>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">Order id</td>
+							<td class="pt-1 font-medium">: <span>[[${order.id}]]</span></td>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">Order date</td>
+							<td class="pt-1 font-medium">: <span>[[${order.orderdate}]]</span></td>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">Total payment</td>
+							<td class="pt-1 font-medium">: <span>&#8377; [[${order.total}]]</span></td>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">Payment method</td>
+							<td class="pt-1 font-medium">: <span>online</span></td>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">Order status</td>
+							<td class="pt-1 font-medium">:
+								<th:block th:if="${order.status == 1}">
+									<label class="text-warning">Pending</label>
+								</th:block>
+								<th:block th:if="${order.status == 2}">
+									<label class="text-primary">Active</label>
+								</th:block>
+								<th:block th:if="${order.status == 3}">
+									<label class="text-info">Shipping</label>
+								</th:block>
+								<th:block th:if="${order.status == 4}">
+									<label class="text-success">Delivered</label>
+								</th:block>
+								<th:block th:if="${order.status == 5}">
+									<label class="text-danger">Cancelled</label>
+								</th:block>
+							</td>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">Invoice</td>
+							<td class="pt-1 font-medium">: <label class="badge badge-dark">
+							<a class="text-black" th:href="@{/invoice/{id}(id=${order.id})}"> Download </a></label></td>
+						</tr>
+					</table>
+				</div>
+				<div class="col-span-1 mx-auto">
+					<table class="w-full">
+						<tr class="border-b-2">
+							<th colspan='2' class="text-left py-1 font-semibold text-first">Shipping address</th>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">Name</td>
+							<td class="pt-1 font-medium">: <span>[[${order.ShippingAddress.fname}]]
+									[[${order.ShippingAddress.lname}]]</span></td>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">Email</td>
+							<td class="pt-1 font-medium">: <span>[[${order.ShippingAddress.email}]]</span></td>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">Phone</td>
+							<td class="pt-1 font-medium">: <span>[[${order.ShippingAddress.phone}]]</span></td>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">Address</td>
+							<td class="pt-1 font-medium address-cell">: <span>[[${order.ShippingAddress.address1}]]</span>
+							</td>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">Suburb</td>
+							<td class="pt-1 font-medium">: <span>[[${order.ShippingAddress.city}]]</span></td>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">State/Territory</td>
+							<td class="pt-1 font-medium">: <span>[[${order.ShippingAddress.country}]]</span></td>
+						</tr>
+						<!-- <tr>
+	                        <td class="pt-1 text-gray-600">Postal code</td>
+	                        <td class="pt-1 font-medium">: <span>[[${order.ShippingAddress}]]</span></td>
+	                    </tr>-->
+					</table>
+				</div>
+				<div class="col-span-1 mx-auto">
+					<table class="w-full">
+						<tr class="border-b-2">
+							<th colspan='2' class="text-left py-1 font-semibold text-first">Billing address</th>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">Name</td>
+							<td class="pt-1 font-medium">: <span>[[${session.user.fname}]] [[${session.user.lname}]]</span>
+							</td>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">Email</td>
+							<td class="pt-1 font-medium">: <span>[[${session.user.email}]]</span></td>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">Phone</td>
+							<td class="pt-1 font-medium">: <span>[[${session.user.contact}]]</span></td>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">Address</td>
+							<td class="pt-1 font-medium address-cell">: <span>[[${session.user.address}]]</span></td>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">Suburb</td>
+							<td class="pt-1 font-medium">: <span>[[${session.user.city}]]</span></td>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">State/Territory</td>
+							<td class="pt-1 font-medium">: <span>[[${session.user.state}]]</span></td>
+						</tr>
+						<tr>
+							<td class="pt-1 text-gray-600">Postal code</td>
+							<td class="pt-1 font-medium">: <span>[[${session.user.zip}]]</span></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="col-10 p-5 bg-light mb-3 mx-auto">
+				<h1 class="text-xl font-semibold text-first">Order details</h1>
+				<div class="overflow-auto">
+	
+					<table class="min-w-[500px] w-full my-8 table">
+						<tr class="border-b-2">
+							<th class="w-2/3 text-left py-2">Product</th>
+							<th class="text-left py-2">Price</th>
+							<th class="text-left py-2">Quantity</th>
+							<th class="text-left py-2">Total</th>
+						</tr>
+	
+						<tr th:each="od:${sproductList}" class="text-sm">
+							<td class="py-2"><a th:href="@{/product-details(id=${od.product.id})}">[[${od.product.pname}]]</a></td>
+							<td class="py-2">&#8377; [[${od.price}]]</td>
+							<td class="py-2">x [[${od.qty}]]</td>
+							<td class="py-2">&#8377; [[${od.total}]]</td>
+						</tr>
+	
+						<tr class="border-y-2">
+							<td colspan="3" class="py-2 font-semibold">Subtotal</td>
+							<td class="py-2">&#8377; [[${order.amount}]]</td>
+						</tr>
+						<tr class="border-b-2">
+							<td colspan="3" class="py-2 font-semibold">Shipping Charges</td>
+							<td>&#8377; [[${order.charge}]]</td>
+						</tr>
+	
+	
+						<tr class="border-y-2" th:if="${order.discount != 0}">
+							<td colspan="3" class="py-2 font-semibold">Discount</td>
+							<td>&#8377; -[[${order.discount}]]</td>
+						</tr>
+	
+						<tr class="border-b-2">
+							<td colspan="3" class="py-2 font-semibold">Total</td>
+							<td class="text-first font-semibold">&#8377; [[${order.total}]]</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
     <!-- ...:::: Start Account Dashboard Section:::... -->
 
     <!-- Start Footer Section -->
