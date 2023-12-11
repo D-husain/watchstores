@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,13 +29,20 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import com.example.demo.dao.AdminDao;
 import com.example.demo.dao.UserDao;
+import com.example.demo.dto.CartDTO;
+import com.example.demo.dto.ProductBrandDTO;
+import com.example.demo.dto.ProductDTO;
+import com.example.demo.dto.SliderDTO;
+import com.example.demo.dto.UserDTO;
+import com.example.demo.dto.UserDTO;
+import com.example.demo.dto.WishlistDTO;
 import com.example.demo.entity.Cart;
 import com.example.demo.entity.Category;
-import com.example.demo.entity.Contact;
 import com.example.demo.entity.Order;
 import com.example.demo.entity.OrderDetails;
 import com.example.demo.entity.Product;
 import com.example.demo.entity.ShippingAddress;
+import com.example.demo.entity.Slider;
 import com.example.demo.entity.User;
 import com.example.demo.entity.Wishlist;
 import com.example.demo.repository.CartRepository;
@@ -335,25 +344,42 @@ public class MainController {
 	}
 
 	@GetMapping("/shop")
-	public String shop(@RequestParam(name = "category", required = false) String category,
-			@RequestParam(name = "brand", required = false) String brand, Model model) {
-		List<Product> productList = null;
-
-		if (category == null && brand == null) {
-			productList = adao.ShowProduct();
-		} else if (category != null && brand == null) {
-			productList = adao.viewProductsByCategoryName(category);
-		} else if (category == null && brand != null) {
-			productList = adao.viewProductsByBrandName(brand);
-		} else {
-			// You can handle this case if necessary.
-		}
-
-		model.addAttribute("category", adao.ShowCategory());
-		model.addAttribute("brand", adao.ShowBrand());
-		model.addAttribute("products", productList);
-
+	public String shop() {
 		return "shop";
+	}
+	
+	@GetMapping("api/shop")
+	public ResponseEntity<List<ProductDTO>> shop(
+	        @RequestParam(name = "category", required = false) String category,
+	        @RequestParam(name = "brand", required = false) String brand) {
+
+	    List<ProductDTO> productDTOList = new ArrayList<>();
+	    List<Product> productList;
+
+	    if (category == null && brand == null) {
+	        productList = adao.ShowProduct();
+	    } else if (category != null && brand == null) {
+	        productList = adao.viewProductsByCategoryName(category);
+	    } else if (category == null && brand != null) {
+	        productList = adao.viewProductsByBrandName(brand);
+	    } else {
+	        // If both category and brand parameters are present
+	        productList = adao.getProductsByCategoryAndBrand(category, brand);
+	    }
+
+	    for (Product product : productList) {
+	        ProductDTO productDTO = adao.mapProductToDTO(product);
+	        productDTOList.add(productDTO);
+	    }
+
+	    return new ResponseEntity<>(productDTOList, HttpStatus.OK);
+	}
+
+	
+	@GetMapping("/brand/data")
+	public ResponseEntity<List<ProductBrandDTO>> getPbrandList() {
+	    List<ProductBrandDTO> productBrandDTOs = adao.getProductBrandDTOList();
+	    return new ResponseEntity<>(productBrandDTOs, HttpStatus.OK);
 	}
 
 	@GetMapping("/product-details")
@@ -376,6 +402,19 @@ public class MainController {
 		model.addAttribute("brand", adao.ShowBrand());
 		return "product-search";
 	}
+	
+	@GetMapping("api/productsearch")
+	public ResponseEntity<List<ProductDTO>> searchProduct(@RequestParam("keyword") String keyword) {
+	    List<Product> products = udao.ProductSearch(keyword);
+	    List<ProductDTO> productDTOs = new ArrayList<>();
+
+	    for (Product product : products) {
+	        ProductDTO productDTO = adao.mapProductToDTO(product);
+	        productDTOs.add(productDTO);
+	    }
+	    return ResponseEntity.ok()
+	        .body(productDTOs);
+	}
 
 	@GetMapping("/sort")
 	public String sortProducts(@RequestParam("sort") String sortType, Model model) {
@@ -393,6 +432,35 @@ public class MainController {
 		model.addAttribute("category", adao.ShowCategory());
 		model.addAttribute("brand", adao.ShowBrand());
 		return "shop";
+	}
+	
+	@GetMapping("/api/sort")
+	public ResponseEntity<List<ProductDTO>> sortProducts(@RequestParam("sort") String sortType) {
+	    List<ProductDTO> productDTOList = new ArrayList<>();
+	    List<Product> sortedProducts;
+
+	    if ("priceLowToHigh".equals(sortType)) {
+	        sortedProducts = productrepo.sortByPriceLowToHigh();
+	    } else if ("priceHighToLow".equals(sortType)) {
+	        sortedProducts = productrepo.sortByPriceHighToLow();
+	    } else if ("productNameZ".equals(sortType)) {
+	        sortedProducts = productrepo.sortByProductNameZ();
+	    } else if ("productNameA".equals(sortType)) {
+	        sortedProducts = productrepo.sortByProductNameA();
+	    } else {
+	        return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Invalid sort type
+	    }
+
+	    for (Product product : sortedProducts) {
+	        ProductDTO productDTO = adao.mapProductToDTO(product);
+	        productDTOList.add(productDTO);
+	    }
+
+	    if (!productDTOList.isEmpty()) {
+	        return new ResponseEntity<>(productDTOList, HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
 	}
 	
 	@GetMapping("/wishlist")
@@ -446,6 +514,45 @@ public class MainController {
 		return "cart";
 	}
 	
+	@GetMapping("/cart/data")
+	public ResponseEntity<List<CartDTO>> getCartList(@RequestParam("userId") Integer userId) {
+		if (userId == null) {
+			return ResponseEntity.badRequest().build(); // If userId is not provided, return a bad request
+		}
+
+		// Assuming you have a service layer that interacts with the database
+		List<Cart> cart = udao.ShowUserCarts(userId); // Fetch cart data for the provided user ID
+
+		if (cart == null || cart.isEmpty()) {
+			return ResponseEntity.noContent().build(); // If cart is empty, return no content
+		}
+
+		List<CartDTO> cartDTO = cart.stream().map(carts -> {
+			CartDTO cdto = new CartDTO();
+			cdto.setId(carts.getId());
+			cdto.setPrice(carts.getPrice());
+			cdto.setQty(carts.getQty());
+			cdto.setTotal(carts.getTotal());
+
+			// Perform null checks to avoid NullPointerException
+			if (carts.getProduct() != null) {
+				cdto.setProductid(carts.getProduct().getId());
+				cdto.setImg(carts.getProduct().getImg1());
+				cdto.setPname(carts.getProduct().getPname());
+			}
+
+			if (carts.getUser() != null) {
+				cdto.setUserid(carts.getUser().getId());
+			}
+
+			return cdto;
+		}).collect(Collectors.toList());
+
+		return ResponseEntity.ok(cartDTO); // Return cart data with OK status
+	}
+
+
+	
 	@PostMapping("/addToCart")
 	public String addToCart(@RequestParam int pid, @RequestParam int qty, HttpSession session, RedirectAttributes redirAttrs) {
 	    User user = (User) session.getAttribute("user");
@@ -474,15 +581,20 @@ public class MainController {
 	}
 	
 	@PostMapping("/api/updateCart")
-    public ResponseEntity<String> updateCarts(@RequestParam("id") Integer id, @RequestParam("qty") int qty) {
+    public ResponseEntity<String> updateCarts(@RequestParam(value = "id", required = true) Integer id,
+                                              @RequestParam(value = "qty", required = true) int qty) {
+        // Check if 'id' parameter is present
+        if (id == null) {
+            return ResponseEntity.badRequest().body("'id' parameter is required.");
+        }
+
         Cart cartItem = cartrepo.getById(id);
 
         if (cartItem != null) {
-            double total = cartItem.getPrice() * qty;
-            udao.updateCart(id, qty, total);
+            udao.updateCart(id, qty);
             return ResponseEntity.ok("Product updated successfully.");
         } else {
-            return ResponseEntity.badRequest().body("Cart item not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cart item not found.");
         }
     }
 

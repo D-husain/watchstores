@@ -2,12 +2,14 @@ package com.example.demo.dao;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dto.ProductBrandDTO;
 import com.example.demo.dto.ProductDTO;
 import com.example.demo.dto.SliderDTO;
 import com.example.demo.entity.Admin;
@@ -26,6 +28,13 @@ import com.example.demo.repository.OriginRepository;
 import com.example.demo.repository.ProductBrandRepository;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.SliderRepository;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 @Service
 public class AdminDao {
@@ -61,6 +70,22 @@ public class AdminDao {
 	public List<ProductBrand> ShowBrand(){
         return brandrepo.findAll();
     }
+	
+	public List<ProductBrandDTO> getProductBrandDTOList() {
+	    List<ProductBrand> productBrands = ShowBrand();
+	    return productBrands.stream()
+	            .map(this::convertToDTO)
+	            .collect(Collectors.toList());
+	}
+
+	private ProductBrandDTO convertToDTO(ProductBrand productBrand) {
+	    ProductBrandDTO dto = new ProductBrandDTO();
+	    dto.setId(productBrand.getId());
+	    dto.setBrand(productBrand.getBrand());
+	    // Set other fields as needed
+
+	    return dto;
+	}
 	
 	public ProductBrand getbrandByName(String brand) {
         return brandrepo.findBybrandname(brand)
@@ -160,7 +185,7 @@ public class AdminDao {
     }
 	
 
-    private ProductDTO mapProductToDTO(Product product) {
+    public ProductDTO mapProductToDTO(Product product) {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setId(product.getId());
         productDTO.setPname(product.getPname());
@@ -302,6 +327,43 @@ public class AdminDao {
 		sliderrepo.deleteById(id);
 		
 	}
+	
+	    private final EntityManager entityManager;
+
+	    public AdminDao(EntityManager entityManager) {
+	        this.entityManager = entityManager;
+	    }
+
+	public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
+        Root<Product> root = criteriaQuery.from(Product.class);
+
+        Predicate categoryPredicate = null;
+        Predicate brandPredicate = null;
+
+        if (category != null) {
+            // Assuming category is a field in Product entity
+            categoryPredicate = criteriaBuilder.equal(root.get("category"), category);
+        }
+
+        if (brand != null) {
+            // Assuming brand is a field in Product entity
+            brandPredicate = criteriaBuilder.equal(root.get("brand"), brand);
+        }
+
+        // Combining predicates if both category and brand are provided
+        if (categoryPredicate != null && brandPredicate != null) {
+            criteriaQuery.where(criteriaBuilder.and(categoryPredicate, brandPredicate));
+        } else if (categoryPredicate != null) {
+            criteriaQuery.where(categoryPredicate);
+        } else if (brandPredicate != null) {
+            criteriaQuery.where(brandPredicate);
+        }
+
+        TypedQuery<Product> query = entityManager.createQuery(criteriaQuery);
+        return query.getResultList();
+    }
 
 	
 

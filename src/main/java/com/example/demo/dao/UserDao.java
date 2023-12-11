@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.management.InstanceAlreadyExistsException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,6 +43,8 @@ import com.example.demo.repository.SubscribeRepository;
 import com.example.demo.repository.UserCouponRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.WishlistRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 
 
 @Service
@@ -232,6 +236,11 @@ public class UserDao {
         return cartrepo.findByUser(user);
     }
 	
+	public List<Cart> ShowUserCarts(Integer userId) {
+        return cartrepo.findByUserUid(userId);
+    }
+	
+	
 	public void deleteCartItemsByUid(int uid) {
         cartrepo.deleteByUid(uid);
     }
@@ -239,6 +248,20 @@ public class UserDao {
 	public void DeleteCart(int id) {
 		cartrepo.deleteById(id);
 	}
+	
+	
+	
+	public boolean updateCart(Integer id, int qty) {
+        Cart cartItem = cartrepo.getById(id);
+        
+        if (cartItem != null) {
+            double total = cartItem.getPrice() * qty;
+            updateCart(id, qty, total);
+            return true;
+        }
+        
+        return false;
+    }
 	
 	//------------------------------------------------ Product ----------------------------------------------------------
 	
@@ -322,6 +345,7 @@ public class UserDao {
 		wishlistrepo.deleteById(id);
 	}
 	
+	 
 	//------------------------------------------------ userOrder ------------------------------------------------------
 	
 	

@@ -166,10 +166,10 @@
 													href="product-details-default.html">[[${c.product.pname}]]</a></td>
 											<td class="product-price">₹ [[${c.price}]]</td>
 											<td class="product_quantity"><label>Quantity</label>
-												<form th:action="@{/updateCart}" method="post">
-													<input type="hidden" name="id" th:value="${c.id}" />
-													<input min="1" max="10" name="qty" th:value="${c.qty}" type="number"
-													 onchange="this.form.submit();" />
+												<form id="updateCartForm">
+													<input type="hidden" id="idInput" name="id" th:value="${c.id}" />
+													<input min="1" max="10" id="qtyInput" name="qty" th:value="${c.qty}" type="number"
+													 onclick='return updateCart()' />
 												</form>
 											</td>
 											<td class="product_total">₹ [[${c.total}]]</td>
@@ -221,7 +221,42 @@
 				</div>
 			</div>
 		</div> <!-- End Cart Table -->
+		<script>
+			function updateCart() {
+				var id = document.getElementById('idInput').value;
+				var qty = document.getElementById('qtyInput').value;
 
+				var formData = new FormData();
+				formData.append('id', id);
+				formData.append('qty', qty);
+
+				fetch('/api/updateCart?id=' + id + '&qty=' + qty, {
+					method: 'POST',
+					body: formData
+				})
+					.then(response => {
+						if (response.ok) {
+							return response.json(); // assuming the response is JSON
+						} else {
+							throw new Error('Failed to update cart');
+						}
+					})
+					.then(data => {
+						// Handle the success response
+						console.log('Product updated successfully:', data);
+
+						// Update the UI with the updated cart information
+						var cartInfoDiv = document.getElementById('cartInfo');
+						cartInfoDiv.innerHTML = 'Updated Cart Information: ' + JSON.stringify(data);
+					})
+					.catch(error => {
+						// Handle errors
+						console.error('Error updating product:', error.message);
+						// Display error message or take appropriate action
+					});
+			}
+		</script>
+			
         <!-- Start Coupon Start -->
         <div class="coupon_area">
             <div class="container">
