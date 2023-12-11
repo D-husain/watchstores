@@ -30,8 +30,6 @@
     <!-- Main CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
 	
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	
     <!-- Use the minified version files listed below for better performance and remove the files listed above -->
     <!-- <link rel="stylesheet" href="assets/css/vendor/vendor.min.css">
     <link rel="stylesheet" href="assets/css/plugins/plugins.min.css">
@@ -96,7 +94,7 @@
     <!-- End Offcanvas Mobile Menu Section -->
 
     <!-- Start Offcanvas Search Bar Section -->
-    <div th:replace="include/search :: div"> </div>
+	<div th:insert="include/search :: div"> </div>
     <!-- End Offcanvas Search Bar Section -->
 
     <!-- Offcanvas Overlay -->
@@ -290,9 +288,9 @@
 	
     <script th:inline="javascript">
 		$(document).ready(function () {
-				getAllProducts();
-			});
-		
+			getAllProducts();
+		});
+
 		function getAllProducts() {
 			$.ajax({
 				url: '/api/shop',
@@ -308,8 +306,8 @@
 				}
 			});
 		}
-		
-		
+
+
 		$(document).ready(function () {
 			$.ajax({
 				url: '/brand/data',
@@ -349,88 +347,64 @@
 				}
 			});
 		}
-		
+
 		$(document).ready(function () {
-				// Fetch categories and populate the category filter
-				$.ajax({
-					url: '/category/data',
-					method: 'GET',
-					dataType: 'json',
-					success: function (response) {
-						if (response && response.length > 0) {
-							var categoryFilter = $('#categoryFilter');
-							response.forEach(function (category) {
-								var categoryListItem = '<li class="sidebar-menu-collapse-list">' +
-									'<div class="accordion">' +
-									'<button onclick="filterByCategory(\'' + category.cname + '\')">' + category.cname + '</button>' +
-									'</div>' +
-									'</li>';
-								categoryFilter.append(categoryListItem);
-							});
-						}
-					},
-					error: function (xhr, status, error) {
-						console.error(error);
-					}
-				});
-			});
-
-			// Function to filter products by category
-			function filterByCategory(category) {
-				$.ajax({
-					url: '/api/shop?category=' + category,
-					method: 'GET',
-					dataType: 'json',
-					success: function (response) {
-						// On successful response, clear existing products and display filtered products
-						displayFilteredProducts(response);
-						displayListProducts(response);
-					},
-					error: function (xhr, status, error) {
-						console.error(error);
-					}
-				});
-			}
-			
-			function filterByProductSortby(sort) {
-					$.ajax({
-						url: '/api/sort?sort=' + sort,
-						method: 'GET',
-						dataType: 'json',
-						success: function (response) {
-							// On successful response, display filtered products
-							displayFilteredProducts(response);
-							displayListProducts(response);
-						},
-						error: function (xhr, status, error) {
-							console.error(error);
-						}
-					});
-				}
-				
-				
-				var keyword = localStorage.getItem('searchKeyword');
-
-					// Function to perform search by keyword
-					function searchByKeyword(keyword) {
-						$.ajax({
-							url: '/api/productsearch?keyword=' + keyword,
-							method: 'GET',
-							dataType: 'json',
-							success: function (response) {
-								displayFilteredProducts(response);
-								displayListProducts(response);
-							},
-							error: function (xhr, status, error) {
-								console.error(error);
-							}
+			// Fetch categories and populate the category filter
+			$.ajax({
+				url: '/category/data',
+				method: 'GET',
+				dataType: 'json',
+				success: function (response) {
+					if (response && response.length > 0) {
+						var categoryFilter = $('#categoryFilter');
+						response.forEach(function (category) {
+							var categoryListItem = '<li class="sidebar-menu-collapse-list">' +
+								'<div class="accordion">' +
+								'<button onclick="filterByCategory(\'' + category.cname + '\')">' + category.cname + '</button>' +
+								'</div>' +
+								'</li>';
+							categoryFilter.append(categoryListItem);
 						});
 					}
+				},
+				error: function (xhr, status, error) {
+					console.error(error);
+				}
+			});
+		});
 
-					if (keyword) {
-						searchByKeyword(keyword);
-					}
-				
+		// Function to filter products by category
+		function filterByCategory(category) {
+			$.ajax({
+				url: '/api/shop?category=' + category,
+				method: 'GET',
+				dataType: 'json',
+				success: function (response) {
+					// On successful response, clear existing products and display filtered products
+					displayFilteredProducts(response);
+					displayListProducts(response);
+				},
+				error: function (xhr, status, error) {
+					console.error(error);
+				}
+			});
+		}
+
+		function filterByProductSortby(sort) {
+			$.ajax({
+				url: '/api/sort?sort=' + sort,
+				method: 'GET',
+				dataType: 'json',
+				success: function (response) {
+					// On successful response, display filtered products
+					displayFilteredProducts(response);
+					displayListProducts(response);
+				},
+				error: function (xhr, status, error) {
+					console.error(error);
+				}
+			});
+		}
 
 		// Function to display filtered products
 		function displayFilteredProducts(products) {
@@ -552,11 +526,9 @@
             }
         }
 
-			
-		
-
 	</script>
-
+	
+	 <script src="ajax/productsearch.js"></script>
 	
     <!-- Start Footer Section -->
     <div th:replace="include/footer :: footer"> </div>

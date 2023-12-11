@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+	<meta charset="ISO-8859-1">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
 <body>
-<div id="search" class="search-modal">
-        <button type="button" class="close">×</button>
-        <form th:action="@{/productsearch}" method="get">
-            <input type="search" th:name="keyword" th:value="${keyword}" placeholder="type keyword(s) here" required />
-            <button type="submit" class="btn btn-lg btn-pink">Search</button>
-        </form>
-    </div>
+	<!-- HTML Structure -->
+	<div id="search" class="offcanvas offcanvas-rightside offcanvas-add-cart-section">
+		<div class="offcanvas-header text-right">
+			<button class="offcanvas-close" onclick="closeSearchModal()"><i class="ion-android-close"></i></button>
+		</div>
+		<form id="searchForm">
+			<input type="search" name="keyword" id="searchInput" placeholder="Type keyword(s) here" required/>
+		</form>
+		<ul id="searchproduct" class="offcanvas-wishlist"></ul>
+	</div>
+	
 </body>
+
 </html>

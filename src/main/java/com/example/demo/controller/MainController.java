@@ -411,6 +411,7 @@ public class MainController {
 	    for (Product product : products) {
 	        ProductDTO productDTO = adao.mapProductToDTO(product);
 	        productDTOs.add(productDTO);
+	        System.out.println("search Product:-"+products);
 	    }
 	    return ResponseEntity.ok()
 	        .body(productDTOs);
