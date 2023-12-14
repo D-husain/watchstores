@@ -181,8 +181,8 @@ $('table').on('click', '.delete', function() {
 					$('#offcanvas-cart-button-shop').empty();
 					$('#offcanvas-cart-button').empty();*/
 				}
-					$('.offcanvas-cart-button').empty();
-					$('#empty-cart').empty();
+				$('.offcanvas-cart-button').empty();
+				$('#empty-cart').empty();
 			},
 			error: function(error) {
 				console.error('Error deleting category:', error);
@@ -242,7 +242,7 @@ function fetchsubtotal() {
 	});
 }
 
-//------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------- Herader cart --------------------------------------------------------------
 
 function fetchheaderCartData() {
 	$.ajax({
@@ -270,7 +270,7 @@ function fetchheaderCartData() {
 
 					$('.offcanvas-cart').append(tableRow);
 				});
-					$('#total-hide').show();
+				$('#total-hide').show();
 				$('.offcanvas-cart-button-shop').empty().append('<li><a href="/cart" class="btn btn-block btn-pink">View Cart</a></li>');
 				$('.offcanvas-cart-button').empty().append('<li><a href="checkout" class="btn btn-block btn-pink mt-5">Checkout</a></li>');
 			} else {
@@ -278,9 +278,9 @@ function fetchheaderCartData() {
 					'<h4 class="title">Unfortunately, Your Cart Is Empty</h4>' +
 					'<h6 class="sub-title">Please Add Something In your Cart</h6>' +
 					'</div>');
-					$('#total-hide').empty();
-					$('#offcanvas-cart-button').empty();
-					$('.offcanvas-cart-button-shop').empty().append('<li><a href="/shop" class="btn btn-block btn-pink">Countinue Shopping</a></li>');
+				$('#total-hide').empty();
+				$('#offcanvas-cart-button').empty();
+				$('.offcanvas-cart-button-shop').empty().append('<li><a href="/shop" class="btn btn-block btn-pink">Countinue Shopping</a></li>');
 
 			}
 		},
@@ -290,7 +290,7 @@ function fetchheaderCartData() {
 					'<h4 class="title">Unfortunately, Your are Logged Out</h4>' +
 					'<h6 class="sub-title">Please Login  In your first</h6>' +
 					'</div>');
-					$('#total-hide').empty();
+				$('#total-hide').empty();
 				$('.offcanvas-cart-button').empty().append('<li><a href="logins" class="btn btn-block btn-pink mt-5">Login</a></li>');
 			} else {
 				console.error('Error:', xhr);
