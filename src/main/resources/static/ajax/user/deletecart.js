@@ -17,11 +17,9 @@ $('table').on('click', '.delete', function() {
 				fetchheaderCartData();
 				fetchheadertotal();
 				fetchcartcount();
-				$('#delete').addClass('show');
-				setTimeout(function() {
-					$('#delete').removeClass('show');
-				}, 3000);
-				window.setTimeout(function() { location.reload() })
+				// Set a flag in localStorage to indicate deletion
+				localStorage.setItem('deletionOccurred', 'true');
+				window.location.reload();
 			},
 			error: function(error) {
 				console.error('Error deleting category:', error);
@@ -29,4 +27,18 @@ $('table').on('click', '.delete', function() {
 			}
 		});
 	});
+});
+
+// Check for the deletion flag on page load
+$(document).ready(function() {
+	var deletionFlag = localStorage.getItem('deletionOccurred');
+	if (deletionFlag === 'true') {
+		// Display the message or perform any action you need
+		$('#delete').addClass('show');
+		setTimeout(function() {
+			$('#delete').removeClass('show');
+		}, 3000);
+		// Clear the flag after displaying the message
+		localStorage.removeItem('deletionOccurred');
+	}
 });
