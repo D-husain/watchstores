@@ -348,6 +348,11 @@ public class MainController {
 		return "shop";
 	}
 	
+	@GetMapping("/filter-products")
+	public String Products() {
+		return "products";
+	}
+	
 	@GetMapping("api/shop")
 	public ResponseEntity<List<ProductDTO>> shop(
 	        @RequestParam(name = "category", required = false) String category,

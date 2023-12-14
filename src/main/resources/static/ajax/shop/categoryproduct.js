@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		fetch(`/api/shop?category=${category}`)
 			.then(response => response.json())
 			.then(data => {
+				
 			displayFilteredProducts(data);
 			displayListProducts(data);
 			})

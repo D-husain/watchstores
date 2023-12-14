@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		link.addEventListener('click', function(event) {
 			event.preventDefault();
 			const brand = this.getAttribute('data-brand');
-			window.location.href = `shop?brand=${brand}`;
+			window.location.href = `filter-products?brand=${brand}`;
 		});
 	});
 });
