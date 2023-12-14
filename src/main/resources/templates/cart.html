@@ -147,7 +147,7 @@
 					<div class="col-12">
 						<div class="table_desc">
 							<div class="table_page table-responsive">
-								<table th:unless="${cart.size() == 0}" id="cartTable">
+								<table id="cartTable">
 									<!-- Start Cart Table Head -->
 									<thead>
 										<tr>
@@ -165,42 +165,13 @@
 									</tbody>
 								</table>
 		
-								<!-- Check if the cart is empty and the user is logged in -->
-								<th:block th:if="${cart.size() == 0 && session.user != null}">
-								    <div class="empty-cart-section section-fluid">
-								        <div class="emptycart-wrapper">
-								            <div class="container">
-								                <div class="row">
-								                    <div class="col-12 col-md-10 offset-md-1 col-xl-6 offset-xl-3">
-								                        <div class="emptycart-content text-center">
-								                            <h4 class="title">Your Cart is Empty</h4>
-								                            <h6 class="sub-title">Sorry Mate... No items found inside your cart!</h6>
-								                            <a href="shop" class="btn btn-lg btn-golden">Continue Shopping</a>
-								                        </div>
-								                    </div>
-								                </div>
-								            </div>
-								        </div>
-								    </div>
-								</th:block>
+								<div id="empty-cart"></div>
+								
 							</div>
-		
-							<div th:if="${session.user==null}" class="empty-cart-section section-fluid">
-								<div class="emptycart-wrapper">
-									<div class="container">
-										<div class="row">
-											<div class="col-12 col-md-10 offset-md-1 col-xl-6 offset-xl-3">
-												<div class="emptycart-content text-center">
-													<!--<div class="image"><img class="img-fluid" src="assets/images/emprt-cart/empty-cart.png" alt=""></div>-->
-													<h4 class="title">Your Are Logout !</h4>
-													<h6 class="sub-title">Sorry Mate... Please First login</h6>
-													<a href="/logins" class="btn btn-lg btn-golden">Login</a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div><br>
+
+							<div id="logout-cart"></div>
+							
+							<br>
 						</div>
 					</div>
 				</div>
@@ -210,7 +181,7 @@
         <!-- Start Coupon Start -->
         <div class="coupon_area">
             <div class="container">
-                <div th:if="${cart.size() > 0}" class="row">
+                <div class="row" id="hide-checkout">
                     <div class="col-lg-6 col-md-6">
                         <!-- <div class="coupon_code left" data-aos="fade-up" data-aos-delay="200">
                             <h3>Coupon</h3>
@@ -501,10 +472,10 @@
     <!-- Main JS -->
     <script src="assets/js/main.js"></script>
     <script src="assets/js/toast.js"></script>
+    
     <script src="ajax/productsearch.js"></script>
+    
     <script src="ajax/user/cart.js"></script>
-    <script src="ajax/user/deletecart.js"></script>
-    <script src="ajax/user/headercart.js"></script>
 </body>
 
 
