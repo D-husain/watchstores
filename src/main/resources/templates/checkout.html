@@ -37,17 +37,24 @@
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
-   <style>
-		@keyframes slideIn {
-			0% {
-				left: -100%;
-			}
-	
-			100% {
-				left: 10px;
-			}
+<style>
+	@keyframes slideIn {
+		0% {
+			left: -100%;
 		}
-	</style>
+
+		100% {
+			left: 10px;
+		}
+	}
+
+	.table-responsive {
+		max-height: 400px;
+		/* Set a max height for the table container */
+		overflow-y: auto;
+		/* Enable vertical scrolling */
+	}
+</style>
 </head>
 
 <body>
@@ -123,8 +130,8 @@
                         <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
                             <nav aria-label="breadcrumb">
                                 <ul>
-                                    <li><a href="index.html">Home</a></li>
-                                    <li><a href="shop-grid-sidebar-left.html">Shop</a></li>
+                                    <li><a href="/">Home</a></li>
+                                    <li><a href="/shop">Shop</a></li>
                                     <li class="active" aria-current="page">Checkout</li>
                                 </ul>
                             </nav>
@@ -325,41 +332,42 @@
                                 </div><!-->
                             </div>
                     </div>
-                    <div class="col-lg-6 col-md-6">
-                            <h3>Your order</h3>
-                            <div class="order_table table-responsive">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Product</th>
-                                            <th>Price</th>
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="c: ${cart}">
-                                            <td>[[${c.product.pname}]] <strong> × [[${c.qty}]]</strong></td>
-                                            <td>₹[[${c.price}]]</td>
-                                            <td>₹[[${c.total}]]</td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Cart Subtotal</th>
+					<div class="col-lg-6 col-md-6">
+						<h3>Your order</h3>
+						<div class="order_table">
+							<div class="table-responsive">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>Product</th>
+											<th>Price</th>
+											<th>Total</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="c: ${cart}">
+											<td>[[${c.product.pname}]] <strong> × [[${c.qty}]]</strong></td>
+											<td>₹[[${c.price}]]</td>
+											<td>₹[[${c.total}]]</td>
+										</tr>
+									</tbody>
+									<tfoot>
+										<tr>
+											<th>Cart Subtotal</th>
 											<th></th>
-                                            <td>₹[[${subtotal}]]</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Shipping</th>
+											<td>₹[[${subtotal}]]</td>
+										</tr>
+										<tr>
+											<th>Shipping</th>
 											<th></th>
-                                            <td><strong>₹[[${charge}]]</strong></td>
-                                        </tr>
-                                        
-                                         <tr class="order_total">
-                                            <th>Order Total</th>
-											 <th></th>
-                                            <td><strong>₹[[${total}]]</strong></td>
-                                        </tr>
+											<td><strong>₹[[${charge}]]</strong></td>
+										</tr>
+					
+										<tr class="order_total">
+											<th>Order Total</th>
+											<th></th>
+											<td><strong>₹[[${total}]]</strong></td>
+										</tr>
 										<tr th:if="${session != null and session.coupon != null and session.coupon.coupon != null}">
 											<th>Coupon ([[${session.coupon.coupon}]])</th>
 											<th></th>
@@ -368,22 +376,24 @@
 										<tr th:if="${session != null and session.coupon != null and session.coupon.coupon != null}">
 											<th>Discount Total</th>
 											<th></th>
-                                            <td><strong>₹[[${discountedSubtotal}]]</strong></td>
-										</tr>	
-
-                                    </tfoot>
-                                </table>
-                            </div>
+											<td><strong>₹[[${discountedSubtotal}]]</strong></td>
+										</tr>
+					
+									</tfoot>
+								</table>
+							</div>
+						</div>
 							<div class="payment_method">
 								<div th:if="${session.user!=null}" class="order_button pt-3">
 									<button onclick='return checkvalidate()' class="btn btn-md btn-black-default-hover" type="submit">Proceed to
-										PayPal</button>
+										Payment</button>
 								</div>
 								<div th:if="${session.user==null}" class="order_button pt-3">
 									<a onclick="return confirmation()" class="btn btn-md btn-black-default-hover" type="submit">Proceed to
-										PayPal</a>
+										Payment</a>
 								</div>
 							</div>
+					</div>
 						</div>
 					</div>
                 </form>

@@ -37,6 +37,14 @@
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
+    <style>
+		.table-responsive {
+		max-height: 400px;
+		/* Set a max height for the table container */
+		overflow-y: auto;
+		/* Enable vertical scrolling */
+	}
+	</style>
 </head>
 
 <body>
@@ -224,50 +232,61 @@
 					<div class="col-lg-6">
                         
                             <h3>Your order</h3>
-                            <div class="order_table table-responsive">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Product</th>
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="c: ${cart}">
-                                            <td> [[${c.product.pname}]] <strong> × [[${c.qty}]]</strong></td>
-                                            <td>₹[[${c.price}]]</td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Cart Subtotal</th>
-                                            <td>₹[[${subtotal}]]</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Shipping</th>
-                                            <td><strong>₹[[${charge}]]</strong></td>
-                                        </tr>
-                                        <tr class="order_total">
-                                            <th>Order Total</th>
-                                            <td><strong>₹[[${total}]]</strong></td>
-                                        </tr>
-										<tr th:if="${session != null and session.coupon != null and session.coupon.coupon != null}">
-											<th>Coupon ([[${session.coupon.coupon}]])</th>
-											<td>₹-[[${discountAmount}]]</td>
-										</tr>
-										<tr th:if="${session != null and session.coupon != null and session.coupon.coupon != null}">
-											<th>Discount Total</th>
-                                            <td><strong>₹[[${discountedSubtotal}]]</strong></td>
-										</tr>	
-                                    </tfoot>
-                                </table>
-                            </div>
+							<div class="order_table">
+								<div class="table-responsive">
+									<table class="table">
+										<thead>
+											<tr>
+												<th>Product</th>
+												<th>Price</th>
+												<th>Total</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="c: ${cart}">
+												<td>[[${c.product.pname}]] <strong> × [[${c.qty}]]</strong></td>
+												<td>₹[[${c.price}]]</td>
+												<td>₹[[${c.total}]]</td>
+											</tr>
+										</tbody>
+										<tfoot>
+											<tr>
+												<th>Cart Subtotal</th>
+												<th></th>
+												<td>₹[[${subtotal}]]</td>
+											</tr>
+											<tr>
+												<th>Shipping</th>
+												<th></th>
+												<td><strong>₹[[${charge}]]</strong></td>
+											</tr>
+							
+											<tr class="order_total">
+												<th>Order Total</th>
+												<th></th>
+												<td><strong>₹[[${total}]]</strong></td>
+											</tr>
+											<tr th:if="${session != null and session.coupon != null and session.coupon.coupon != null}">
+												<th>Coupon ([[${session.coupon.coupon}]])</th>
+												<th></th>
+												<td>₹-[[${discountAmount}]]</td>
+											</tr>
+											<tr th:if="${session != null and session.coupon != null and session.coupon.coupon != null}">
+												<th>Discount Total</th>
+												<th></th>
+												<td><strong>₹[[${discountedSubtotal}]]</strong></td>
+											</tr>
+							
+										</tfoot>
+									</table>
+								</div>
+							</div>
                             <div class="payment_method">
                                 <div th:if="${session.user!=null}" class="order_button pt-3">
-                                    <button id="rzp-button1" class="btn btn-outline-dark btn-lg"><i class="fas fa-money-bill"></i>Payment</button>
+                                    <button id="rzp-button1" class="btn btn-outline-dark btn-lg"><i class="fas fa-money-bill"></i>Pay For Order</button>
                                 </div>
                                 <div th:if="${session.user==null}" class="order_button pt-3">
-                                    <a onclick="return confirmation()" class="btn btn-outline-dark btn-lg"><i class="fas fa-money-bill"></i>Payment</a>
+                                    <a onclick="return confirmation()" class="btn btn-outline-dark btn-lg"><i class="fas fa-money-bill"></i>Pay For Order</a>
                                 </div>
                             </div>
                     </div>
@@ -300,45 +319,45 @@
 	<tr th:if="${session != null and session.coupon != null and session.coupon.coupon != null}">
 	<script type="text/javascript">
 		var options = {
-			"key": "rzp_test_BFuqGW7IZkVybQ",
-			// Enter the Key ID generated from the Dashboard
-			"amount":'[[${discountedSubtotal}]]'*100,
-		// Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-		"currency": "INR",
-			"name": "Watch Store",
+				"key": "rzp_test_BFuqGW7IZkVybQ",
+				// Enter the Key ID generated from the Dashboard
+				"amount": '[[${discountedSubtotal}]]' * 100,
+				// Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+				"currency": "INR",
+				"name": "Watch Store",
 				"description": "Test Transaction",
-					"image": "http://localhost:8081/assets/images/logo/logo_black.png",
-						//"order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-						"handler": function (response) {
-							document.getElementById('someFormId').submit();
-						},
-		//"callback_url": "order.jsp",
-		"prefill": {
-			"name": "",
-				"email": "",
+				"image": "http://localhost:8081/assets/images/logo/logo_black.png",
+				//"order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+				"handler": function (response) {
+					document.getElementById('someFormId').submit();
+				},
+				//"callback_url": "order.jsp",
+				"prefill": {
+					"name": "",
+					"email": "",
 					"contact": "+91 "
-		},
-		"notes": {
-			"address": ""
-		},
-		"theme": {
-			"color": "#445f84;"
-		}
-									};
-		var rzp1 = new Razorpay(options);
-		rzp1.on('payment.failed', function (response) {
-			alert(response.error.code);
-			alert(response.error.description);
-			alert(response.error.source);
-			alert(response.error.step);
-			alert(response.error.reason);
-			alert(response.error.metadata.order_id);
-			alert(response.error.metadata.payment_id);
-		});
-		document.getElementById('rzp-button1').onclick = function (e) {
-			rzp1.open();
-			e.preventDefault();
-		}
+				},
+				"notes": {
+					"address": ""
+				},
+				"theme": {
+					"color": "#445f84;"
+				}
+			};
+			var rzp1 = new Razorpay(options);
+			rzp1.on('payment.failed', function (response) {
+				alert(response.error.code);
+				alert(response.error.description);
+				alert(response.error.source);
+				alert(response.error.step);
+				alert(response.error.reason);
+				alert(response.error.metadata.order_id);
+				alert(response.error.metadata.payment_id);
+			});
+			document.getElementById('rzp-button1').onclick = function (e) {
+				rzp1.open();
+				e.preventDefault();
+			}
 		</script>
 		</tr>
 		<tr th:unless="${session != null and session.coupon != null and session.coupon.coupon != null}">
