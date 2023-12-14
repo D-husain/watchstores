@@ -106,8 +106,8 @@ function fetchCartData() {
 					'<div class="row">' +
 					'<div class="col-12 col-md-10 offset-md-1 col-xl-6 offset-xl-3">' +
 					'<div class="emptycart-content text-center">' +
-					'<h4 class="title">Your Cart is Empty !</h4>' +
-					'<h6 class="sub-title">Sorry Mate... No items found inside your cart!</h6>' +
+					'<h4 class="title">Unfortunately, Your Cart Is Empty</h4>' +
+					'<h6 class="sub-title">Please Add Something In your Cart</h6>' +
 					'<a href="/shop" class="btn btn-lg btn-golden">Continue Shopping</a>' +
 					'</div>' +
 					'</div>' +
@@ -131,7 +131,7 @@ function fetchCartData() {
 					'<div class="emptycart-content text-center">' +
 					'<h4 class="title">You Are Logged Out!</h4>' +
 					'<h6 class="sub-title">Sorry Mate... Please log in first</h6>' +
-					'<a href="/login" class="btn btn-lg btn-golden">Login</a>' +
+					'<a href="/logins" class="btn btn-lg btn-golden">Login</a>' +
 					'</div>' +
 					'</div>' +
 					'</div>' +
@@ -167,9 +167,22 @@ $('table').on('click', '.delete', function() {
 				fetchheaderCartData();
 				fetchheadertotal();
 				fetchcartcount();
+				fetchCartData();
 				// Set a flag in localStorage to indicate deletion
-				localStorage.setItem('deletionOccurred', 'true');
-				window.location.reload();
+				$('#delete').addClass('show');
+				setTimeout(function() {
+					$('#delete').removeClass('show');
+				}, 3000);
+				// After deleting, check if the cart is empty
+				if ($('#cartTable tbody tr').length === 0) {
+					$('#cartTable').empty();
+					$('#hide-checkout').empty();
+					/*$('#total-hide').empty();
+					$('#offcanvas-cart-button-shop').empty();
+					$('#offcanvas-cart-button').empty();*/
+				}
+					$('.offcanvas-cart-button').empty();
+					$('#empty-cart').empty();
 			},
 			error: function(error) {
 				console.error('Error deleting category:', error);
@@ -257,23 +270,36 @@ function fetchheaderCartData() {
 
 					$('.offcanvas-cart').append(tableRow);
 				});
-
+					$('#total-hide').show();
+				$('.offcanvas-cart-button-shop').empty().append('<li><a href="/cart" class="btn btn-block btn-pink">View Cart</a></li>');
 				$('.offcanvas-cart-button').empty().append('<li><a href="checkout" class="btn btn-block btn-pink mt-5">Checkout</a></li>');
 			} else {
-				$('.offcanvas-cart').append('<img src="assets/images/no-product-found.png" class="rounded mx-auto d-block" style="width:400px;height:200px;" alt="No product found">');
-				$('.offcanvas-cart-button').empty().append('<li style="cursor:no-drop;"><button class="btn btn-block btn-pink mt-5" disabled>Checkout</button></li>');
+				$('.offcanvas-cart').append('<div class=" text-center">' +
+					'<h4 class="title">Unfortunately, Your Cart Is Empty</h4>' +
+					'<h6 class="sub-title">Please Add Something In your Cart</h6>' +
+					'</div>');
+					$('#total-hide').empty();
+					$('#offcanvas-cart-button').empty();
+					$('.offcanvas-cart-button-shop').empty().append('<li><a href="/shop" class="btn btn-block btn-pink">Countinue Shopping</a></li>');
+
 			}
 		},
 		error: function(xhr) {
 			if (xhr && xhr.status < 401) {
-				$('.offcanvas-cart').append('<img src="assets/images/no-product-found.png" class="rounded mx-auto d-block" style="width:400px;height:200px;" alt="No product found">');
-				$('.offcanvas-cart-button').empty().append('<li style="cursor:no-drop;"><button class="btn btn-block btn-pink mt-5" disabled>Checkout</button></li>');
+				$('.offcanvas-cart').append('<div class=" text-center">' +
+					'<h4 class="title">Unfortunately, Your are Logged Out</h4>' +
+					'<h6 class="sub-title">Please Login  In your first</h6>' +
+					'</div>');
+					$('#total-hide').empty();
+				$('.offcanvas-cart-button').empty().append('<li><a href="logins" class="btn btn-block btn-pink mt-5">Login</a></li>');
 			} else {
 				console.error('Error:', xhr);
 			}
 		}
 	});
 }
+
+
 
 
 function fetchheadertotal() {
