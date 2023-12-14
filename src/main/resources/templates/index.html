@@ -37,7 +37,10 @@
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
-
+	<link rel="stylesheet" href="assets/css/toastmessage2.css">
+	
+	 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	 
 </head>
 
 <body>
@@ -122,7 +125,7 @@
                                     <div class="hero-slider-content">
                                         <h4 class="subtitle">[[${s.name}]]</h4>
                                         <h1 class="title">[[${s.tital}]] </h1>
-                                        <a th:href="@{/shop(category=${s.category.cname})}" class="btn btn-lg btn-pink">shop now </a>
+                                        <a href="/shop" class="btn btn-lg btn-pink">shop now </a>
                                     </div>
                                 </div>
                             </div>
@@ -206,23 +209,22 @@
 
     <!-- Start Banner Section -->
     <div class="banner-section section-top-gap-100">
-        <div class="banner-wrapper clearfix">
+        <div class="banner-wrapper clearfix" id="category">
 			
-            <!-- Start Banner Single Item -->
-            <a th:href="@{/shop(category=${c.cname})}" th:each="c: ${category}">
+             <!--Start Banner Single Item -->
+            <!--<a th:href="@{/shop(category=${c.cname})}" th:each="c: ${category}">
                 <div class="banner-single-item banner-style-7 banner-animation banner-color--green float-left"
                     data-aos="fade-up" data-aos-delay="0">
                     <div class="image">
                         <img class="img-fluid" th:src="@{'../images/category/'+${c.cimg}}" alt="">
                     </div>
                 </div>
-            </a>
-            <!-- End Banner Single Item -->
+            </a>-->
+             <!--End Banner Single Item -->
             
         </div>
     </div>
-    <!-- End Banner Section -->
-
+    
     <!-- Start Product Default Slider Section -->
     <div class="product-default-slider-section section-top-gap-100 section-fluid">
         <!-- Start Section Content Text Area -->
@@ -252,7 +254,7 @@
                                 <div class="swiper-wrapper">
 									
                                     <!-- Start Product Default Single Item -->
-                                    <div class="product-default-single-item product-color--pink swiper-slide" th:each="p: ${product}">
+                                    <div th:each="p,iterStat: ${product}" class="product-default-single-item product-color--pink swiper-slide">
                                         <div class="image-box">
                                             <a th:href="@{/product-details(id=${p.id})}" class="image-link">
                                                 <img th:src="@{'../images/product/'+${p.img1}}" alt="">
@@ -265,10 +267,10 @@
 											<div class="action-link">
 												<th:block th:if="${p.availability eq 'yes'}">
 													<div class="action-link-left">
-														<form th:action="@{/addToCart}" method="post">
+														<form th:id="'addToCartForm'+${iterStat.index+1}">
 															<input type="hidden" name="pid" th:value="${p.id}">
 															<input type="hidden" name="qty" th:value="1">
-															<button style="color: white;" >
+															<button th:id="'addToCartBtn'+${iterStat.index+1}" style="color: white;" >
 																Add to Cart</button>
 														</form>
 													</div>
@@ -320,50 +322,33 @@
         </div>
     </div>
     <!-- End Product Default Slider Section -->
-	<script type="text/javascript">
-	function confirmation() {
-		const Toast = Swal.mixin({
-		toast: true,
-		position: 'top-end',
-		showConfirmButton: false,
-		timer: 3000,
-		timerProgressBar: true,
-		didOpen: (toast) => {
-		toast.addEventListener('mouseenter', Swal.stopTimer)
-		toast.addEventListener('mouseleave', Swal.resumeTimer)
-		}
-		})
-		
-		Toast.fire({
-		icon: 'error',
-		title: '<p style="font-size:15px;">Please First <a href="logins">Login</a></p>'
-		})}
-	</script>
-    <!-- Start Banner Section -->
-    <div class="banner-section section-top-gap-100">
-        <div class="banner-wrapper clearfix">
-            <!-- Start Banner Single Item -->
-            <a th:href="@{/shop(brand=Casio)}">
-                <div class="banner-single-item banner-style-8 banner-animation banner-color--green float-left"
-                    data-aos="fade-up" data-aos-delay="0">
-                    <div class="image">
-                        <img class="img-fluid" src="assets/images/banner/aem-banner-top-g-1920-816.webp" alt="">
-                    </div>
-                </div>
-            </a>
-            <!-- End Banner Single Item -->
-            <!-- Start Banner Single Item -->
-            <a th:href="@{/shop(brand=Fastrack)}">
-                <div class="banner-single-item banner-style-8 banner-animation banner-color--green float-left"
-                    data-aos="fade-up" data-aos-delay="200">
-                    <div class="image">
-                        <img class="img-fluid" src="assets/images/banner/Curv_1.webp" alt="">
-                    </div>
-                </div>
-            </a>
-            <!-- End Banner Single Item -->
-        </div>
-    </div>
+	
+	<!-- Start Banner Section -->
+	<div class="banner-section section-top-gap-100">
+		<div class="banner-wrapper clearfix">
+			<!-- Start Banner Single Item -->
+			<a href="#" class="brandLink" data-brand="Casio">
+				<div class="banner-single-item banner-style-8 banner-animation banner-color--green float-left brandButton"
+					data-aos="fade-up" id="Casio" data-aos-delay="0">
+					<div class="image">
+						<img class="img-fluid" src="assets/images/banner/aem-banner-top-g-1920-816.webp" alt="">
+					</div>
+				</div>
+			</a>
+			<!-- End Banner Single Item -->
+	
+			<!-- Start Banner Single Item -->
+			<a href="#" class="brandLink" data-brand="Fastrack">
+				<div class="banner-single-item banner-style-8 banner-animation banner-color--green float-left brandButton"
+					data-aos="fade-up" id="Fastrack" data-aos-delay="200">
+					<div class="image">
+						<img class="img-fluid" src="assets/images/banner/Curv_1.webp" alt="">
+					</div>
+				</div>
+			</a>
+			<!-- End Banner Single Item -->
+		</div>
+	</div>
     <!-- End Banner Section -->
 
     <!-- Start Product Default Slider Section -->
@@ -396,7 +381,7 @@
                                     <!-- End Product Default Single Item -->
                                     
                                     <!-- Start Product Default Single Item -->
-                                    <div th:each="p: ${product}" class="product-default-single-item product-color--pink swiper-slide">
+                                    <div th:each="p,iterStat: ${product}" class="product-default-single-item product-color--pink swiper-slide">
                                         <div class="image-box">
                                             <a th:href="@{/product-details(id=${p.id})}" class="image-link">
                                                 <img th:src="@{'../images/product/'+${p.img1}}" alt="">
@@ -405,10 +390,10 @@
 											<div class="action-link">
 												<th:block th:if="${p.availability eq 'yes'}">
 													<div class="action-link-left">
-														<form th:action="@{/addToCart}" method="post">
+														<form th:id="'addToCartForm'+${iterStat.index+1000}" method="post">
 															<input type="hidden" name="pid" th:value="${p.id}">
 															<input type="hidden" name="qty" th:value="1">
-															<button style="color: white;" data-bs-toggle="modal" data-bs-target="#modalAddcart">
+															<button th:id="'addToCartBtn'+${iterStat.index+1000}" style="color: white;">
 																Add to Cart</button>
 														</form>
 													</div>
@@ -720,7 +705,8 @@
     <!-- Start Footer Section -->
  	<div th:insert="include/footer :: footer"> </div>    
  	<!-- End Footer Section -->
-
+	<div class="snackbar" id="insert">Product added successfully!</div>
+	<div class="snackbar" id="info">Please first login!</div>
     <!-- material-scrolltop button -->
     <button class="material-scrolltop" type="button"></button>
 
@@ -803,6 +789,11 @@
     <!-- Main JS -->
     <script src="assets/js/main.js"></script>
     <script src="ajax/productsearch.js"></script>
+    <script src="ajax/user/category.js"></script>
+    <script src="ajax/user/brand.js"></script>
+    <script src="ajax/user/headercart.js"></script>
+    <script src="ajax/user/addcart.js"></script>
+    <script src="ajax/user/deletecart.js"></script>
 </body>
 
 

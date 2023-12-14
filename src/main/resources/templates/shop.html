@@ -29,12 +29,11 @@
 
     <!-- Main CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
-	
+	<link rel="stylesheet" href="assets/css/toastmessage2.css">
     <!-- Use the minified version files listed below for better performance and remove the files listed above -->
     <!-- <link rel="stylesheet" href="assets/css/vendor/vendor.min.css">
     <link rel="stylesheet" href="assets/css/plugins/plugins.min.css">
     <link rel="stylesheet" href="assets/css/style.min.css"> -->
-
 </head>
 
 <body>
@@ -246,7 +245,8 @@
                                             <div class="row">
 												
                                                <div id="productsContainer" class="row"></div>
-
+												<!-- Product list will be displayed here -->
+												
                                             </div>
                                         </div>
                                         <!-- End Grid View Product -->
@@ -286,254 +286,11 @@
         </div>
     </div> <!-- ...:::: End Shop Section:::... -->
 	
-    <script th:inline="javascript">
-		$(document).ready(function () {
-			getAllProducts();
-		});
-
-		function getAllProducts() {
-			$.ajax({
-				url: '/api/shop',
-				method: 'GET',
-				dataType: 'json',
-				success: function (response) {
-					// On successful response, clear existing products and display filtered products
-					displayFilteredProducts(response);
-					displayListProducts(response);
-				},
-				error: function (xhr, status, error) {
-					console.error(error);
-				}
-			});
-		}
-
-
-		$(document).ready(function () {
-			$.ajax({
-				url: '/brand/data',
-				method: 'GET',
-				dataType: 'json',
-				success: function (response) {
-					if (response) {
-						var brandFilter = $('#brandFilter');
-						response.forEach(function (brand) {
-							var brandListItem = '<li class="sidebar-menu-collapse-list">' +
-								'<div class="accordion">' +
-								'<button onclick="filterByBrand(\'' + brand.brand + '\')">' + brand.brand + '</button>' +
-								'</div>' +
-								'</li>';
-							brandFilter.append(brandListItem);
-						});
-					}
-				},
-				error: function (xhr, status, error) {
-					console.error(error);
-				}
-			});
-		});
-
-		function filterByBrand(brand) {
-			$.ajax({
-				url: 'http://localhost:8081/api/shop?brand=' + brand,
-				method: 'GET',
-				dataType: 'json',
-				success: function (response) {
-					// On successful response, clear existing products and display filtered products
-					displayFilteredProducts(response);
-					displayListProducts(response);
-				},
-				error: function (xhr, status, error) {
-					console.error(error);
-				}
-			});
-		}
-
-		$(document).ready(function () {
-			// Fetch categories and populate the category filter
-			$.ajax({
-				url: '/category/data',
-				method: 'GET',
-				dataType: 'json',
-				success: function (response) {
-					if (response && response.length > 0) {
-						var categoryFilter = $('#categoryFilter');
-						response.forEach(function (category) {
-							var categoryListItem = '<li class="sidebar-menu-collapse-list">' +
-								'<div class="accordion">' +
-								'<button onclick="filterByCategory(\'' + category.cname + '\')">' + category.cname + '</button>' +
-								'</div>' +
-								'</li>';
-							categoryFilter.append(categoryListItem);
-						});
-					}
-				},
-				error: function (xhr, status, error) {
-					console.error(error);
-				}
-			});
-		});
-
-		// Function to filter products by category
-		function filterByCategory(category) {
-			$.ajax({
-				url: '/api/shop?category=' + category,
-				method: 'GET',
-				dataType: 'json',
-				success: function (response) {
-					// On successful response, clear existing products and display filtered products
-					displayFilteredProducts(response);
-					displayListProducts(response);
-				},
-				error: function (xhr, status, error) {
-					console.error(error);
-				}
-			});
-		}
-
-		function filterByProductSortby(sort) {
-			$.ajax({
-				url: '/api/sort?sort=' + sort,
-				method: 'GET',
-				dataType: 'json',
-				success: function (response) {
-					// On successful response, display filtered products
-					displayFilteredProducts(response);
-					displayListProducts(response);
-				},
-				error: function (xhr, status, error) {
-					console.error(error);
-				}
-			});
-		}
-
-		// Function to display filtered products
-		function displayFilteredProducts(products) {
-			var productsLength = products.length; // Get the length of the current products array
-			var totalProductsLength = products.length; // Assuming 'totalProducts' is the array containing all products
-
-			var productCountElement = document.getElementById('productCount');
-			if (productCountElement) {
-				productCountElement.textContent = 'Showing ' + productsLength + ' of ' + totalProductsLength + ' results';
-			}
-
-			$('#productsContainer').empty(); // Clear existing products before displaying filtered ones
-
-			if (Array.isArray(products) && products.length > 0) {
-				products.forEach(function (p) {
-					var availabilityBlock = p.availability === 'yes' ?
-						'<div class="action-link-left">' +
-						'<form action="/addToCart" method="post">' +
-						'<input type="hidden" name="pid" value="' + p.id + '">' +
-						'<input type="hidden" name="qty" value="1">' +
-						'<button style="color: aliceblue;">Add to Cart</button>' +
-						'</form>' +
-						'</div>' :
-						'<button style="color: aliceblue; cursor:no-drop;">Add to Cart</button>';
-
-					var productHtml = '<div class="col-xl-4 col-sm-6 col-12">' +
-						'<div class="product-default-single-item product-color--golden" data-aos="fade-up" data-aos-delay="0">' +
-						'<div class="image-box">' +
-						'<a href="/product-details?id=' + p.id + '" class="image-link">' +
-						'<img src="../images/product/' + p.img1 + '" alt="">' +
-						'<img src="../images/product/' + p.img2 + '" alt="">' +
-						'</a>' +
-						'<div class="action-link">' +
-						availabilityBlock +
-						'<div class="action-link-right">' +
-						'<form action="/addToWishlist" method="post">' +
-						'<input type="hidden" name="pid" value="' + p.id + '">' +
-						'<button style="color: white;"><i class="icon-heart"></i></button>' +
-						'</form>' +
-						'</div>' +
-						'</div>' +
-						'</div>' +
-						'<div class="content">' +
-						'<div class="content-left">' +
-						'<h6 class="title"><a href="/product-details?id=' + p.id + '">' + p.pname + '</a></h6>' +
-						'<ul class="review-star">' +
-						'<li class="fill"><i class="ion-android-star"></i></li>' +
-						'<li class="fill"><i class="ion-android-star"></i></li>' +
-						'<li class="fill"><i class="ion-android-star"></i></li>' +
-						'<li class="fill"><i class="ion-android-star"></i></li>' +
-						'<li class="empty"><i class="ion-android-star"></i></li>' +
-						'</ul>' +
-						'</div>' +
-						'<div class="content-right">' +
-						'<span class="price">' + p.price + '</span>' +
-						'</div>' +
-						'</div>' +
-						'</div>' +
-						'</div>';
-					$('#productsContainer').append(productHtml);
-				});
-			} else {
-				// If no products found, display a message or perform any appropriate action
-				$('#productsContainer').html('<img  class="rounded mx-auto d-block" style="width:400px;height:200px;" alt="no product found" src="assets/images/no-product-found.png">');
-			}
-		}
-		
-		
-		function displayListProducts(products) {
-            var productsContainer = $('#productsListContainer');
-            productsContainer.empty(); // Clear existing products before displaying new ones
-
-            if (products && Array.isArray(products) && products.length > 0) {
-                products.forEach(function(product) {
-                    var availabilityBlock = '';
-                    if (product.availability === 'yes') {
-                        availabilityBlock = '<form action="/addToCart" method="post">' +
-                            '<input type="hidden" name="pid" value="' + product.id + '">' +
-                            '<input type="hidden" name="qty" value="1">' +
-                            '<button class="btn btn-lg btn-black-default-hover">Add to cart</button>' +
-                            '</form>'+'&nbsp;';
-                    } else {
-                        availabilityBlock = '<button style="cursor:no-drop;" class="btn btn-lg btn-black-default-hover">Add to cart</button>';
-                    }
-
-                    // Construct HTML for each product
-                    var productHtml = '<div class="product-list-single product-color--golden">' +
-                        '<a href="/product-details?id=' + product.id + '" class="product-list-img-link">' +
-                        '<img src="../images/product/' + product.img1 + '" height="300px;" alt="">' +
-                        '<img src="../images/product/' + product.img2 + '" height="300px;" alt="">' +
-                        '</a>' +
-                        '<div class="product-list-content">' +
-                        '<h5 class="product-list-link">' +
-                        '<a href="/product-details?id=' + product.id + '">' + product.pname + '</a></h5>' +
-                        '<ul class="review-star">' +
-                        '<li class="fill"><i class="ion-android-star"></i></li>' +
-                        '<li class="fill"><i class="ion-android-star"></i></li>' +
-                        '<li class="fill"><i class="ion-android-star"></i></li>' +
-                        '<li class="fill"><i class="ion-android-star"></i></li>' +
-                        '<li class="empty"><i class="ion-android-star"></i></li>' +
-                        '</ul>' +
-                        '<span class="product-list-price">' + product.price + '</span>' +
-                        '<p>' + product.description + '</p>' +
-                        '<div class="product-action-icon-link-list d-md-flex justify-content-md-start">' +
-                        availabilityBlock +
-                        '<form action="/addToWishlist" method="post">' +
-                        '<input type="hidden" name="pid" value="' + product.id + '">' +
-                        '<button class="btn btn-lg btn-black-default-hover"><i class="icon-heart"></i></button>' +
-                        '</form>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>';
-
-                    productsContainer.append(productHtml);
-                });
-            } else {
-                // Display a message when no products are found
-                productsContainer.html('<img src="assets/images/no-product-found.png" class="rounded mx-auto d-block" style="width:400px;height:200px;" alt="No product found">');
-            }
-        }
-
-	</script>
-	
-	 <script src="ajax/productsearch.js"></script>
-	
     <!-- Start Footer Section -->
     <div th:replace="include/footer :: footer"> </div>
     <!-- End Footer Section -->
-
+	<div class="snackbar" id="insert">Product added successfully!</div>
+	<div class="snackbar" id="info">Please first login!</div>
     <!-- material-scrolltop button -->
     <button class="material-scrolltop" type="button"></button>
 
@@ -780,6 +537,17 @@
 
     <!-- Main JS -->
     <script src="assets/js/main.js"></script>
+    
+    <script src="ajax/shop/brandproduct.js"></script>
+    <script src="ajax/shop/allproduct.js"></script>
+    <script src="ajax/shop/brandfilter.js"></script>
+    <script src="ajax/shop/categoryfilter.js"></script>
+    <script src="ajax/shop/displayproducts.js"></script>
+    <script src="ajax/shop/categoryproduct.js"></script>
+    <script src="ajax/shop/productsorting.js"></script>
+    <script src="ajax/productsearch.js"></script>
+    <script src="ajax/user/headercart.js"></script>
+    <script src="ajax/user/addcart.js"></script>
 </body>
 
 

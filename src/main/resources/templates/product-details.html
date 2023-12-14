@@ -27,7 +27,7 @@
 
     <!-- Main CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
-
+	<link rel="stylesheet" href="assets/css/toastmessage2.css">
     <!-- Use the minified version files listed below for better performance and remove the files listed above -->
     <!-- <link rel="stylesheet" href="assets/css/vendor/vendor.min.css">
     <link rel="stylesheet" href="assets/css/plugins/plugins.min.css">
@@ -217,7 +217,7 @@
 									<i class="ion-checkmark-circled"></i></span> [[${product.qty}]] IN STOCK</div>
                             </div>
                             <!-- Product Variable Single Item -->
-                            <form th:action="@{/addToCart}" method="post">
+                            <form id="addToCartForm2000">
                             <div class="d-flex align-items-center ">
                                 <div class="variable-single-item ">
                                     <span>Quantity</span>
@@ -228,7 +228,7 @@
 								<th:block th:if="${product.availability eq 'yes'}">
                                 <div class="product-add-to-cart-btn">
 									<input type="hidden" name="pid" th:value="${product.id}">
-                                    <button href="#" class="btn btn-block btn-lg btn-black-default-hover"
+                                    <button id="addToCartBtn2000" class="btn btn-block btn-lg btn-black-default-hover"
                                         data-bs-toggle="modal">+ Add To Cart</button>
                                 </div>
                                 </th:block>
@@ -453,7 +453,7 @@
                                     <!-- End Product Default Single Item -->
                                     
                                     <!-- Start Product Default Single Item -->
-                                    <div th:each="p:${related}" class="product-default-single-item product-color--golden swiper-slide" >
+                                    <div th:each="p,iterStat:${related}" class="product-default-single-item product-color--golden swiper-slide" >
                                         <div class="image-box">
                                             <a href="product-details-default.html" class="image-link">
                                                 <img th:src="@{'../images/product/'+${p.img1}}" alt="">
@@ -462,11 +462,11 @@
                                             <div class="action-link">
 												<th:block th:if="${p.availability eq 'yes'}">
                                                 <div class="action-link-left">
-													 <form th:action="@{/addToCart}" method="post">
-														 <input type="hidden" name="pid" th:value="${p.id}">
-														 <input type="hidden" name="qty" th:value="1">
-                                                    <button style="color: white;">Add to Cart</button>
-												</form>                                                
+													<form th:id="'addToCartForm'+${iterStat.index+1}">
+														<input type="hidden" name="pid" th:value="${p.id}">
+														<input type="hidden" name="qty" th:value="1">
+														<button th:id="'addToCartBtn'+${iterStat.index+1}" style="color: white;">Add to Cart</button>
+													</form>
 												</div>
 												</th:block>
 												<th:block th:if="${p.availability eq 'no'}">
@@ -514,29 +514,12 @@
         </div>
     </div>
     <!-- End Product Default Slider Section -->
-	<script type="text/javascript">
-	function confirmation() {
-		const Toast = Swal.mixin({
-		toast: true,
-		position: 'top-end',
-		showConfirmButton: false,
-		timer: 3000,
-		timerProgressBar: true,
-		didOpen: (toast) => {
-		toast.addEventListener('mouseenter', Swal.stopTimer)
-		toast.addEventListener('mouseleave', Swal.resumeTimer)
-		}
-		})
-		
-		Toast.fire({
-		icon: 'error',
-		title: '<p style="font-size:15px;">Please First <a href="logins">Login</a></p>'
-		})}
-	</script>
+
     <!-- Start Footer Section -->
     <div th:insert="include/footer :: footer"> </div>
     <!-- End Footer Section -->
-
+	<div class="snackbar" id="insert">Product added successfully!</div>
+	<div class="snackbar" id="info">Please first login!</div>
     <!-- material-scrolltop button -->
     <button class="material-scrolltop" type="button"></button>
 
@@ -784,6 +767,8 @@
     <!-- Main JS -->
     <script src="assets/js/main.js"></script>
     <script src="ajax/productsearch.js"></script>
+    <script src="ajax/user/headercart.js"></script>
+    <script src="ajax/user/addcart.js"></script>
 </body>
 
 

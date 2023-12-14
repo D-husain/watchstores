@@ -371,6 +371,8 @@ public class MainController {
 	        ProductDTO productDTO = adao.mapProductToDTO(product);
 	        productDTOList.add(productDTO);
 	    }
+	    
+	    System.out.println("category::::----"+productList.size());
 
 	    return new ResponseEntity<>(productDTOList, HttpStatus.OK);
 	}
@@ -503,56 +505,17 @@ public class MainController {
 		User user = (User) session.getAttribute("user");
 
 		List<Cart> cartItems = udao.ShowUserCart(user);
-		double subtotal = udao.calculateCartSubtotal(cartItems);
 		double charge = 100.0;
-		double total = udao.calculateCartTotalWithShipping(cartItems, charge);
+		//double subtotal = udao.calculateCartSubtotal(cartItems);
+		//double total = udao.calculateCartTotalWithShipping(cartItems, charge);
 
 		model.addAttribute("cart", cartItems);
-		model.addAttribute("subtotal", subtotal);
-		model.addAttribute("total", total);
 		model.addAttribute("charge", charge);
+		//model.addAttribute("subtotal", subtotal);
+		//model.addAttribute("total", total);
 
 		return "cart";
 	}
-	
-	@GetMapping("/cart/data")
-	public ResponseEntity<List<CartDTO>> getCartList(@RequestParam("userId") Integer userId) {
-		if (userId == null) {
-			return ResponseEntity.badRequest().build(); // If userId is not provided, return a bad request
-		}
-
-		// Assuming you have a service layer that interacts with the database
-		List<Cart> cart = udao.ShowUserCarts(userId); // Fetch cart data for the provided user ID
-
-		if (cart == null || cart.isEmpty()) {
-			return ResponseEntity.noContent().build(); // If cart is empty, return no content
-		}
-
-		List<CartDTO> cartDTO = cart.stream().map(carts -> {
-			CartDTO cdto = new CartDTO();
-			cdto.setId(carts.getId());
-			cdto.setPrice(carts.getPrice());
-			cdto.setQty(carts.getQty());
-			cdto.setTotal(carts.getTotal());
-
-			// Perform null checks to avoid NullPointerException
-			if (carts.getProduct() != null) {
-				cdto.setProductid(carts.getProduct().getId());
-				cdto.setImg(carts.getProduct().getImg1());
-				cdto.setPname(carts.getProduct().getPname());
-			}
-
-			if (carts.getUser() != null) {
-				cdto.setUserid(carts.getUser().getId());
-			}
-
-			return cdto;
-		}).collect(Collectors.toList());
-
-		return ResponseEntity.ok(cartDTO); // Return cart data with OK status
-	}
-
-
 	
 	@PostMapping("/addToCart")
 	public String addToCart(@RequestParam int pid, @RequestParam int qty, HttpSession session, RedirectAttributes redirAttrs) {
@@ -581,25 +544,6 @@ public class MainController {
 		return "redirect:/cart";
 	}
 	
-	@PostMapping("/api/updateCart")
-    public ResponseEntity<String> updateCarts(@RequestParam(value = "id", required = true) Integer id,
-                                              @RequestParam(value = "qty", required = true) int qty) {
-        // Check if 'id' parameter is present
-        if (id == null) {
-            return ResponseEntity.badRequest().body("'id' parameter is required.");
-        }
-
-        Cart cartItem = cartrepo.getById(id);
-
-        if (cartItem != null) {
-            udao.updateCart(id, qty);
-            return ResponseEntity.ok("Product updated successfully.");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cart item not found.");
-        }
-    }
-
-
 	@GetMapping("/deletecart/{id}")
 	public String deletecart(@PathVariable int id, HttpSession session,RedirectAttributes redirAttrs) {
 		udao.DeleteCart(id);
