@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import jakarta.mail.Authenticator;
@@ -15,9 +17,12 @@ import jakarta.mail.internet.MimeMessage;
 @Service
 public class EmailService {
 
+	@Autowired
+	private Environment env;
+
 	public boolean sendEmail(String subject, String message, String to) {
 		boolean f = false;
-		String from = "dhusain4.3.2000@gmail.com";
+		String from = env.getProperty("adminemail.mobile");
 		String host = "smtp.gmail.com";
 		Properties properties = System.getProperties();
 
