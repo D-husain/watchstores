@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	}, 1500); // Adjust the time in milliseconds as needed
 });
 
-document.addEventListener('DOMContentLoaded', function () {
+/*document.addEventListener('DOMContentLoaded', function () {
         var toastContainer = document.querySelector('.toast-container');
         var toast = document.querySelector('.toast');
 
@@ -15,4 +15,4 @@ document.addEventListener('DOMContentLoaded', function () {
             var scrollTop = window.scrollY;
             toastContainer.style.bottom = scrollTop + 'px';
         });
-    });
+    });*/

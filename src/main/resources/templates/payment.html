@@ -45,6 +45,8 @@
 		/* Enable vertical scrolling */
 	}
 	</style>
+	
+	<script src="https://js.stripe.com/v3/"></script>
 </head>
 
 <body>
@@ -137,7 +139,7 @@
         <div class="container">
             <!-- Start User Details Checkout Form -->
             <div class="checkout_form" data-aos="fade-up" data-aos-delay="400">
-				<form th:action="@{/userorder}" method="post" id="someFormId">
+				<form th:action="@{//create-session}" method="post" id="someFormId">
                 <div class="row">
 					<div class="col-lg-6">
 						<!-- <h2 class="checkout-title">Billing Details</h2>End .checkout-title -->
