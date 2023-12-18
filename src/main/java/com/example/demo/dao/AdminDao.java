@@ -343,16 +343,13 @@ public class AdminDao {
         Predicate brandPredicate = null;
 
         if (category != null) {
-            // Assuming category is a field in Product entity
             categoryPredicate = criteriaBuilder.equal(root.get("category"), category);
         }
 
         if (brand != null) {
-            // Assuming brand is a field in Product entity
             brandPredicate = criteriaBuilder.equal(root.get("brand"), brand);
         }
 
-        // Combining predicates if both category and brand are provided
         if (categoryPredicate != null && brandPredicate != null) {
             criteriaQuery.where(criteriaBuilder.and(categoryPredicate, brandPredicate));
         } else if (categoryPredicate != null) {
@@ -364,6 +361,27 @@ public class AdminDao {
         TypedQuery<Product> query = entityManager.createQuery(criteriaQuery);
         return query.getResultList();
     }
+
+	public List<Product> viewProductsByColor(String color) {
+		List<Product> products = productrepo.findProductsByColor(color);
+		return products;
+	}
+
+	public List<Product> getProductsByCategoryAndColor(String category, String color) {
+	    List<Product> products = productrepo.findProductsByCategoryAndColor(category, color);
+	    return products;
+	}
+
+	public List<Product> getProductsByCategoryBrandAndColor(String category, String brand, String color) {
+	    List<Product> products = productrepo.findProductsByCategoryBrandAndColor(category, brand, color);
+	    return products;
+	}
+
+	public List<Product> getProductsByBrandAndColor(String brand, String color) {
+	    List<Product> products = productrepo.findProductsByBrandAndColor(brand, color);
+	    return products;
+	}
+
 
 	
 

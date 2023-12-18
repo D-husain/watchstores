@@ -39,4 +39,16 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 	@Query("SELECT COUNT(p) FROM Product p")
 	int countAllProducts();
 
+	@Query("SELECT p FROM Product p where p.colore = ?1")
+	List<Product> findProductsByColor(String color);
+
+	@Query("SELECT p FROM Product p WHERE p.category.cname = ?1 AND p.colore = ?2")
+	List<Product> findProductsByCategoryAndColor(String category, String color);
+
+	@Query("SELECT p FROM Product p WHERE p.category.cname = ?1 AND p.brand.brand=?2 AND p.colore = ?3")
+	List<Product> findProductsByCategoryBrandAndColor(String category, String brand, String color);
+	
+	@Query("SELECT p FROM Product p WHERE p.brand.brand = ?1 AND p.colore = ?2")
+	List<Product> findProductsByBrandAndColor(String brand, String color);
+
 }

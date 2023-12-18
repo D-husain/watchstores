@@ -27,6 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import com.example.demo.dao.AdminDao;
+import com.example.demo.dao.ProductDAO;
 import com.example.demo.dao.UserDao;
 import com.example.demo.dto.ProductBrandDTO;
 import com.example.demo.dto.ProductDTO;
@@ -55,20 +56,14 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class MainController {
 
-	@Autowired
-	private UserDao udao;
-	@Autowired
-	private AdminDao adao;
-	@Autowired
-	private UserRepository userrepo;
-	@Autowired
-	private ProductRepository productrepo;
-	@Autowired
-	private CartRepository cartrepo;
-	@Autowired
-	private WishlistRepository wishlistrepo;
-	@Autowired
-	private EmailService emailService;
+	@Autowired private UserDao udao;
+	@Autowired private AdminDao adao;
+	@Autowired private UserRepository userrepo;
+	@Autowired private ProductRepository productrepo;
+	@Autowired private CartRepository cartrepo;
+	@Autowired private WishlistRepository wishlistrepo;
+	@Autowired private EmailService emailService;
+	@Autowired private ProductDAO pdao;
 
 	@GetMapping("/")
 	public String index(Model model, HttpSession session) {
@@ -161,7 +156,7 @@ public class MainController {
 	}
 	
 	
-	@PostMapping("/api/login_users")
+	@PostMapping("/user/login")
 	@ResponseBody
 	public ResponseEntity<String> userlogins(@RequestParam("name") String user_name, @RequestParam("password") String password,
 	        HttpSession session) {
@@ -180,7 +175,7 @@ public class MainController {
 	    }
 
 	    if (loggedIn) {
-	        return ResponseEntity.ok("redirect:/account");
+	    	  return ResponseEntity.ok().build();
 	    } else {
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed. Invalid username or password.");
 	    }
@@ -353,31 +348,41 @@ public class MainController {
 	@GetMapping("api/shop")
 	public ResponseEntity<List<ProductDTO>> shop(
 	        @RequestParam(name = "category", required = false) String category,
-	        @RequestParam(name = "brand", required = false) String brand) {
+	        @RequestParam(name = "brand", required = false) String brand,
+	        @RequestParam(name = "color", required = false) String color) {
 
 	    List<ProductDTO> productDTOList = new ArrayList<>();
 	    List<Product> productList;
 
-	    if (category == null && brand == null) {
+	    if (category == null && brand == null && color == null) {
 	        productList = adao.ShowProduct();
-	    } else if (category != null && brand == null) {
+	    } else if (category != null && brand == null && color == null) {
 	        productList = adao.viewProductsByCategoryName(category);
-	    } else if (category == null && brand != null) {
+	    } else if (category == null && brand != null && color == null) {
 	        productList = adao.viewProductsByBrandName(brand);
-	    } else {
-	        // If both category and brand parameters are present
+	    } else if (category == null && brand == null && color != null) {
+	        productList = adao.viewProductsByColor(color);
+	    } else if (category != null && brand != null && color == null) {
 	        productList = adao.getProductsByCategoryAndBrand(category, brand);
+	    } else if (category != null && brand == null && color != null) {
+	        productList = adao.getProductsByCategoryAndColor(category, color);
+	    } else if (category == null && brand != null && color != null) {
+	        productList = adao.getProductsByBrandAndColor(brand, color);
+	    } else {
+	        // If all category, brand, and color parameters are present
+	        productList = adao.getProductsByCategoryBrandAndColor(category, brand, color);
 	    }
 
 	    for (Product product : productList) {
 	        ProductDTO productDTO = adao.mapProductToDTO(product);
 	        productDTOList.add(productDTO);
 	    }
-	    
-	    System.out.println("category::::----"+productList.size());
+
+	    System.out.println("Filtered products count: " + productList.size());
 
 	    return new ResponseEntity<>(productDTOList, HttpStatus.OK);
 	}
+
 
 	
 	@GetMapping("/brand/data")
@@ -385,6 +390,12 @@ public class MainController {
 	    List<ProductBrandDTO> productBrandDTOs = adao.getProductBrandDTOList();
 	    return new ResponseEntity<>(productBrandDTOs, HttpStatus.OK);
 	}
+	
+	@GetMapping("/product/color")
+    public ResponseEntity<List<String>> getProductColorList() {
+        List<String> productColorList = pdao.getProductColors();
+        return new ResponseEntity<>(productColorList, HttpStatus.OK);
+    }
 
 	@GetMapping("/product-details")
 	public String pdetails(@RequestParam("id") Integer id, Model m) {
