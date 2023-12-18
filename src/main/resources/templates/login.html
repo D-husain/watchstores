@@ -29,6 +29,7 @@
 
     <!-- Main CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/toastmessage2.css">
 	<style>
 		@keyframes slideIn {
 			0% {
@@ -38,6 +39,20 @@
 			100% {
 				left: 10px;
 			}
+		}
+	
+		.password-input {
+			position: relative;
+		}
+		.toggle-password {
+			position: absolute;
+			top: 50%;
+			right: 10px;
+			transform: translateY(-50%);
+			cursor: pointer;
+		}
+		#eyeIcon {
+			color: #666;
 		}
 	</style>
     <!-- Use the minified version files listed below for better performance and remove the files listed above -->
@@ -141,17 +156,22 @@
                     <div class="account_form" data-aos="fade-up" data-aos-delay="0">
                         <h3>login</h3>
 						<!--<div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>-->
-                        <form action="login_user" method="post">
+                        <form id="loginForm">
                             <div class="default-form-box">
                                 <label>Username <span>*</span></label>
                                 <input type="text" onblur="checkname()" id="name" name="name" placeholder="Enter register name">
                                 <span id='nameerr' class='text-danger'></span>
                             </div>
-                            <div class="default-form-box">
-                                <label>Passwords <span>*</span></label>
-                                <input type="password" onblur="checkpassword()" name="password" id="password" placeholder="Enter register password">
-                                <span id='passeerr' class='text-danger'></span>
-                            </div>
+							<div class="default-form-box">
+								<label>Password <span>*</span></label>
+								<div class="password-input">
+									<input type="password" name="password" id="password" placeholder="Enter register password">
+									<span class="toggle-password" onclick="togglePasswordVisibility()">
+										<i id="eyeIcon" class="fa fa-eye" aria-hidden="true"></i>
+									</span>
+								</div>
+								<span id='passeerr' class='text-danger'></span>
+							</div>
                             <div class="login_submit">
                                 <button class="btn btn-md btn-black-default-hover mb-4" onclick='return checkvalidate()' type="submit">login</button>
                                 <a href="forgot">Lost your password?</a>
@@ -188,36 +208,59 @@
 		</div>
 	</div>
 	<script>
-		$(document).ready(function () {
-			$('#loginForm').submit(function (event) {
-				event.preventDefault();
-				var formData = $(this).serialize(); // Serialize form data
+		$('#loginForm').submit(function (event) {
+			event.preventDefault();
 
-				$.ajax({
-					type: 'POST',
-					url: '/api/login_users',
-					data: formData,
-					success: function () {
-						window.location.href = "/account"; // Redirect to account page
-					},
-					error: function (xhr, status, error) {
-						 if (xhr.status === 401) {
-                        $('#error').text("Username and password do not match."); // Show error message for username and password mismatch
-                    } else {
-                        var errorMessage = xhr.responseText;
-                        $('#error').text(errorMessage); // Show other error messages on the page
-                    }
-					}
-				});
+			var user_name = $('#name').val();
+			var password = $('#password').val();
+
+			$.ajax({
+				type: 'POST',
+				url: '/user/login',
+				data: {
+					name: user_name,
+					password: password
+				},
+				success: function (response) {
+					window.location.href = '/account';
+				},
+				error: function (xhr, status, error) {
+					var errorMessage = xhr.responseText;
+					$('#error').text(errorMessage);
+					$('#error').addClass('show');
+
+					setTimeout(function () {
+						$('#error').removeClass('show').text('');
+					}, 2500);
+				}
 			});
 		});
+
+
+
+
+		function togglePasswordVisibility() {
+			var passwordField = document.getElementById('password');
+			var eyeIcon = document.getElementById('eyeIcon');
+
+			if (passwordField.type === 'password') {
+				passwordField.type = 'text';
+				eyeIcon.classList.remove('fa-eye');
+				eyeIcon.classList.add('fa-eye-slash');
+			} else {
+				passwordField.type = 'password';
+				eyeIcon.classList.remove('fa-eye-slash');
+				eyeIcon.classList.add('fa-eye');
+			}
+		}
+
 	</script>
 
 
     <!-- Start Footer Section -->
     <div th:insert="include/footer :: footer"> </div>
     <!-- End Footer Section -->
-
+	<div class="snackbar" id="error"></div>
     <!-- material-scrolltop button -->
     <button class="material-scrolltop" type="button"></button>
 
