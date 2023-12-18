@@ -47,7 +47,7 @@ function addClickEventListeners() {
 	$('.categoryLink').on('click', function(event) {
 		event.preventDefault();
 		const category = $(this).data('category');
-		window.location.href = `/filter-products?category=${category}`;
+		window.location.href = `/category-product?category=${category}`;
 	});
 }
 

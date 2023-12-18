@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Products</title>
+    <title>Category - product</title>
 
     <!-- ::::::::::::::Favicon icon::::::::::::::-->
     <link rel="shortcut icon" th:href="@{assets/images/favicon.ico}" type="image/png">
@@ -105,12 +105,12 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <h3 class="breadcrumb-title">Products</h3>
+                        <h3 class="breadcrumb-title">Category - product</h3>
                         <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
                             <nav aria-label="breadcrumb">
                                 <ul>
-                                    <li><a href="index.html">Home</a></li>
-                                    <li class="active" aria-current="page">Products</li>
+                                    <li><a href="/">Home</a></li>
+                                    <li class="active" aria-current="page">Category - product</li>
                                 </ul>
                             </nav>
                         </div>
@@ -152,46 +152,20 @@
                             </div>
                         </div> <!-- End Single Sidebar Widget -->
 
-                       <!--  Start Single Sidebar Widget 
+                         <!--Start Single Sidebar Widget -->
                         <div class="sidebar-single-widget">
                             <h6 class="sidebar-title">SELECT BY COLOR</h6>
                             <div class="sidebar-content">
-                                <div class="filter-type-select">
-                                    <ul>
-                                        <li>
-                                            <label class="checkbox-default" for="black">
-                                                <input type="checkbox" id="black">
-                                                <span>Black (6)</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="checkbox-default" for="blue">
-                                                <input type="checkbox" id="blue">
-                                                <span>Blue (8)</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="checkbox-default" for="brown">
-                                                <input type="checkbox" id="brown">
-                                                <span>Brown (10)</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="checkbox-default" for="Green">
-                                                <input type="checkbox" id="Green">
-                                                <span>Green (6)</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="checkbox-default" for="pink">
-                                                <input type="checkbox" id="pink">
-                                                <span>Pink (4)</span>
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </div>
+								<div class="filter-type-select">
+									<ul>
+										<li>
+											<ul id="colorFilter" class="sidebar-menu-collapse"></ul>
+										</li>
+									</ul>
+								</div>
                             </div>
-                        </div>  End Single Sidebar Widget -->
+                        </div>  
+                      <!--  End Single Sidebar Widget -->
 
                     </div> <!-- End Sidebar Area -->
                 </div>
@@ -246,7 +220,6 @@
 												
                                                <div id="productsContainer" class="row"></div>
 												<!-- Product list will be displayed here -->
-												
                                             </div>
                                         </div>
                                         <!-- End Grid View Product -->
@@ -538,14 +511,8 @@
     <!-- Main JS -->
     <script src="assets/js/main.js"></script>
     
-    <script src="ajax/shop/brandproduct.js"></script>
-    <script src="ajax/shop/brandfilter.js"></script>
-    
-    <script src="ajax/shop/categoryfilter.js"></script>
-    <script src="ajax/shop/categoryproduct.js"></script>
-    
     <script src="ajax/shop/displayproducts.js"></script>
-    <script src="ajax/shop/productsorting.js"></script>
+    <script src="ajax/shop/product-category-filters.js"></script>
     <script src="ajax/productsearch.js"></script>
     
      <script src="ajax/user/cart.js"></script>

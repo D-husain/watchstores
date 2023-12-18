@@ -340,9 +340,14 @@ public class MainController {
 		return "shop";
 	}
 	
-	@GetMapping("/filter-products")
+	@GetMapping("/category-product")
 	public String Products() {
-		return "products";
+		return "category";
+	}
+	
+	@GetMapping("/barnd-product")
+	public String brand() {
+		return "brand";
 	}
 	
 	@GetMapping("api/shop")

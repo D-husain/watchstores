@@ -49,7 +49,7 @@
                                 data-aos-delay="400">
                                 <h5 class="title">CATEGORIES</h5>
                                 <ul class="footer-nav">
-                                    <li th:each="c:${category}"><a th:href="@{/filter-products(category=${c.cname})}">[[${c.cname}]]</a></li>
+                                    <li th:each="c:${category}"><a th:href="@{/category-product(category=${c.cname})}">[[${c.cname}]]</a></li>
                                 </ul>
                             </div>
                             <!-- End Footer Single Item -->

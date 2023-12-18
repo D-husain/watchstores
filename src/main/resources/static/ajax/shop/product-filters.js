@@ -1,4 +1,115 @@
 $(document).ready(function() {
+	getAllProducts();
+});
+
+function getAllProducts() {
+	$.ajax({
+		url: '/api/shop',
+		method: 'GET',
+		dataType: 'json',
+		success: function(response) {
+			// On successful response, clear existing products and display filtered products
+			displayFilteredProducts(response);
+			displayListProducts(response);
+		},
+		error: function(xhr, status, error) {
+			console.error(error);
+		}
+	});
+}
+
+//---------------------------------------Products Sorting -----------------------------------------------------------
+
+function filterByProductSortby(sort) {
+	$.ajax({
+		url: '/api/sort?sort=' + sort,
+		method: 'GET',
+		dataType: 'json',
+		success: function(response) {
+			// On successful response, display filtered products
+			displayFilteredProducts(response);
+			displayListProducts(response);
+		},
+		error: function(xhr, status, error) {
+			console.error(error);
+		}
+	});
+}
+
+//---------------------------------------Category Filter -----------------------------------------------------------
+
+$(document).ready(function() {
+	
+	function fetchCategoryData() {
+		$.ajax({
+			url: '/category/data',
+			method: 'GET',
+			dataType: 'json',
+			success: function(response) {
+				if (response && response.length > 0) {
+					var productsLength = response.length;
+					var categoryFilter = $('#categoryFilter');
+					var previousCheckbox = null; // To keep track of the previously checked checkbox
+					response.forEach(function(category, index) {
+						var categoryListItem = $('<li></li>');
+						var checkboxId = 'categoryCheckbox_' + index;
+						var label = $('<label class="checkbox-default" for="' + checkboxId + '"></label>');
+						var input = $('<input type="checkbox" id="' + checkboxId + '">');
+						var span = $('<span>' + category.cname + ' (' + productsLength + ')</span>');
+
+						label.append(input);
+						label.append(span);
+						categoryListItem.append(label);
+						categoryFilter.append(categoryListItem);
+
+						// Event listener for checkbox change
+						input.on('change', function() {
+							if (this.checked) {
+								
+								if (previousCheckbox && previousCheckbox !== this) {
+									$(previousCheckbox).prop('checked', false);
+								}
+								filterByCategory(category.cname);
+								previousCheckbox = this;
+							} else {
+								// Clear filtered products if unchecked
+								getAllProducts();
+								//clearFilteredProducts();
+							}
+						});
+					});
+				} else {
+					console.error('Empty or invalid response received from the server.');
+				}
+			},
+			error: function(xhr, status, error) {
+				console.error('AJAX request failed:', error);
+			}
+		});
+	}
+
+	fetchCategoryData();
+});
+
+function filterByCategory(category) {
+	$.ajax({
+		url: '/api/shop?category=' + category,
+		method: 'GET',
+		dataType: 'json',
+		success: function(response) {
+			// On successful response, clear existing products and display filtered products
+			displayFilteredProducts(response);
+			displayListProducts(response);
+		},
+		error: function(xhr, status, error) {
+			console.error(error);
+		}
+	});
+}
+
+//---------------------------------------Brand Filter -----------------------------------------------------------
+
+$(document).ready(function() {
 	
 	function fetchBrandData() {
 		$.ajax({
@@ -69,6 +180,7 @@ function filterByBrand(brand) {
 	});
 }
 
+//---------------------------------------Color Filter -----------------------------------------------------------
 
 $(document).ready(function() {
 	
@@ -139,20 +251,4 @@ function filterBycolore(color) {
 	});
 }
 
-
-
-function getAllProducts() {
-	$.ajax({
-		url: '/api/shop',
-		method: 'GET',
-		dataType: 'json',
-		success: function(response) {
-			// On successful response, clear existing products and display filtered products
-			displayFilteredProducts(response);
-			displayListProducts(response);
-		},
-		error: function(xhr, status, error) {
-			console.error(error);
-		}
-	});
-}
+//---------------------------------------Brand Filter -----------------------------------------------------------
