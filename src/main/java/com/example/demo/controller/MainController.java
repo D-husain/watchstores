@@ -1935,6 +1935,9 @@ public class MainController {
 				orderProducts.setTotal(totals);
 				Product product = productrepo.getById(proId);
 				orderProducts.setProduct(product);
+				
+				product.setStock(product.getStock() -1);
+	        	adao.updateProduct(product);
 
 				udao.SaveOrderProduct(orderProducts, user.getId());
 				session.setAttribute("saveorder", orderProducts);
