@@ -18,6 +18,8 @@ public class ProductDTO {
 	private double price;
 	private int qty;
 	private String availability;
+	private int stock;
+	
 	public int getId() {
 		return id;
 	}
@@ -114,6 +116,10 @@ public class ProductDTO {
 	public void setAvailability(String availability) {
 		this.availability = availability;
 	}
-	
-	
+	public int getStock() {
+		return stock;
+	}
+	public void setStock(int stock) {
+		this.stock = stock;
+	}
 }

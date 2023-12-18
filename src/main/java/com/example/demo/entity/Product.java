@@ -38,14 +38,11 @@ public class Product {
 	private double price;
 	private int qty;
 	private String availability;
+	private int stock;
 	
-	public Product() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 	public Product(int id, String pname, Category category, String img1, String img2, String img3, String img4,
-			ProductBrand brand, String colore, String description, String specification, String genericname, ProductCountryOrigin country,
-			double price, int qty, String availability) {
+			ProductBrand brand, String colore, String description, String specification, String genericname,
+			ProductCountryOrigin country, double price, int qty, String availability, int stock) {
 		super();
 		this.id = id;
 		this.pname = pname;
@@ -63,13 +60,19 @@ public class Product {
 		this.price = price;
 		this.qty = qty;
 		this.availability = availability;
+		this.stock = stock;
+	}
+	public Product() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", pname=" + pname + ", category=" + category + ", img1=" + img1 + ", img2=" + img2
 				+ ", img3=" + img3 + ", img4=" + img4 + ", brand=" + brand + ", colore=" + colore + ", description="
 				+ description + ", specification=" + specification + ", genericname=" + genericname + ", country="
-				+ country + ", price=" + price + ", qty=" + qty + ", availability=" + availability + "]";
+				+ country + ", price=" + price + ", qty=" + qty + ", availability=" + availability + ", stock=" + stock
+				+ "]";
 	}
 	public int getId() {
 		return id;
@@ -166,5 +169,11 @@ public class Product {
 	}
 	public void setAvailability(String availability) {
 		this.availability = availability;
+	}
+	public int getStock() {
+		return stock;
+	}
+	public void setStock(int stock) {
+		this.stock = stock;
 	}
 }

@@ -185,10 +185,22 @@ function checkproprice() {
 	let price = document.getElementById('price').value;
 	let propriceerr = document.getElementById('propriceerr');
 	if (price === "") {
-		propriceerr.innerHTML = "Please select product color";
+		propriceerr.innerHTML = "Please enter product price";
 		return false;
 	} else {
 		propriceerr.innerHTML = "";
+		return true;
+	}
+}
+
+function checkprostock() {
+	let stock = document.getElementById('stock').value;
+	let prostockeerr = document.getElementById('prostockeerr');
+	if (stock === "") {
+		prostockeerr.innerHTML = "Please enter product stock";
+		return false;
+	} else {
+		prostockeerr.innerHTML = "";
 		return true;
 	}
 }
@@ -208,11 +220,12 @@ function validate() {
 	let isprocountryValid =checkprocountry();
 	let isprocolorValid =checkprocolor();
 	let isproqtyValid =checkproqty();
-	let ispropriceValid =checkproprice();			
+	let ispropriceValid =checkproprice();	
+	let isProstockValid =checkprostock();		
 
 	return ispnameValid && isprocatValid&&isprobrandValid&&isproimg1Valid&&isproimg2Valid
 	&&isproimg3Valid&&isproimg4Valid&&isprodesValid&&isprospecValid&&isprognameValid&&isprocountryValid
-	&&isprocolorValid&&isproqtyValid&&ispropriceValid;
+	&&isprocolorValid&&isproqtyValid&&ispropriceValid&&isProstockValid;
 }
 
 $(document).ready(function() {
@@ -297,6 +310,7 @@ $('table').on('click', '.edit', function() {
 		} else if (product.availability === 'no') {
 			$('#outOfStockRadio').prop('checked', true);
 		}
+		$('#productstock').val(product.stock);
 		$('#productimg1').attr('src', '../images/product/' + product.img1);
 		$('#productimg2').attr('src', '../images/product/' + product.img2);
 		$('#productimg3').attr('src', '../images/product/' + product.img3);
@@ -508,6 +522,23 @@ function checkproprices() {
 	}
 }
 
+function checkprostocks() {
+	let stock = document.getElementById('productstock').value;
+	let prostockerr = document.getElementById('prostockerrs');
+	let s = /^[0-9]+$/
+	if (stock === "") {
+		prostockerr.innerHTML = "Please enter product stock";
+		return false;
+	} else if (!stock.match(s)) {
+		prostockerr.innerHTML = "Please only enter numeric characters only for your Stock!";
+		return false;
+	}
+	else {
+		prostockerr.innerHTML = "";
+		return true;
+	}
+}
+
 
 function validates() {
 	let ispnameValid = checkpronames();
@@ -523,11 +554,12 @@ function validates() {
 	let isprocountryValid =checkprocountrys();
 	let isprocolorValid =checkprocolors();
 	let isproqtyValid =checkproqtys();
-	let ispropriceValid =checkproprices();			
+	let ispropriceValid =checkproprices();	
+	let isprostockValid =checkprostocks();		
 
 	return ispnameValid && isprocatValid&&isprobrandValid&&isproimg1Valid&&isproimg2Valid
 	&&isproimg3Valid&&isproimg4Valid&&isprodesValid&&isprospecValid&&isprognameValid&&isprocountryValid
-	&&isprocolorValid&&isproqtyValid&&ispropriceValid;
+	&&isprocolorValid&&isproqtyValid&&ispropriceValid&&isprostockValid;
 }
 
 $(document).on('click', '#updateProduct', function(event) {
@@ -544,6 +576,7 @@ $(document).on('click', '#updateProduct', function(event) {
 	var qty = $('#productqty').val();
 	var price = $('#productprice').val();
 	var colore = $('#productcolore').val();
+	var stock = $('#productstock').val();
 
 	var availabilityRadio = $('input[name="availability"]:checked');
 	var availability = (availabilityRadio.length > 0) ? availabilityRadio.val() : null;
@@ -569,6 +602,7 @@ $(document).on('click', '#updateProduct', function(event) {
 	if (availability !== null) {
 		formData.append('availability', availability);
 	}
+	formData.append('stock', stock);
 	formData.append('img1', $('#productimg1')[0].files[0]); // Assuming img1 is an input for image file
 	formData.append('img2', $('#productimg2')[0].files[0]);
 	formData.append('img3', $('#productimg3')[0].files[0]);

@@ -44,16 +44,11 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class ProductController {
 
-	@Autowired
-	private ProductRepository productrepo;
-	@Autowired
-	private AdminDao adao;
-	@Autowired
-	private Upload_File fileuploadhelper;
-	@Autowired 
-	private UserDao udao;
-	@Autowired
-	private OriginRepository originRepository;
+	@Autowired private ProductRepository productrepo;
+	@Autowired private AdminDao adao;
+	@Autowired private Upload_File fileuploadhelper;
+	@Autowired private UserDao udao;
+	@Autowired private OriginRepository originRepository;
 	String uploadProduct = "src/main/resources/static/images/product";
 	
 	
@@ -259,7 +254,7 @@ public class ProductController {
 			@RequestParam("brand") String brand, @RequestParam("description") String description,
 			@RequestParam("specification") String specification, @RequestParam("gname") String gname,
 			@RequestParam("country") String country, @RequestParam("qty") int qty, @RequestParam("price") Double price,
-			@RequestParam("availability") String Availability) {
+			@RequestParam("availability") String Availability,@RequestParam("stock") int stock) {
         Map<String, String> response = new HashMap<>();
 
         ProductBrand b = adao.getbrandByName(brand);
@@ -278,6 +273,7 @@ public class ProductController {
 		product.setQty(qty);
 		product.setPrice(price);
 		product.setAvailability(Availability);
+		product.setStock(stock);
 		product.setImg1(img1.getOriginalFilename());
 		product.setImg2(img2.getOriginalFilename());
 		product.setImg3(img3.getOriginalFilename());
@@ -323,7 +319,7 @@ public class ProductController {
 			@RequestParam("brand") String brand, @RequestParam("description") String description,
 			@RequestParam("specification") String specification, @RequestParam("gname") String gname,
 			@RequestParam("country") String country, @RequestParam("qty") int qty, @RequestParam("price") Double price,
-			@RequestParam("availability") String Availability, @PathVariable("id") Integer id) {
+			@RequestParam("availability") String Availability, @PathVariable("id") Integer id,@RequestParam("stock") int stock) {
 		Optional<Product> existingProduct = productrepo.findById(id);
 
 		ProductBrand b = adao.getbrandByName(brand);
@@ -344,6 +340,7 @@ public class ProductController {
 					foundProduct.setQty(qty);
 					foundProduct.setPrice(price);
 					foundProduct.setAvailability(Availability);
+					foundProduct.setStock(stock);
 					
 		            handleFileUpload(img1, img2, img3, img4, foundProduct);
 

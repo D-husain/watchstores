@@ -203,6 +203,7 @@ public class AdminDao {
         productDTO.setCountry(product.getCountry().getCountryname());
         productDTO.setQty(product.getQty());
         productDTO.setAvailability(product.getAvailability());
+        productDTO.setStock(product.getStock());
         return productDTO;
     }
 	
@@ -248,6 +249,11 @@ public class AdminDao {
         int totalProducts = productrepo.countAllProducts();
         return (int) Math.ceil((double) totalProducts / pageSize);
     }
+
+	public void updateProduct(Product product) {
+		productrepo.save(product);
+	}
+
     
     //----------------------------------------Product origin country --------------------------------------------------
     
