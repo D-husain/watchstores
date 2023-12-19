@@ -231,6 +231,7 @@
 					</tr>
 					<input type="hidden" name="charge" th:value="${charge}">
 					<input type="hidden" name="orderdate" th:value="${orderdate}">
+					<input type="hidden" name="method" th:value="online">
 					<div class="col-lg-6">
                         
                             <h3>Your order</h3>
@@ -321,10 +322,49 @@
 	<tr th:if="${session != null and session.coupon != null and session.coupon.coupon != null}">
 	<script type="text/javascript">
 		var options = {
+			"key": "rzp_test_BFuqGW7IZkVybQ",
+			"amount": '[[${discountedSubtotal}]]' * 100,
+			"currency": "INR",
+			"name": "Watch Store",
+			"description": "Test Transaction",
+			"image": "http://localhost:8081/assets/images/logo/logo_black.png",
+			//"order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+			"handler": function (response) {
+				document.getElementById('someFormId').submit();
+			},
+			//"callback_url": "order.jsp",
+			"prefill": {
+				"name": "",
+				"email": "",
+				"contact": "+91 "
+			},
+			"notes": {
+				"address": ""
+			},
+			"theme": {
+				"color": "#445f84;"
+			},
+			"modal": {
+				"ondismiss": function () {
+					window.location.href = '/order-cancel';
+				}
+			}
+		};
+		var rzp1 = new Razorpay(options);
+		rzp1.on('payment.failed', function (response) {
+			alert("Payment failed: " + response.error.description);
+		});
+		document.getElementById('rzp-button1').onclick = function (e) {
+			rzp1.open();
+			e.preventDefault();
+		}
+	</script>
+	</tr>
+	<tr th:unless="${session != null and session.coupon != null and session.coupon.coupon != null}">
+		<script type="text/javascript">
+			var options = {
 				"key": "rzp_test_BFuqGW7IZkVybQ",
-				// Enter the Key ID generated from the Dashboard
-				"amount": '[[${discountedSubtotal}]]' * 100,
-				// Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+				"amount": '[[${total}]]' * 100,
 				"currency": "INR",
 				"name": "Watch Store",
 				"description": "Test Transaction",
@@ -344,66 +384,21 @@
 				},
 				"theme": {
 					"color": "#445f84;"
+				},
+				"modal": {
+				"ondismiss": function () {
+					window.location.href = '/order-cancel';
 				}
+			}
 			};
 			var rzp1 = new Razorpay(options);
 			rzp1.on('payment.failed', function (response) {
-				alert(response.error.code);
-				alert(response.error.description);
-				alert(response.error.source);
-				alert(response.error.step);
-				alert(response.error.reason);
-				alert(response.error.metadata.order_id);
-				alert(response.error.metadata.payment_id);
+				alert("Payment failed: " + response.error.description);
 			});
 			document.getElementById('rzp-button1').onclick = function (e) {
 				rzp1.open();
 				e.preventDefault();
 			}
-		</script>
-		</tr>
-		<tr th:unless="${session != null and session.coupon != null and session.coupon.coupon != null}">
-		<script type="text/javascript">
-		var options = {
-			"key": "rzp_test_BFuqGW7IZkVybQ",
-			// Enter the Key ID generated from the Dashboard
-			"amount":'[[${total}]]'*100,
-		// Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-		"currency": "INR",
-			"name": "Watch Store",
-				"description": "Test Transaction",
-					"image": "http://localhost:8081/assets/images/logo/logo_black.png",
-						//"order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-						"handler": function (response) {
-							document.getElementById('someFormId').submit();
-						},
-		//"callback_url": "order.jsp",
-		"prefill": {
-			"name": "",
-				"email": "",
-					"contact": "+91 "
-		},
-		"notes": {
-			"address": ""
-		},
-		"theme": {
-			"color": "#445f84;"
-		}
-									};
-		var rzp1 = new Razorpay(options);
-		rzp1.on('payment.failed', function (response) {
-			alert(response.error.code);
-			alert(response.error.description);
-			alert(response.error.source);
-			alert(response.error.step);
-			alert(response.error.reason);
-			alert(response.error.metadata.order_id);
-			alert(response.error.metadata.payment_id);
-		});
-		document.getElementById('rzp-button1').onclick = function (e) {
-			rzp1.open();
-			e.preventDefault();
-		}
 		</script>
 		</tr>
     <!-- Start Footer Section -->

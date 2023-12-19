@@ -729,6 +729,33 @@ public class MainController {
 
 		return "redirect:/confirmorder";
 	}
+	
+	@GetMapping("order-cancel")
+	public String cancel_order(HttpSession session, Model model) {
+		session.removeAttribute("data");
+
+		User user = (User) session.getAttribute("user");
+
+		List<Cart> cartItems = udao.ShowUserCart(user);
+		model.addAttribute("cart", cartItems);
+
+		double subtotal = udao.calculateCartSubtotal(cartItems);
+		model.addAttribute("subtotal", subtotal);
+
+		int charge = 100;
+		model.addAttribute("charge", charge);
+
+		double total = udao.calculateCartTotalWithShipping(cartItems, charge);
+		model.addAttribute("total", total);
+
+		double discountPercentage = 10;
+		double discountAmount = total * (discountPercentage / 100);
+		model.addAttribute("discountAmount", discountAmount);
+		double discountedSubtotal = total - discountAmount;
+		model.addAttribute("discountedSubtotal", discountedSubtotal);
+
+		return "order-cancel";
+	}
 
 	@GetMapping("/confirmorder")
 	public String confirmorder(Model model, HttpSession session) {
