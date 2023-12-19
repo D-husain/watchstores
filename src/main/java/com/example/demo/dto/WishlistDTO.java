@@ -4,7 +4,10 @@ public class WishlistDTO {
 
 	private int id;
 	private int user;
-	private int product;
+	private int pid;
+	private String img;
+	private String pname;
+	private String stock;
 	private double price;
 	public int getId() {
 		return id;
@@ -18,11 +21,29 @@ public class WishlistDTO {
 	public void setUser(int user) {
 		this.user = user;
 	}
-	public int getProduct() {
-		return product;
+	public int getPid() {
+		return pid;
 	}
-	public void setProduct(int product) {
-		this.product = product;
+	public void setPid(int pid) {
+		this.pid = pid;
+	}
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
+	}
+	public String getPname() {
+		return pname;
+	}
+	public void setPname(String pname) {
+		this.pname = pname;
+	}
+	public String getStock() {
+		return stock;
+	}
+	public void setStock(String stock) {
+		this.stock = stock;
 	}
 	public double getPrice() {
 		return price;
@@ -30,5 +51,7 @@ public class WishlistDTO {
 	public void setPrice(double price) {
 		this.price = price;
 	}
+	
+	
 	
 }

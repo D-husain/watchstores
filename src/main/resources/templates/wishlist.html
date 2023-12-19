@@ -29,7 +29,7 @@
 	<link rel="stylesheet" href="assets/css/toastmessage2.css">
     <!-- Main CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
-	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Use the minified version files listed below for better performance and remove the files listed above -->
     <!-- <link rel="stylesheet" href="assets/css/vendor/vendor.min.css">
     <link rel="stylesheet" href="assets/css/plugins/plugins.min.css">
@@ -144,7 +144,7 @@
                     <div class="col-12">
                         <div class="table_desc">
                             <div class="table_page table-responsive">
-                                <table th:unless="${wishlist.size() == 0}">
+                                <table id="wishlistTable">
                                     <!-- Start Wishlist Table Head -->
                                     <thead>
                                         <tr>
@@ -158,76 +158,16 @@
                                     </thead> 
                                     <!-- End Cart Table Head -->
                                     <tbody>
-										
                                         <!-- Start Wishlist Single Item-->
-                                        <tr th:each="w,iterStat: ${wishlist}">
-                                            <td class="product_thumb"><a th:href="@{/product-details(id=${w.product.id})}">
-												<img th:src="@{'../images/product/'+${w.product.img1}}" alt=""></a></td>
-                                            <td class="product_name"><a href="product-details">[[${w.product.pname}]]</a></td>
-                                            <td class="product-price">₹ [[${w.price}]]</td>
-                                            <!--<td class="product_stock">[[${w.product.availability}]]</td>-->
-											<th:block th:if="${w.product.availability eq 'yes'}">
-												<td class="product_stock"><span class="in-stock">In stock</span></td>
-											</th:block>
-											<th:block th:if="${w.product.availability eq 'no'}">
-												<td class="product_stock"><span class="out-of-stock">Out of stock</span></td>
-											</th:block>
-                                            
-                                            <th:block th:if="${w.product.availability eq 'yes'}">
-											<td class="product_addcart">
-												<form th:id="'addToCartForm'+${iterStat.index+1}">
-													<input type="hidden" name="pid" th:value="${w.product.id}">
-													<input type="hidden" name="qty" th:value="1">
-													<button th:id="'addToCartBtn'+${iterStat.index+1}" class="btn btn-md btn-golden" data-bs-toggle="modal">Add To Cart</button>
-												</form>
-											</td>
-											</th:block>
-											<th:block th:if="${w.product.availability eq 'no'}">
-											<td class="product_addcart">
-													<button style="cursor:no-drop;" class="btn btn-md btn-golden" data-bs-toggle="modal">Add To Cart</button>
-											</td>
-											</th:block>
-											
-                                            <td class="product_remove"><a th:href="@{/deletewishlist/{id}(id=${w.id})}"><i class="fa fa-trash-o"></i></a></td>        
-                                        </tr> 
+                                        
                                         <!-- End Wishlist Single Item-->
                                     </tbody>
                                 </table>
                                 <!-- Check if the cart is empty and the user is logged in -->
-								<th:block th:if="${wishlist.size() == 0 && session.user != null}">
-								    <div class="empty-cart-section section-fluid">
-								        <div class="emptycart-wrapper">
-								            <div class="container">
-								                <div class="row">
-								                    <div class="col-12 col-md-10 offset-md-1 col-xl-6 offset-xl-3">
-								                        <div class="emptycart-content text-center">
-								                            <h4 class="title">Your Wishlist Cart is Empty</h4>
-								                            <h6 class="sub-title">Sorry Mate... No items found inside your wishlist cart!</h6>
-								                            <a href="shop" class="btn btn-lg btn-golden">Continue Shopping</a>
-								                        </div>
-								                    </div>
-								                </div>
-								            </div>
-								        </div>
-								    </div>
-								</th:block>
+								<div id="empty-wishlist"></div>
                             </div>
-                            <div th:if="${session.user==null}" class="empty-cart-section section-fluid">
-								<div class="emptycart-wrapper">
-									<div class="container">
-										<div class="row">
-											<div class="col-12 col-md-10 offset-md-1 col-xl-6 offset-xl-3">
-												<div class="emptycart-content text-center">
-													<!--<div class="image"><img class="img-fluid" src="assets/images/emprt-cart/empty-cart.png" alt=""></div>-->
-													<h4 class="title">Your Are Logout !</h4>
-													<h6 class="sub-title">Sorry Mate... Please First login</h6>
-													<a href="/logins" class="btn btn-lg btn-golden">Login</a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div><br>
+                            <div id="logout-wishlist"></div>
+                            <br>
                         </div>
                     </div>
                 </div>
@@ -251,12 +191,41 @@
 	
 	<div class="snackbar" id="insert">Product added successfully!</div>
 	<div class="snackbar" id="info">Please first login!</div>
+	<div class="snackbar" id="delete">Product delete successfully!</div>
     <!-- Start Footer Section -->
     <div th:insert="include/footer :: footer"> </div>
     <!-- End Footer Section -->
 	
     <!-- material-scrolltop button -->
     <button class="material-scrolltop" type="button"></button>
+    
+	<!-- Start Modal delete wishlist -->
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title fs-5">Delete Wishlist</h5>
+					<button type="button" class="close modal-close" data-bs-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true"><i class="fa fa-times"></i></span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-md-7">
+								<p class="modal-message fs-3">Are you sure you want to delete this wishlist cart?</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-golden" data-bs-dismiss="modal">No</button>
+					<button id="confirmDelete" type="button" class="btn btn-golden">Yes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Modal delete wishlist -->
 
     <!-- Start Modal Add cart -->
     <div class="modal fade" id="modalAddcart" tabindex="-1" role="dialog" aria-hidden="true">
@@ -506,6 +475,8 @@
     <script src="ajax/productsearch.js"></script>
     
      <script src="ajax/user/cart.js"></script>
+     
+     <script src="ajax/user/wishlist.js"></script>
 </body>
 
 

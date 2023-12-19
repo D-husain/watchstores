@@ -23,6 +23,7 @@ $(document).ready(function() {
 					fetchheaderCartData();
 					fetchheadertotal();
 					fetchcartcount();
+					fetchWishlistData();
 
 					if (response === "Product added successfully.") {
 						$('#insert').addClass('show');

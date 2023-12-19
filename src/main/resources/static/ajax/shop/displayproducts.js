@@ -31,9 +31,9 @@ function displayFilteredProducts(products) {
 				'<div class="action-link">' +
 				availabilityBlock +
 				'<div class="action-link-right">' +
-				'<form action="/addToWishlist" method="post">' +
+				'<form id="addToWishlistForm' + index + '">' +
 				'<input type="hidden" name="pid" value="' + p.id + '">' +
-				'<button style="color: white;"><i class="icon-heart"></i></button>' +
+				'<button id="addToWishlistBtn' + index + '" style="color: white;"><i class="icon-heart"></i></button>' +
 				'</form>' +
 				'</div>' +
 				'</div>' +
@@ -103,6 +103,49 @@ $(document).ready(function() {
 });
 
 
+$(document).ready(function() {
+	$('#productsContainer').on('click', '[id^="addToWishlistBtn"]', function(e) {
+		e.preventDefault(); // Prevent the default form submission
+
+		var btnId = $(this).attr('id').replace('addToWishlistBtn', '');
+		var formData = $('#addToWishlistForm' + btnId).serialize(); // Serialize form data
+
+		$.ajax({
+			type: 'POST',
+			url: 'user/addToWishlist', // URL for the addToCart endpoint
+			data: formData,
+			success: function(response) {
+				fetchheaderwishData();
+					fetchwishlistcount();
+
+				if (response === "Product added successfully.") {
+						$('#insertwishlist').addClass('show');
+						setTimeout(function() {
+							$('#insertwishlist').removeClass('show');
+						}, 3000);
+					}
+					else if(response === "Product is already in your wishlist."){
+						$('#sem').addClass('show');
+						setTimeout(function() {
+							$('#sem').removeClass('show');
+						}, 3000);
+					}
+			},
+			error: function(xhr) {
+				if (xhr.status === 401) {
+					$('#info').addClass('show');
+					setTimeout(function() {
+						$('#info').removeClass('show');
+					}, 3000);
+				} else {
+					console.error('Error:', xhr);
+					// Handle other errors if needed
+				}
+			}
+		});
+	});
+});
+
 
 function displayListProducts(products) {
 	var productsContainer = $('#productsListContainer');
@@ -141,9 +184,9 @@ function displayListProducts(products) {
 				'<p>' + product.description + '</p>' +
 				'<div class="product-action-icon-link-list d-md-flex justify-content-md-start">' +
 				availabilityBlock +
-				'<form action="/addToWishlist" method="post">' +
+				'<form id="addToWishlistForm' + index + '">' +
 				'<input type="hidden" name="pid" value="' + product.id + '">' +
-				'<button class="btn btn-lg btn-black-default-hover"><i class="icon-heart"></i></button>' +
+				'<button id="addToWishlistBtn' + index + '" class="btn btn-lg btn-black-default-hover"><i class="icon-heart"></i></button>' +
 				'</form>' +
 				'</div>' +
 				'</div>' +
@@ -179,6 +222,49 @@ $(document).ready(function() {
 						$('#insert').removeClass('show');
 					}, 3000);
 				}
+			},
+			error: function(xhr) {
+				if (xhr.status === 401) {
+					$('#info').addClass('show');
+					setTimeout(function() {
+						$('#info').removeClass('show');
+					}, 3000);
+				} else {
+					console.error('Error:', xhr);
+					// Handle other errors if needed
+				}
+			}
+		});
+	});
+});
+
+$(document).ready(function() {
+	$('#productsListContainer').on('click', '[id^="addToWishlistBtn"]', function(e) {
+		e.preventDefault(); // Prevent the default form submission
+
+		var btnId = $(this).attr('id').replace('addToWishlistBtn', '');
+		var formData = $('#addToWishlistForm' + btnId).serialize(); // Serialize form data
+
+		$.ajax({
+			type: 'POST',
+			url: 'user/addToWishlist', // URL for the addToCart endpoint
+			data: formData,
+			success: function(response) {
+				fetchheaderwishData();
+					fetchwishlistcount();
+
+				if (response === "Product added successfully.") {
+						$('#insertwishlist').addClass('show');
+						setTimeout(function() {
+							$('#insertwishlist').removeClass('show');
+						}, 3000);
+					}
+					else if(response === "Product is already in your wishlist."){
+						$('#sem').addClass('show');
+						setTimeout(function() {
+							$('#sem').removeClass('show');
+						}, 3000);
+					}
 			},
 			error: function(xhr) {
 				if (xhr.status === 401) {
