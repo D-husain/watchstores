@@ -433,14 +433,4 @@ public class OrderController {
 		return ResponseEntity.ok().body(orderDetailsMap);
 	}
 
-	/*
-	 * @GetMapping("/filter-by-date") public ResponseEntity<List<Order>>
-	 * filterByDate(
-	 * 
-	 * @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-	 * 
-	 * @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
-	 * List<Order> entities = udao.findByDateRangeAndOrderByDate(startDate,
-	 * endDate); return ResponseEntity.ok(entities); }
-	 */
 }

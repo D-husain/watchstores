@@ -2019,6 +2019,7 @@ public class MainController {
 				session.removeAttribute("coupon");
 				redirAttrs.addFlashAttribute("success", "Order send successfully.");
 			}
+			
 		} else {
 			redirAttrs.addFlashAttribute("error", "Order failed.");
 			return "redirect:/account";
@@ -2058,7 +2059,7 @@ public class MainController {
 		String jspContent = "<html>\n" + "<head>\n" + "<style>"
 				+ "body { font-family: Arial, sans-serif; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }.store{color: #445f84; font-family: cursive; text-align: center; display: flex; justify-content: center; align-items: center;}.invoice{ text-align: center; font-family: serif; } th { background-color: #445f84; }"
 				+ "</style>" + "</head>\n" + "<body>\n"
-				+ "<div class='store'><img width='100' height='70' src='http://localhost:8080/Shoe_Store/assets/images/demos/demo-10/shoe-logo-footers.png' alt='Shoe Logo'></img><h1 class='store'> Watch Store</h1></div>"
+				+ "<div class='store'><h1 class='store'> Watch Store</h1></div>"
 				+ "<h2 class='invoice'>Order Invoice</h2>" + "<p>Order Id: " + order.get(0).getOrder().getId() + "</p>"
 				+ "<p>Order Date: " + order.get(0).getOrder().getOrderdate() + "</p>" + "<p>Customer Name: "
 				+ order.get(0).getOrder().getUser().getFname() + " " + order.get(0).getOrder().getUser().getLname()

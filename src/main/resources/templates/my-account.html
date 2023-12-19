@@ -29,7 +29,8 @@
 
     <!-- Main CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
-
+	<link rel="stylesheet" href="assets/css/toastmessage2.css">
+	
     <!-- Use the minified version files listed below for better performance and remove the files listed above -->
     <!-- <link rel="stylesheet" href="assets/css/vendor/vendor.min.css">
     <link rel="stylesheet" href="assets/css/plugins/plugins.min.css">
@@ -330,7 +331,8 @@
     <!-- Start Footer Section -->
     <div th:insert="include/footer :: footer"> </div>
     <!-- End Footer Section -->
-
+	<div class="snackbar" id="success">Order send successfully.</div>
+	<div class="snackbar" id="error">Order failed.</div>
     <!-- material-scrolltop button -->
     <button class="material-scrolltop" type="button"></button>
 
