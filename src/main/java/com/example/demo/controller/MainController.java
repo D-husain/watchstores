@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.io.ByteArrayOutputStream;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -8,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -31,11 +31,13 @@ import com.example.demo.dao.ProductDAO;
 import com.example.demo.dao.UserDao;
 import com.example.demo.dto.ProductBrandDTO;
 import com.example.demo.dto.ProductDTO;
+import com.example.demo.dto.ReviewDTO;
 import com.example.demo.entity.Cart;
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Order;
 import com.example.demo.entity.OrderDetails;
 import com.example.demo.entity.Product;
+import com.example.demo.entity.Reviews;
 import com.example.demo.entity.ShippingAddress;
 import com.example.demo.entity.User;
 import com.example.demo.entity.Wishlist;
@@ -44,10 +46,7 @@ import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.WishlistRepository;
 import com.example.demo.service.EmailService;
-import com.stripe.Stripe;
-import com.stripe.exception.StripeException;
-import com.stripe.model.checkout.Session;
-import com.stripe.param.checkout.SessionCreateParams;
+import com.stripe.model.Review;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -403,14 +402,62 @@ public class MainController {
     }
 
 	@GetMapping("/product-details")
-	public String pdetails(@RequestParam("id") Integer id, Model m) {
+	public String pdetails(@RequestParam("id") Integer id, Model model, Principal principal) {
 		Product product = adao.getProductById(id);
-		m.addAttribute("product", product);
+		model.addAttribute("product", product);
+
 		if (product != null) {
-			List<Product> product1 = adao.viewProductsByCategoryId(product.getCategory().getId());
-			m.addAttribute("related", product1);
+			List<Product> relatedProducts = adao.viewProductsByCategoryId(product.getCategory().getId());
+			model.addAttribute("related", relatedProducts);
+
+			// Check if the user is authenticated
+			if (principal != null) {
+				User user = udao.findByUsername(principal.getName());
+				if (user != null) {
+					List<Reviews> reviewsForProduct = udao.getReviewsByProduct(product);
+
+					boolean hasReviewed = false;
+
+					for (Reviews review : reviewsForProduct) {
+						if (review.getUser().getId().equals(user.getId())) {
+							hasReviewed = true;
+							break;
+						}
+					}
+
+					if (!hasReviewed) {
+						model.addAttribute("review", new Reviews());
+					}
+				}
+			} 
 		}
+
+		List<Reviews> allReviewsForProduct = udao.getReviewsByProduct(product);
+		model.addAttribute("reviews", allReviewsForProduct);
+
 		return "product-details";
+	}
+
+	
+	@PostMapping("/{productId}/reviews")
+	public String addReview(@PathVariable Integer productId, @ModelAttribute("reviewss") ReviewDTO reviewDTO,
+			Principal principal) {
+		User user = udao.findByUsername(principal.getName());
+		Product product = adao.getProductById(productId);
+
+		if (user != null && product != null) {
+			Reviews review = new Reviews();
+			review.setProduct(product);
+			review.setUser(user);
+			review.setRating(reviewDTO.getRating());
+			review.setReview(reviewDTO.getReview());
+			review.setReviewdate(reviewDTO.getReviewdate());
+			review.setReviewtital(reviewDTO.getReviewtital());
+
+			udao.AddRevirew(review);
+		}
+
+		return "redirect:/product-details?id=" + productId;
 	}
 
 	@GetMapping("/productsearch")

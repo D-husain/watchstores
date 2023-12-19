@@ -315,80 +315,115 @@
                                 <!-- Start Product Details Tab Content Singel -->
                                 <div class="tab-pane" id="review">
                                     <div class="single-tab-content-item">
+										
                                         <!-- Start - Review Comment -->
                                         <ul class="comment">
+											
                                             <!-- Start - Review Comment list-->
-                                            <li class="comment-list">
-                                                <div class="comment-wrapper">
-                                                    <div class="comment-img">
-                                                        <img src="assets/images/user/image-1.png" alt="">
-                                                    </div>
-                                                    <div class="comment-content">
-                                                        <div class="comment-content-top">
-                                                            <div class="comment-content-left">
-                                                                <h6 class="comment-name">Kaedyn Fraser</h6>
-                                                                <ul class="review-star">
-                                                                    <li class="fill"><i class="ion-android-star"></i>
-                                                                    </li>
-                                                                    <li class="fill"><i class="ion-android-star"></i>
-                                                                    </li>
-                                                                    <li class="fill"><i class="ion-android-star"></i>
-                                                                    </li>
-                                                                    <li class="fill"><i class="ion-android-star"></i>
-                                                                    </li>
-                                                                    <li class="empty"><i class="ion-android-star"></i>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                            <div class="comment-content-right">
-                                                                <a href="#"><i class="fa fa-reply"></i>Reply</a>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="para-content">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                                                Tempora inventore dolorem a unde modi iste odio amet,
-                                                                fugit fuga aliquam, voluptatem maiores animi dolor nulla
-                                                                magnam ea! Dignissimos aspernatur cumque nam quod sint
-                                                                provident modi alias culpa, inventore deserunt
-                                                                accusantium amet earum soluta consequatur quasi eum eius
-                                                                laboriosam, maiores praesentium explicabo enim dolores
-                                                                quaerat! Voluptas ad ullam quia odio sint sunt. Ipsam
-                                                                officia, saepe repellat. </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li> <!-- End - Review Comment list-->
+											<!-- Check if reviews exist -->
+											<th:block th:if="${reviews != null and reviews.size() > 0}">
+												<!-- Iterate through each review -->
+												<li th:each="r, iterStat : ${reviews}" class="comment-list">
+													<div class="comment-wrapper">
+														<!-- Display user image, name, and review content for each review -->
+														<div class="comment-img">
+															<img src="assets/images/user/image-1.png" alt="">
+														</div>
+														<div class="comment-content">
+															<div class="comment-content-top">
+																<div class="comment-content-left">
+																	<h6 class="comment-name">[[${r.user.fname}]] [[${r.user.lname}]]</h6>
+																	<!-- Display star ratings (assuming 'rating' property exists in 'Review' entity) -->
+																	<ul class="review-star">
+																		<th:block th:if="${r.rating == 1}">
+																		<li class="fill"><i class="ion-android-star"></i></li>
+																		<li class="empty"><i class="ion-android-star"></i></li>
+																		<li class="empty"><i class="ion-android-star"></i></li>
+																		<li class="empty"><i class="ion-android-star"></i></li>
+																		<li class="empty"><i class="ion-android-star"></i></li>
+																		</th:block>
+																		<th:block th:if="${r.rating == 2}">
+																		<li class="fill"><i class="ion-android-star"></i></li>
+																		<li class="fill"><i class="ion-android-star"></i></li>
+																		<li class="empty"><i class="ion-android-star"></i></li>
+																		<li class="empty"><i class="ion-android-star"></i></li>
+																		<li class="empty"><i class="ion-android-star"></i></li>
+																		</th:block>
+																		<th:block th:if="${r.rating == 3}">
+																		<li class="fill"><i class="ion-android-star"></i></li>
+																		<li class="fill"><i class="ion-android-star"></i></li>
+																		<li class="fill"><i class="ion-android-star"></i></li>
+																		<li class="empty"><i class="ion-android-star"></i></li>
+																		<li class="empty"><i class="ion-android-star"></i></li>
+																		</th:block>
+																		<th:block th:if="${r.rating == 4}">
+																		<li class="fill"><i class="ion-android-star"></i></li>
+																		<li class="fill"><i class="ion-android-star"></i></li>
+																		<li class="fill"><i class="ion-android-star"></i></li>
+																		<li class="fill"><i class="ion-android-star"></i></li>
+																		<li class="empty"><i class="ion-android-star"></i></li>
+																		</th:block>
+																		<th:block th:if="${r.rating == 5}">
+																		<li class="fill"><i class="ion-android-star"></i></li>
+																		<li class="fill"><i class="ion-android-star"></i></li>
+																		<li class="fill"><i class="ion-android-star"></i></li>
+																		<li class="fill"><i class="ion-android-star"></i></li>
+																		<li class="fill"><i class="ion-android-star"></i></li>
+																		</th:block>
+																	</ul>
+																</div>
+																<!--<div class="comment-content-right">
+																	<a href="#"><i class="fa fa-reply"></i>Reply</a>
+																</div>-->
+															</div>
+															<div class="comment-content-left">
+																<p class="h5" th:text="${r.reviewtital}"></p>
+															</div>	
+															<div class="para-content">
+																<p th:text="${r.review}"></p>
+															</div>
+														</div>
+													</div>
+												</li>
+											</th:block>
+											
+											<!-- Show a message if no reviews exist -->
+											<th:block th:if="${reviews == null or reviews.size() == 0}">
+												<th colspan="7">No review found</th>
+											</th:block>
+											<!-- End - Review Comment list-->
+                                            
                                             <!-- Start - Review Comment list-->
-                                        </ul> <!-- End - Review Comment -->
-                                        <div class="review-form">
-                                            <div class="review-form-text-top">
-                                                <h5>ADD A REVIEW</h5>
-                                                <p>Your email address will not be published. Required fields are marked
-                                                    *</p>
-                                            </div>
-
-                                            <form action="#" method="post">
-                                                <div class="row">
-                                                    <div class="col-md-5">
-                                                        <div class="default-form-box">
-                                                            <label for="comment-name">Your name <span>*</span></label>
-                                                            <input id="comment-name" type="text"
-                                                                placeholder="Enter your name" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-5">
-                                                        <div class="default-form-box">
-                                                            <label for="comment-email">Your Email <span>*</span></label>
-                                                            <input id="comment-email" type="email"
-                                                                placeholder="Enter your email" required>
-                                                        </div>
-                                                    </div>
+                                        </ul> 
+                                        <!-- End - Review Comment -->
+										<div th:if="${session.user != null and reviews != null}" class="review-form">
+											<div class="review-form-text-top">
+												<h5>ADD A REVIEW</h5>
+												<p>Your email address will not be published. Required fields are marked *</p>
+											</div>
+										
+											<form th:action="@{/products/{productId}/reviews(productId=${product.id})}" method="post" th:object="${reviews}">
+												<div class="row">
+													<!-- Input fields for name and email -->
+													<!-- Ensure to bind these inputs to the corresponding properties of the review object -->
+													<div class="col-md-5">
+														<div class="default-form-box">
+															<label for="comment-name">Your name <span>*</span></label>
+															<input id="comment-name" type="text" placeholder="Enter your name" required>
+														</div>
+													</div>
+													<div class="col-md-5">
+														<div class="default-form-box">
+															<label for="comment-email">Your Email <span>*</span></label>
+															<input id="comment-email" type="email" placeholder="Enter your email"  required>
+														</div>
+													</div>
+													<!-- Review Rating selection -->
 													<div class="col-md-2">
 														<div class="default-form-box">
-															<label for="comment-email">review Rating <span>*</span></label>
-															<select name="rating" class="form-control">
-																<option selected="selected" disabled="disabled">Select Rating Star</option>
+															<label for="comment-rating">Review Rating <span>*</span></label>
+															<select id="comment-rating" name="rating" class="form-control" required>
+																<option value="" selected="selected" disabled="disabled">Select Rating Star</option>
 																<option value="1">1</option>
 																<option value="2">2</option>
 																<option value="3">3</option>
@@ -397,21 +432,21 @@
 															</select>
 														</div>
 													</div>
-                                                    <div class="col-12">
-                                                        <div class="default-form-box">
-                                                            <label for="comment-review-text">Your review
-                                                                <span>*</span></label>
-                                                            <textarea id="comment-review-text"
-                                                                placeholder="Write a review" required></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <button class="btn btn-md btn-black-default-hover"
-                                                            type="submit">Submit</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
+													<!-- Review Textarea -->
+													<div class="col-12">
+														<div class="default-form-box">
+															<label for="comment-review-text">Your review <span>*</span></label>
+															<textarea id="comment-review-text" placeholder="Write a review" 
+																required></textarea>
+														</div>
+													</div>
+													<!-- Submit Button -->
+													<div class="col-12">
+														<button class="btn btn-md btn-black-default-hover" type="submit">Submit</button>
+													</div>
+												</div>
+											</form>
+										</div>
                                     </div>
                                 </div> <!-- End Product Details Tab Content Singel -->
                             </div>

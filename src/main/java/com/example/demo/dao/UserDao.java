@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
-import javax.management.InstanceAlreadyExistsException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,38 +42,23 @@ import com.example.demo.repository.UserCouponRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.WishlistRepository;
 
-import jakarta.persistence.EntityNotFoundException;
-
 
 @Service
 public class UserDao {
 	
-	@Autowired
-	private UserRepository userrepo;
-	@Autowired
-	private WishlistRepository wishlistrepo;
-	@Autowired
-	private ContactRepository contactrepo;
-	@Autowired
-	private CartRepository cartrepo;
-	@Autowired
-	private ProductRepository productrepo;
-	@Autowired
-	private ShippingAddressRepository shippingrepo;
-	@Autowired
-	private OrderRepository orderrepo;
-	@Autowired
-	private OrderProductRepository orderproductrepo;
-	@Autowired
-    private UserCouponRepository UserCouponRepo;
-	@Autowired
-	private SubscribeRepository subscriberepo;
-	@Autowired
-	private StateRepository staterepo;
-	@Autowired
-	private CityRepository cityrepo;
-	@Autowired
-	private ReviewsRepository reviewrepo;
+	@Autowired private UserRepository userrepo;
+	@Autowired private WishlistRepository wishlistrepo;
+	@Autowired private ContactRepository contactrepo;
+	@Autowired private CartRepository cartrepo;
+	@Autowired private ProductRepository productrepo;
+	@Autowired private ShippingAddressRepository shippingrepo;
+	@Autowired private OrderRepository orderrepo;
+	@Autowired private OrderProductRepository orderproductrepo;
+	@Autowired private UserCouponRepository UserCouponRepo;
+	@Autowired private SubscribeRepository subscriberepo;
+	@Autowired private StateRepository staterepo;
+	@Autowired private CityRepository cityrepo;
+	@Autowired private ReviewsRepository reviewrepo;
 	
 	/*
 	 * public void UserReqister(User user) { u.save(user); }
@@ -116,6 +99,10 @@ public class UserDao {
         userrepo.save(user);
     }
 	
+	public User findByUsername(String username) {
+        return userrepo.findByUsername(username);
+    }
+
 	//------------------------------------------------ subscribe --------------------------------------------------------
 	
 	public void Subscribes(Subscribe subscribe) {
@@ -285,6 +272,14 @@ public class UserDao {
 	    return productrepo.findAll(pageable);
 	}
 	
+	public Reviews findByProductAndUser(Product product, User user) {
+        return reviewrepo.findByProductAndUser(product, user);
+    }
+	
+	public Product findById(Integer productId) {
+        Optional<Product> productOptional = productrepo.findById(productId);
+        return productOptional.orElse(null);
+    }
 	
 	//------------------------------------------------ Review ----------------------------------------------------------
 	
@@ -296,6 +291,10 @@ public class UserDao {
 	public List<Reviews> viewUserreview(User user) {
 		return reviewrepo.findByUser(user);
 	}
+	
+	public List<Reviews> getReviewsByProduct(Product product) {
+        return reviewrepo.findAllByProduct(product);
+    }
 	
 	//------------------------------------------------ shipping Address------------------------------------------------------
 	
@@ -353,13 +352,15 @@ public class UserDao {
 	//------------------------------------------------ userOrder ------------------------------------------------------
 	
 	/*
-	 * public void SaveUserOrder(Order order, ShippingAddress shippingAddress) {
+	 * public void SaveUserOrderss(Order order, ShippingAddress shippingAddress) {
 	 * 
-	 * if (shippingAddress.getUser().getId()==null) {
+	 * shippingrepo.save(shippingAddress);
+	 * order.setShippingAddress(shippingAddress); orderrepo.save(order);
 	 * 
-	 * shippingrepo.save(shippingAddress); } else { upadte shhping id with data }
-	 * order.setShippingAddress(shippingAddress); orderrepo.save(order); }
+	 * }
 	 */
+	
+	
 	
 	public void SaveUserOrder(Order order, ShippingAddress shippingAddress) {
 		if (shippingAddress.getUser().getId() != null && shippingAddress.getUser().getId().equals(shippingAddress.getUser().getId())) {
@@ -506,4 +507,8 @@ public class UserDao {
     	UserCouponRepo.save(userCoupon);
 	}
 
+	
+
+    
+    
 }

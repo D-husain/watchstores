@@ -34,10 +34,36 @@ public class Order {
 	private String cancelorder;
 	private int charge;
 	private double discount;
+	private String method;
 	
 	public Order() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+	public Order(int id, int orderId, User user, ShippingAddress shippingAddress, String orderdate, double total,
+			double amount, int status, String cancelorder, int charge, double discount, String method) {
+		super();
+		this.id = id;
+		this.orderId = orderId;
+		this.user = user;
+		this.shippingAddress = shippingAddress;
+		this.orderdate = orderdate;
+		this.total = total;
+		this.amount = amount;
+		this.status = status;
+		this.cancelorder = cancelorder;
+		this.charge = charge;
+		this.discount = discount;
+		this.method = method;
+	}
+	public String getMethod() {
+		return method;
+	}
+	public void setMethod(String method) {
+		this.method = method;
+	}
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
 	}
 	public Order(int id, int orderId, User user, ShippingAddress shippingAddress, String orderdate, double total,
 			double amount, int status, String cancelorder, int charge, double discount) {
@@ -58,7 +84,8 @@ public class Order {
 	public String toString() {
 		return "Order [id=" + id + ", orderId=" + orderId + ", user=" + user + ", shippingAddress=" + shippingAddress
 				+ ", orderdate=" + orderdate + ", total=" + total + ", amount=" + amount + ", status=" + status
-				+ ", cancelorder=" + cancelorder + ", charge=" + charge + ", discount=" + discount + "]";
+				+ ", cancelorder=" + cancelorder + ", charge=" + charge + ", discount=" + discount + ", method="
+				+ method + "]";
 	}
 	public int getId() {
 		return id;
