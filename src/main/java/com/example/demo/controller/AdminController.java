@@ -99,13 +99,14 @@ public class AdminController {
 	    if (loggedIn) {
 	    	  return ResponseEntity.ok().build();
 	    } else {
-	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed. Invalid username or password.");
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed. Invalid email or password.");
 	    }
 	}
 
 	@GetMapping("/admin-logout")
-	public String adminlogout(HttpSession s) {
+	public String adminlogout(HttpSession s,RedirectAttributes redirAttrs) {
 		s.invalidate();
+		redirAttrs.addFlashAttribute("success", "Admin logout succsesfully");
 		return "redirect:/adminlogins";
 	}
 	
