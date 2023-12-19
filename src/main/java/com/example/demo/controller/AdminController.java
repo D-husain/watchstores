@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.dao.AdminDao;
@@ -78,6 +79,29 @@ public class AdminController {
 		}
 		return page_move;
 	}
+	
+	@PostMapping("/admin/login")
+	@ResponseBody
+	public ResponseEntity<String> userlogins(@RequestParam("email") String admin_email, @RequestParam("password") String password,
+	        HttpSession session) {
+	    List<Admin> adminList = adao.fechAllUser();
+
+	    boolean loggedIn = false;
+
+	    for (Admin admin : adminList) {
+	        if (admin_email.equals(admin.getEmail()) && password.equals(admin.getPassword())) {
+	            session.setAttribute("admin", admin);
+	            loggedIn = true;
+	            break;
+	        }
+	    }
+
+	    if (loggedIn) {
+	    	  return ResponseEntity.ok().build();
+	    } else {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed. Invalid username or password.");
+	    }
+	}
 
 	@GetMapping("/admin-logout")
 	public String adminlogout(HttpSession s) {
@@ -100,7 +124,7 @@ public class AdminController {
 		return "admin/subscribers";
 	}
 	
-	//Subscribe user Data Api
+	//------------------------------------- Subscribe user Data Api -----------------------------------------------------
 	
 	@GetMapping("/user/subscribe")
 	public ResponseEntity<List<SubscribeDTO>> getSubscribeList() {
