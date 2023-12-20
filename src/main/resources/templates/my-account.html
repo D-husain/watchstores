@@ -30,11 +30,26 @@
     <!-- Main CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
 	<link rel="stylesheet" href="assets/css/toastmessage2.css">
-	
     <!-- Use the minified version files listed below for better performance and remove the files listed above -->
     <!-- <link rel="stylesheet" href="assets/css/vendor/vendor.min.css">
     <link rel="stylesheet" href="assets/css/plugins/plugins.min.css">
     <link rel="stylesheet" href="assets/css/style.min.css"> -->
+    <style>
+		.table-responsive {
+		max-height: 400px;
+		/* Set a max height for the table container */
+		overflow-y: auto;
+		/* Enable vertical scrolling */
+	}
+	
+	/* Example styles for modal and form */
+        .modal-content {
+            border-radius: 8px;
+        }
+        .form-control {
+            margin-bottom: 10px;
+        }
+	</style>
 </head>
 
 <body>
@@ -158,7 +173,8 @@
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Order</th>
+											<th>ID</th>
+                                            <th>Order ID</th>
                                             <th>Date</th>
                                             <th>Status</th>
                                             <th>Total</th>
@@ -166,7 +182,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr th:each="o: ${orders}">
+                                        <tr th:each="o,iterStat: ${orders}">
+											<td>[[${iterStat.index+1}]]</td>
                                             <td>[[${o.id}]]</td>
                                             <td>[[${o.orderdate}]]</td>
                                             <th:block th:if="${o.status eq 1}">
@@ -203,11 +220,11 @@
 									<div class="card card-dashboard">
 										<div class="card-body">
 											<h3 class="card-title">Billing Address</h3><!-- End .card-title -->
-							
-											<p>[[${session.user.fname}]] [[${session.user.lname}]]<br>
-												[[${session.user.address}]]<br>
-												[[${session.user.contact}]]<br>
-												[[${session.user.email}]]<br>
+											<p>[[${session.user.fname}]] 
+												   [[${session.user.lname}]]<br>
+												       [[${session.user.address}]]<br>
+												           [[${session.user.contact}]]<br>
+												               [[${session.user.email}]]<br>
 												<button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
 													Edit <i class="icon-edit"></i></button>
 											</p>
@@ -216,59 +233,61 @@
 								</div><!-- End .col-lg-6 -->
 								
 								<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-								<div class="modal-dialog modal-dialog-centered" role="document">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h5 class="modal-title" id="exampleModalLabel">Edit Address</h5>
-											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-										</div>
-										<div class="modal-body">
-											<form th:action="@{/editaddress}" method="post">
-												<div class="row">
-													<div class="col-sm-6">
-														<label>First Name *</label>
-														<input type="hidden" name="uid" th:value="${session.user.id}">
-														<input type="hidden" name="country" th:value="${session.user.country}">
-														<input type="hidden" name="zip" th:value="${session.user.zip}">
-														<input type="hidden" name="password" th:value="${session.user.password}">
-														<input type="text" name="fname" th:value="${session.user.fname}" class="form-control" required>
-													</div><!-- End .col-sm-6 -->
-										
-													<div class="col-sm-6">
-														<label>Last Name *</label>
-														<input type="text" name="lname" th:value="${session.user.lname}" class="form-control" required>
-													</div><!-- End .col-sm-6 -->
-												</div><!-- End .row -->
-										
-												<label>Email address *</label>
-												<input type="email" name="email" th:value="${session.user.email}" class="form-control" required>
-										
-												<label>Contact number</label>
-												<input type="tel" name="contact" th:value="${session.user.contact}" class="form-control">
-												<div class="row">
-													<div class="col-sm-6">
-														<label>State</label>
-														<input type="text" name="state" th:value="${session.user.state}" class="form-control">
+									<div class="modal-dialog modal-dialog-centered">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="exampleModalLabel">Edit Address</h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+												<form th:action="@{/editaddress}" method="post">
+													<div class="row mb-3">
+														<input type="hidden" name="userId" th:value="${session.user.id}">
+														<div class="col">
+															<label for="fname" class="form-label">First Name *</label>
+															<input type="text" id="fname" name="fname" th:value="${session.user.fname}"
+																class="form-control" required>
+														</div>
+														<div class="col">
+															<label for="lname" class="form-label">Last Name *</label>
+															<input type="text" id="lname" name="lname" th:value="${session.user.lname}"
+																class="form-control" required>
+														</div>
 													</div>
-													<div class="col-sm-6">
-														<label>City</label>
-														<input type="text" name="city" th:value="${session.user.city}" class="form-control">
+													<div class="mb-3">
+														<label for="email" class="form-label">Email address *</label>
+														<input type="email" id="email" name="email" th:value="${session.user.email}"
+															class="form-control" required>
 													</div>
-												</div>
-												<label>Address</label>
-												<textarea name="address" class="form-control"></textarea><br>
-										
-												<div class="modal-footer">
-													<button type="submit" class="btn btn-black-default-hover">
-														<span>SAVE CHANGES</span>
-														<i class="icon-long-arrow-right"></i>
-													</button>
-												</div>
-											</form>
+													<div class="mb-3">
+														<label for="contact" class="form-label">Contact number</label>
+														<input type="tel" id="contact" name="contact" th:value="${session.user.contact}"
+															class="form-control">
+													</div>
+													<div class="row mb-3">
+														<div class="col">
+															<label for="state" class="form-label">State</label>
+															<input type="text" id="state" name="state" th:value="${session.user.state}"
+																class="form-control">
+														</div>
+														<div class="col">
+															<label for="city" class="form-label">City</label>
+															<input type="text" id="city" name="city" th:value="${session.user.city}"
+																class="form-control">
+														</div>
+													</div>
+													<div class="mb-3">
+														<label for="address" class="form-label">Address</label>
+														<textarea id="address" name="address" class="form-control" rows="3" th:text="${session.user.address}"></textarea>
+													</div>
+													<div class="modal-footer">
+														<button type="submit" class="btn btn-black-default-hover">Edit Address</button>
+													</div>
+												</form>
+											</div>
 										</div>
 									</div>
 								</div>
-								</div>			
 								<div class="col-lg-5">
 									<div class="card card-dashboard">
 										<div class="card-body">
@@ -331,8 +350,8 @@
     <!-- Start Footer Section -->
     <div th:insert="include/footer :: footer"> </div>
     <!-- End Footer Section -->
-	<div class="snackbar" id="success">Order send successfully.</div>
-	<div class="snackbar" id="error">Order failed.</div>
+	<div class="snackbar" th:if="${error}">[[${error}]]</div>
+	<div class="snackbar" th:if="${success}">[[${success}]]</div>
     <!-- material-scrolltop button -->
     <button class="material-scrolltop" type="button"></button>
 
@@ -572,7 +591,7 @@
     <script src="assets/js/plugins/aos.min.js"></script>
     <script src="assets/js/plugins/jquery.instagramFeed.js"></script>
     <script src="assets/js/plugins/ajax-mail.js"></script>
-
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Use the minified version files listed below for better performance and remove the files listed above -->
     <!-- <script src="assets/js/vendor/vendor.min.js"></script>
     <script src="assets/js/plugins/plugins.min.js"></script> -->

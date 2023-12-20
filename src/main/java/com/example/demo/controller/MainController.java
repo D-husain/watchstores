@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.xhtmlrenderer.pdf.ITextRenderer;
@@ -72,6 +75,16 @@ public class MainController implements ErrorController {
 
 	public String getErrorPath() {
 		return "/error";
+	}
+
+	@ControllerAdvice
+	public class GlobalExceptionHandler {
+
+		@ExceptionHandler(Exception.class)
+		@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+		public String handle500Error(Exception e) {
+			return "error/500";
+		}
 	}
 
 	@GetMapping("/")
@@ -326,12 +339,56 @@ public class MainController implements ErrorController {
 		return "my-account";
 	}
 	
+	@GetMapping("user/order")
+    public ResponseEntity<Object> getAccountDetails(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return new ResponseEntity<>("User not logged in", HttpStatus.UNAUTHORIZED);
+        } else {
+            Map<String, Object> accountDetails = new HashMap<>();
+            accountDetails.put("orders", udao.viewUserOrders(user));
+            accountDetails.put("shipping", udao.showShippingAddressesByUserId(user.getId()));
+            return new ResponseEntity<>(accountDetails, HttpStatus.OK);
+        }
+    }
+	
 	@PostMapping("/editaddress")
-	public String editAddress(@ModelAttribute("user") User user,  RedirectAttributes redirAttrs) {
-		udao.UserRegister(user);
-		redirAttrs.addFlashAttribute("success", "Address edit successfully");
-		return "redirect:/user-logout";
+	public String editAddress(@RequestParam("userId") Integer userId,
+	                          @RequestParam("fname") String fname,
+	                          @RequestParam("lname") String lname,
+	                          @RequestParam("email") String email,
+	                          @RequestParam("contact") String contact,
+	                          @RequestParam("state") String state,
+	                          @RequestParam("city") String city,
+	                          @RequestParam("address") String address,
+	                          RedirectAttributes redirAttrs) {
+
+	    if (userId == null || fname.isEmpty() || lname.isEmpty() || email.isEmpty() || contact.isEmpty() ||
+	            state.isEmpty() || city.isEmpty() || address.isEmpty()) {
+	        redirAttrs.addFlashAttribute("error", "Please fill in all the required fields.");
+	        return "redirect:/account";
+	    }
+
+	    User user = new User();
+	    user.setId(userId);
+	    user.setFname(fname);
+	    user.setLname(lname);
+	    user.setEmail(email);
+	    user.setContact(contact);
+	    user.setState(state);
+	    user.setCity(city);
+	    user.setAddress(address);
+
+	    try {
+	        udao.updateUser(user);
+	        redirAttrs.addFlashAttribute("success", "Address edited successfully");
+	    } catch (Exception e) {
+	        redirAttrs.addFlashAttribute("error", "Failed to update user address. Please try again.");
+	    }
+
+	    return "redirect:/account";
 	}
+
 
 	@GetMapping("order_details")
 	public String detailsorder(@RequestParam("orderId") int OrderId, Model model, HttpSession session) {
