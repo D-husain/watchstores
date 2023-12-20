@@ -9,7 +9,7 @@
 
 <body>
 	<!-- HTML Structure -->
-	<div id="search" class="offcanvas offcanvas-rightside offcanvas-add-cart-section">
+	<!--<div id="search" class="offcanvas offcanvas-rightside offcanvas-add-cart-section">
 		<div class="offcanvas-header text-right">
 			<button class="offcanvas-close" onclick="closeSearchModal()"><i class="ion-android-close"></i></button>
 		</div>
@@ -17,8 +17,14 @@
 			<input type="search" name="keyword" id="searchInput" placeholder="Type keyword(s) here" required/>
 		</form>
 		<ul id="searchproduct" class="offcanvas-wishlist"></ul>
+	</div>-->
+
+	<div id="search" class="search-modal">
+		<button type="button" class="close">×</button>
+		<input type="search" id="keywordInput" placeholder="type keyword(s) here" required />
+		<button id="fetchProductsBtn" onclick="fetchProducts()" class="btn btn-lg btn-pink">Search</button>
 	</div>
-	
+
 </body>
 
 </html>
