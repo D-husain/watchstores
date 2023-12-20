@@ -47,7 +47,6 @@ $(document).ready(function() {
 			dataType: 'json',
 			success: function(response) {
 				if (response && response.length > 0) {
-					var productsLength = response.length;
 					var categoryFilter = $('#categoryFilter');
 					var previousCheckbox = null; // To keep track of the previously checked checkbox
 					response.forEach(function(category, index) {
@@ -55,7 +54,7 @@ $(document).ready(function() {
 						var checkboxId = 'categoryCheckbox_' + index;
 						var label = $('<label class="checkbox-default" for="' + checkboxId + '"></label>');
 						var input = $('<input type="checkbox" id="' + checkboxId + '">');
-						var span = $('<span>' + category.cname + ' (' + productsLength + ')</span>');
+						var span = $('<span>' + category.cname + ' </span>');
 
 						label.append(input);
 						label.append(span);
@@ -118,7 +117,6 @@ $(document).ready(function() {
 			dataType: 'json',
 			success: function(response) {
 				if (response && response.length > 0) {
-					var productsLength = response.length;
 					var brandFilter = $('#brandFilter');
 					var previousCheckbox = null; // To keep track of the previously checked checkbox
 					response.forEach(function(brand, index) {
@@ -126,7 +124,7 @@ $(document).ready(function() {
 						var checkboxId = 'brandCheckbox_' + index;
 						var label = $('<label class="checkbox-default" for="' + checkboxId + '"></label>');
 						var input = $('<input type="checkbox" id="' + checkboxId + '">');
-						var span = $('<span>' + brand.brand + ' (' + productsLength + ')</span>');
+						var span = $('<span>' + brand.brand + '</span>');
 
 						label.append(input);
 						label.append(span);
@@ -191,7 +189,6 @@ $(document).ready(function() {
 			dataType: 'json',
 			success: function(response) {
 				if (response && response.length > 0) {
-					var productsLength = response.length;
 					var brandFilter = $('#colorFilter');
 					var previousCheckbox = null; // To keep track of the previously checked checkbox
 					response.forEach(function(color, index) {
@@ -199,7 +196,7 @@ $(document).ready(function() {
 						var checkboxId = 'colorCheckbox_' + index;
 						var label = $('<label class="checkbox-default" for="' + checkboxId + '"></label>');
 						var input = $('<input type="checkbox" id="' + checkboxId + '">');
-						var span = $('<span>' +color + ' (' + productsLength + ')</span>');
+						var span = $('<span>' +color + '</span>');
 
 						label.append(input);
 						label.append(span);
