@@ -69,23 +69,13 @@ public class MainController implements ErrorController {
 	@Autowired private ProductDAO pdao;
 	
 	@RequestMapping("/error")
-	public String handleError() {
-		return "error/404";
-	}
+    public String handleError() {
+        return "error/404";
+    }
 
-	public String getErrorPath() {
-		return "/error";
-	}
-
-	@ControllerAdvice
-	public class GlobalExceptionHandler {
-
-		@ExceptionHandler(Exception.class)
-		@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-		public String handle500Error(Exception e) {
-			return "error/500";
-		}
-	}
+    public String getErrorPath() {
+        return "/error";
+    }
 
 	@GetMapping("/")
 	public String index(Model model, HttpSession session) {
