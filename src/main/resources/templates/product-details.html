@@ -112,7 +112,7 @@
                             <nav aria-label="breadcrumb">
                                 <ul>
                                     <li><a href="/">Home</a></li>
-                                    <li><a th:href="@{/shop(id=${product.category.id})}">[[${product.category.cname}]]</a></li>
+                                    <li><a th:href="@{/category-product(category=${product.category.cname})}">[[${product.category.cname}]]</a></li>
                                     <li class="active" aria-current="page">[[${product.pname}]]</li>
                                 </ul>
                             </nav>
@@ -252,13 +252,18 @@
                         <!-- Start  Product Details Social Area-->
                         <div class="product-details-social">
                             <span class="title">SHARE THIS PRODUCT:</span>
-                            <ul>
-                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
-                                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            </ul>
+							<ul>
+								<li><a th:href="'https://www.facebook.com/sharer/sharer.php?u=' + ${productDetailsUrl}" target="_blank"><i
+											class="fa fa-facebook"></i></a></li>
+								<li><a th:href="'https://twitter.com/intent/tweet?url=' + ${productDetailsUrl}" target="_blank"><i
+											class="fa fa-twitter"></i></a></li>
+								<li><a th:href="'https://pinterest.com/pin/create/button/?url=' + ${productDetailsUrl}" target="_blank"><i
+											class="fa fa-pinterest"></i></a></li>
+								<li><a th:href="'https://plus.google.com/share?url=' + ${productDetailsUrl}" target="_blank"><i
+											class="fa fa-google-plus"></i></a></li>
+								<li><a th:href="'https://www.linkedin.com/shareArticle?url=' + ${productDetailsUrl}" target="_blank"><i
+											class="fa fa-linkedin"></i></a></li>
+							</ul>
                         </div> <!-- End  Product Details Social Area-->
                     </div>
                 </div>

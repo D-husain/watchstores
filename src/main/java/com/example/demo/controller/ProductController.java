@@ -254,7 +254,7 @@ public class ProductController {
 			@RequestParam("brand") String brand, @RequestParam("description") String description,
 			@RequestParam("specification") String specification, @RequestParam("gname") String gname,
 			@RequestParam("country") String country, @RequestParam("qty") int qty, @RequestParam("price") Double price,
-			@RequestParam("availability") String Availability,@RequestParam("stock") int stock) {
+			@RequestParam("availability") String Availability,@RequestParam("stock") Integer stock) {
         Map<String, String> response = new HashMap<>();
 
         ProductBrand b = adao.getbrandByName(brand);

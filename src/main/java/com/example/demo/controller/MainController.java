@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -46,14 +48,13 @@ import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.WishlistRepository;
 import com.example.demo.service.EmailService;
-import com.stripe.model.Review;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-public class MainController {
+public class MainController implements ErrorController {
 
 	@Autowired private UserDao udao;
 	@Autowired private AdminDao adao;
@@ -63,6 +64,15 @@ public class MainController {
 	@Autowired private WishlistRepository wishlistrepo;
 	@Autowired private EmailService emailService;
 	@Autowired private ProductDAO pdao;
+	
+	@RequestMapping("/error")
+	public String handleError() {
+		return "error/404";
+	}
+
+	public String getErrorPath() {
+		return "/error";
+	}
 
 	@GetMapping("/")
 	public String index(Model model, HttpSession session) {
@@ -409,6 +419,10 @@ public class MainController {
 		if (product != null) {
 			List<Product> relatedProducts = adao.viewProductsByCategoryId(product.getCategory().getId());
 			model.addAttribute("related", relatedProducts);
+			
+			String productDetailsUrl = "http://localhost:8081/product-details?id=" + product.getId();
+	        
+	        model.addAttribute("productDetailsUrl", productDetailsUrl);
 
 			// Check if the user is authenticated
 			if (principal != null) {
@@ -434,7 +448,7 @@ public class MainController {
 
 		List<Reviews> allReviewsForProduct = udao.getReviewsByProduct(product);
 		model.addAttribute("reviews", allReviewsForProduct);
-
+		
 		return "product-details";
 	}
 
