@@ -17,8 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.xhtmlrenderer.pdf.ITextRenderer;
@@ -378,17 +375,23 @@ public class MainController implements ErrorController {
 
 	    return "redirect:/account";
 	}
-
-
-	@GetMapping("order_details")
-	public String detailsorder(@RequestParam("orderId") int OrderId, Model model, HttpSession session) {
-		Order order = udao.getOrderById(OrderId);
+	
+	@GetMapping("/order_details")
+	public String Odde(Model model, HttpSession session) {
+		
+		Order order = udao.getOrderById((int) session.getAttribute("oid"));
 		model.addAttribute("order", order);
 
 		List<OrderDetails> sproductList = udao.getOrderDetailsByOrderId(order.getId());
 		model.addAttribute("sproductList", sproductList);
-
 		return "order_details";
+	}
+
+
+	@GetMapping("order_details/{orderId}")
+	public String detailsorder(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
+		session.setAttribute("oid", orderId);
+		return "redirect:/order_details";
 	}
 
 	@GetMapping("/shop")

@@ -173,9 +173,11 @@
 							</td>
 						</tr>
 						<tr>
+							<th:block th:if="${order.status == 4}">
 							<td class="pt-1 text-gray-600">Invoice</td>
 							<td class="pt-1 font-medium">: <label class="badge badge-dark">
 							<a class="text-black" th:href="@{/invoice/{id}(id=${order.id})}"> Download </a></label></td>
+							</th:block>
 						</tr>
 					</table>
 				</div>

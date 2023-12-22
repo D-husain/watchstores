@@ -39,22 +39,15 @@ import jakarta.persistence.criteria.Root;
 @Service
 public class AdminDao {
 	
-	@Autowired
-	private AdminRepository adminrepo;
-	@Autowired
-	private SliderRepository sliderrepo;
-	@Autowired
-	private ProductBrandRepository brandrepo;
-	@Autowired
-	private CategoryRepository categoryrepo;
-	@Autowired
-	private CountryRepository countryrepo;
-	@Autowired 
-	private ProductRepository productrepo;
-	@Autowired 
-	private CouponRepository couponrepo;
-	@Autowired 
-	private OriginRepository originRepository;
+	@Autowired private AdminRepository adminrepo;
+	@Autowired private SliderRepository sliderrepo;
+	@Autowired private ProductBrandRepository brandrepo;
+	@Autowired private CategoryRepository categoryrepo;
+	@Autowired private CountryRepository countryrepo;
+	@Autowired private ProductRepository productrepo;
+	@Autowired private CouponRepository couponrepo;
+	@Autowired private OriginRepository originRepository;
+	
 	//-----------------------------------------------Admit--------------------------------------------------------------
 	
 	public List<Admin> fechAllUser() {

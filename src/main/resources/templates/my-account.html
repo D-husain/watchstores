@@ -169,6 +169,7 @@
                         </div>
                         <div class="tab-pane fade" id="orders">
                             <h4>Orders</h4>
+							 <p style="color: black;">* You can only download invoice after the order delivered.</p>
                             <div th:if="${orders.size() > 0}" class="table_page table-responsive">
                                 <table>
                                     <thead>
@@ -202,7 +203,7 @@
 												<td><span class="text-danger">Cancelled</span></td>
 											</th:block>
                                             <td>₹ [[${o.total}]]</td>
-                                            <td><a th:href="@{/order_details(orderId=${o.id})}" class="view">view</a></td>
+                                            <td><a th:href="@{/order_details/{orderId}(orderId=${o.id})}" class="view">view</a></td>
                                         </tr>
                                     </tbody>
                                 </table>

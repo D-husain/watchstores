@@ -29,6 +29,9 @@
 
     <!-- Main CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!--razorpay script-->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <!-- Use the minified version files listed below for better performance and remove the files listed above -->
     <!-- <link rel="stylesheet" href="assets/css/vendor/vendor.min.css">
@@ -297,32 +300,13 @@
                 </div>
             </div> <!-- Start User Details Checkout Form -->
         </div>
-    </div><!-- ...:::: End Checkout Section:::... -->
-	<script type="text/javascript">
-	function confirmation() {
-		const Toast = Swal.mixin({
-		toast: true,
-		position: 'top-end',
-		showConfirmButton: false,
-		timer: 3000,
-		timerProgressBar: true,
-		didOpen: (toast) => {
-		toast.addEventListener('mouseenter', Swal.stopTimer)
-		toast.addEventListener('mouseleave', Swal.resumeTimer)
-		}
-		})
-		
-		Toast.fire({
-		icon: 'error',
-		title: '<p style="font-size:15px;">Please First <a href="logins">Login</a></p>'
-		})}
-	</script>
-	
-	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    </div>
+    <!-- ...:::: End Checkout Section:::... -->
+    
 	<tr th:if="${session != null and session.coupon != null and session.coupon.coupon != null}">
 	<script type="text/javascript">
 		var options = {
-			"key": "rzp_test_BFuqGW7IZkVybQ",
+			"key": "rzp_test_WDOcX8hKAYmsF3",
 			"amount": '[[${discountedSubtotal}]]' * 100,
 			"currency": "INR",
 			"name": "Watch Store",
@@ -363,7 +347,7 @@
 	<tr th:unless="${session != null and session.coupon != null and session.coupon.coupon != null}">
 		<script type="text/javascript">
 			var options = {
-				"key": "rzp_test_BFuqGW7IZkVybQ",
+				"key": "rzp_test_WDOcX8hKAYmsF3",
 				"amount": '[[${total}]]' * 100,
 				"currency": "INR",
 				"name": "Watch Store",
