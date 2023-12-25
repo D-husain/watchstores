@@ -29,21 +29,18 @@ public class PasswordResetService {
         tokenRepository.save(resetToken);
     }
 
-    // Send email with reset link
-    public void sendResetPasswordEmail(User user, String token) {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("Reset Your Password");
-        mailMessage.setText("To reset your password, click here: " +
-                "http://localhost:8081/user-reset-password?token=" + token);
-
-        try {
-            javaMailSender.send(mailMessage);
-        } catch (MailException e) {
-            // Handle mail sending exceptions
-            // Log the exception or take appropriate action
-            e.printStackTrace();
-        }
-    }
+	// Send email with reset link
+	public void sendResetPasswordEmail(User user, String token) {
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		mailMessage.setTo(user.getEmail());
+		mailMessage.setSubject("Reset Your Password");
+		mailMessage.setText(
+				"To reset your password, click here: " + "http://localhost:8081/reset_password?token=" + token);
+		try {
+			javaMailSender.send(mailMessage);
+		} catch (MailException e) {
+			e.printStackTrace();
+		}
+	}
 }
 
