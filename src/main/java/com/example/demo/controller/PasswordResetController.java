@@ -49,7 +49,7 @@ public class PasswordResetController {
 		PasswordResetToken passwordResetToken = tokenrepo.findByToken(token);
 		if (passwordResetToken != null && !passwordResetToken.isExpired()) {
 			modelAndView.addObject("token", token);
-			modelAndView.setViewName("reset_password"); // HTML page for reset password form
+			modelAndView.setViewName("/reset_password"); // HTML page for reset password form
 		} else {
 			modelAndView.setViewName("invalid-token"); // HTML page for invalid token message
 		}
