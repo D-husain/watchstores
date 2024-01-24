@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +49,6 @@ public class OrderController {
 	    return "admin/orders";
 	}
 
-	
 	@GetMapping("/pendingorders")
 	public String pendingorders(Model model) {
 		List<Order> panding = udao.getPendingOrders();

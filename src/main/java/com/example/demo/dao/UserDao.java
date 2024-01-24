@@ -184,7 +184,6 @@ public class UserDao {
                 if (wishlistItem != null) {
                     wishlistrepo.delete(wishlistItem);
                 }
-                
             }
         }
     }

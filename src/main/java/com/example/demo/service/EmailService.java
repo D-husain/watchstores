@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -15,7 +14,6 @@ public class EmailService {
 	private final JavaMailSender emailSender;
 	private final Environment env;
 
-	@Autowired
 	public EmailService(JavaMailSender emailSender, Environment env) {
 		this.emailSender = emailSender;
 		this.env = env;
