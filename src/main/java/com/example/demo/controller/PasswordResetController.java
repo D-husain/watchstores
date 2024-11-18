@@ -17,6 +17,9 @@ import com.example.demo.entity.User;
 import com.example.demo.repository.PasswordResetTokenRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.PasswordResetService;
+import com.paypal.api.openidconnect.Session;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/user")
@@ -27,7 +30,7 @@ public class PasswordResetController {
 	@Autowired private PasswordResetTokenRepository tokenrepo;
 
 	@PostMapping("/forgot-password")
-	public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+	public ResponseEntity<String> forgotPassword(@RequestParam String email,HttpSession s) {
 		User user = userRepository.findByEmail(email);
 
 		if (user == null) {
@@ -37,6 +40,7 @@ public class PasswordResetController {
 		String token = UUID.randomUUID().toString();
 		passwordResetService.createPasswordResetTokenForUser(user, token);
 		passwordResetService.sendResetPasswordEmail(user, token);
+		s.setAttribute("token", token);
 
 		return ResponseEntity.ok("Password reset instructions sent to your email");
 	}
@@ -66,8 +70,8 @@ public class PasswordResetController {
 			user.setPassword(newPassword);
 			userRepository.save(user);
 
-			// Delete the token after successful password reset
-			//tokenrepo.delete(passwordResetToken);
+			//Delete the token after successful password reset
+			tokenrepo.delete(passwordResetToken);
 
 			return ResponseEntity.ok("Password reset successful");
 		} else {

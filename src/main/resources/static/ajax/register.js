@@ -211,3 +211,75 @@ function validate() {
 		});
 	}
 });*/
+
+
+$(document).ready(function() {
+    // Initialize nice-select on page load
+    $('select').niceSelect();
+
+    // Load countries on page load
+    $.ajax({
+        url: "/countries",
+        type: "GET",
+        success: function(data) {
+            let countryOptions = '<option value="">Select Country</option>';
+            data.forEach(function(country) {
+                countryOptions += `<option value="${country.countryname}">${country.countryname}</option>`;
+            });
+            $('#country').html(countryOptions).niceSelect('update'); // Update nice-select after changing options
+        },
+        error: function(xhr, status, error) {
+            $('#countryerr').text('Failed to load countries. Please try again.');
+        }
+    });
+
+    // On country change, load states
+    $('#country').on('change', function() {
+        const countryName = $(this).val();
+        if (countryName) {
+            $.ajax({
+                url: `/states/${countryName}`,
+                type: "GET",
+                success: function(data) {
+                    let stateOptions = '<option value="">Select State</option>';
+                    data.forEach(function(state) {
+                        stateOptions += `<option value="${state.name}">${state.name}</option>`;
+                    });
+                    $('#state').html(stateOptions).niceSelect('update'); // Update nice-select
+                    $('#city').html('<option value="">Select City</option>').niceSelect('update'); // Reset and update city dropdown
+                    $('#stateerr').text(''); // Clear any previous error message
+                },
+                error: function(xhr, status, error) {
+                    $('#stateerr').text('Failed to load states. Please try again.');
+                }
+            });
+        } else {
+            $('#state').html('<option value="">Select State</option>').niceSelect('update');
+            $('#city').html('<option value="">Select City</option>').niceSelect('update');
+        }
+    });
+
+    // On state change, load cities
+    $('#state').on('change', function() {
+        const stateName = $(this).val();
+        if (stateName) {
+            $.ajax({
+                url: `/cities/${stateName}`,
+                type: "GET",
+                success: function(data) {
+                    let cityOptions = '<option value="">Select City</option>';
+                    data.forEach(function(city) {
+                        cityOptions += `<option value="${city.city}">${city.city}</option>`;
+                    });
+                    $('#city').html(cityOptions).niceSelect('update'); // Update nice-select
+                    $('#cityerr').text(''); // Clear any previous error message
+                },
+                error: function(xhr, status, error) {
+                    $('#cityerr').text('Failed to load cities. Please try again.');
+                }
+            });
+        } else {
+            $('#city').html('<option value="">Select City</option>').niceSelect('update');
+        }
+    });
+});

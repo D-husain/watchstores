@@ -26,6 +26,8 @@
     <link rel="stylesheet" href="assets/css/plugins/venobox.min.css">
     <link rel="stylesheet" href="assets/css/plugins/jquery.lineProgressbar.css">
     <link rel="stylesheet" href="assets/css/plugins/aos.min.css">
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Main CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
@@ -267,16 +269,19 @@
 													</div>
 													<div class="row mb-3">
 														<div class="col">
-															<label for="state" class="form-label">State</label>
-															<input type="text" id="state" name="state" th:value="${session.user.state}"
-																class="form-control">
+															<label>State<span>*</span></label> 
+															<select id="state" name="state" class="country_option nice-select wide">
+																<option th:value="${session.user.state}">[[${session.user.state}]]</option>
+															</select> <span id='stateerr' class='text-danger'></span>
 														</div>
 														<div class="col">
-															<label for="city" class="form-label">City</label>
-															<input type="text" id="city" name="city" th:value="${session.user.city}"
-																class="form-control">
+															<label>City<span>*</span></label> 
+															<select id="city" name="city" class="country_option nice-select wide">
+																<option th:value="${session.user.city}">[[${session.user.city}]]</option>
+															</select> <span id='cityerr' class='text-danger'></span>
 														</div>
 													</div>
+
 													<div class="mb-3">
 														<label for="address" class="form-label">Address</label>
 														<textarea id="address" name="address" class="form-control" rows="3" th:text="${session.user.address}"></textarea>
@@ -571,6 +576,76 @@
             </div>
         </div>
     </div> <!-- End Modal Quickview cart -->
+    
+    <script type="text/javascript">
+    
+    $(document).ready(function () {
+        // Initialize nice-select on page load
+        $('select').niceSelect();
+
+        // Set default country to 'India' and trigger state load
+        const defaultCountry = 'India';
+        $('#country').val(defaultCountry).niceSelect('update'); // Set 'India' as default
+        loadStates(defaultCountry); // Load states for 'India' on page load
+
+        // On country change, load states
+        $('#country').on('change', function () {
+            const countryName = $(this).val();
+            if (countryName) {
+                loadStates(countryName);
+            } else {
+                $('#state').html('<option th:value="${session.user.state}">[[${session.user.state}]]</option>').niceSelect('update');
+                $('#city').html('<option th:value="${session.user.state}">[[${session.user.city}]]</option>').niceSelect('update');
+            }
+        });
+
+        // Function to load states based on selected country
+        function loadStates(countryName) {
+            $.ajax({
+                url: `/states/${countryName}`,
+                type: "GET",
+                success: function (data) {
+                    let stateOptions = '<option th:value="${session.user.state}">[[${session.user.state}]]</option>';
+                    data.forEach(function (state) {
+                        stateOptions += `<option th:value="${state.name}">${state.name}</option>`;
+                    });
+                    $('#state').html(stateOptions).niceSelect('update'); // Update nice-select
+                    $('#city').html('<option th:value="${session.user.city}">[[${session.user.city}]]</option>').niceSelect('update'); // Reset city dropdown
+                    $('#stateerr').text(''); // Clear any previous error message
+                },
+                error: function () {
+                    $('#stateerr').text('Failed to load states. Please try again.');
+                }
+            });
+        }
+
+        // On state change, load cities
+        $('#state').on('change', function () {
+            const stateName = $(this).val();
+            if (stateName) {
+                $.ajax({
+                    url: `/cities/${stateName}`,
+                    type: "GET",
+                    success: function (data) {
+                        let cityOptions = '<option th:value="${session.user.city}">[[${session.user.city}]]</option>';
+                        data.forEach(function (city) {
+                            cityOptions += `<option th:value="${city.city}">${city.city}</option>`;
+                        });
+                        $('#city').html(cityOptions).niceSelect('update'); // Update nice-select
+                        $('#cityerr').text(''); // Clear any previous error message
+                    },
+                    error: function () {
+                        $('#cityerr').text('Failed to load cities. Please try again.');
+                    }
+                });
+            } else {
+                $('#city').html('<option th:value="${session.user.city}">[[${session.user.city}]]</option>').niceSelect('update');
+            }
+        });
+    });
+
+    
+    </script>
 
     <!-- ::::::::::::::All JS Files here :::::::::::::: -->
     <!-- Global Vendor, plugins JS -->

@@ -17,5 +17,8 @@ public interface CityRepository extends JpaRepository<City, Integer> {
 	
 	@Query("SELECT c FROM City c WHERE c.states.id = :id")
     List<City> findByStateId(@Param("id") Integer stateId);
+	
+	@Query("SELECT c FROM City c WHERE c.states.name = :name")
+    List<City> findByStateName(@Param("name") String stateName);
 
 }
